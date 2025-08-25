@@ -1,0 +1,32 @@
+-----------------------NPC PORTRAIT SIZES------------------------
+TINY (must be fixed)
+    Clowngirl = 96x96
+    Drugdealer = 96x96
+
+REGULAR
+    Anahi = 181x181
+    Big Cheeks = 197x197
+    Bozzo = 197x197
+    Banger the Killer = 197x197
+    Corpman A, B & C = 197x197
+    Miihyo = 192x192
+    Nice Corpguy = 197x197
+    Punkgirl A & B = 197x197
+    Raquel = 197x197
+    Regis = 197x197
+
+BIG (must be fixed)
+    Cinder = 985x985 (stupidly big)
+
+
+
+
+
+
+
+
+
+
+
+
+

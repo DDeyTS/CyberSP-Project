@@ -1,0 +1,33 @@
+// depois de todos os includes e defines, coloque os valores 
+// da caixa a ser usada na função dela.
+
+void CaixinhaDeDescrição(texto da descrição, ID do texto)
+{
+    // construa a caixa do tamanho mais modesto, um retângulo 
+    // deitado um pouco maior que o próprio sprite do personagem.
+    
+    compute o texto dentro da caixinha 
+    // preste atenção para caber a descrição inteira, senão 
+    // uma lógica de prevenção que ajuste o tamanho deverá 
+    // feita. 
+
+    if (texto não couber dentro da caixinha) {
+        compute as dimensões atuais
+        aplique-as para a caixinha 
+        // se preciso, ajuste o texto também. 
+    }
+
+    // copie o while loop da caixa de diálogo para impressão 
+    // do texto, porém faça alterações para que adeque uma 
+    
+    while (houver texto) 
+    {
+        compute o tamanho do texto 
+        aloque-o no ponteiro que recebe o texto 
+        carregue-o no buffer
+
+        desenhe o texto na tela 
+    }
+}
+
+

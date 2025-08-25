@@ -1,0 +1,43 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "closedstreet_map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "Todos os Ficheiros (*)",
+    "fileStates": {
+        "Lightbar_tile.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "avenue_tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "closedstreet_map.tmx": {
+            "scale": 0.9029,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 244.2130911507365,
+                "y": 272.45542141986925
+            }
+        }
+    },
+    "last.imagePath": "/home/atsxp/projetos_c/isometric_movement/tiles",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 20,
+    "openFiles": [
+        "closedstreet_map.tmx"
+    ],
+    "project": "cyberpunktiles.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "closedstreet_map.tmx",
+        "avenue_tileset.tsx",
+        "Lightbar_tile.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

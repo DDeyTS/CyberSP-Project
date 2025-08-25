@@ -1,0 +1,53 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "buspoint.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "Todos os Ficheiros (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "bus_stop_tile.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2.2876
+        },
+        "buspoint.tmx": {
+            "scale": 2.2003,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 128.39158296595917,
+                "y": 121.80157251283916
+            }
+        },
+        "street_tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "/home/atsxp/projetos_c/cybersp_project/tiles",
+    "map.height": 8,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": "3",
+    "map.width": 8,
+    "openFiles": [
+        "bus_stop_tile.tsx",
+        "street_tiles.tsx",
+        "buspoint.tmx"
+    ],
+    "project": "cybersp_tilesets.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "bus_stop_tile.tsx",
+        "street_tiles.tsx",
+        "buspoint.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 96,
+        "width": 160
+    }
+}

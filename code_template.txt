@@ -1,0 +1,64 @@
+//**************************************************************************
+//**
+//** File: 
+//** Purpose: 
+//** Last Update: 
+//** Author: 
+//**
+//**************************************************************************
+
+// HEADER FILES ////////////////////////////////////////////////////////////
+
+// MACROS //////////////////////////////////////////////////////////////////
+
+// TYPES ///////////////////////////////////////////////////////////////////
+
+// EXTERNAL FUNCTION PROTOTYPES ////////////////////////////////////////////
+
+// PUBLIC FUNCTION PROTOYPES ///////////////////////////////////////////////
+
+// PRIVATE FUNCTION PROTOTYPES /////////////////////////////////////////////
+
+// EXTERNAL DATA DECLARATIONS //////////////////////////////////////////////
+
+// PUBLIC DATA DEFINITIONS /////////////////////////////////////////////////
+
+// PRIVATE DATA DEFINITIONS ////////////////////////////////////////////////
+
+//==========================================================================
+//
+//    FunctionName
+//
+//    Argument: 
+//    Return: 
+//
+//==========================================================================
+
+// CODE ///////////
+
+PREFIXES:
+SYS_ -> Main system (init, loop, shutdown)
+CFG_ -> Settings and loading of config files
+DBG_ -> Debuggers
+
+PLY_ -> Player stuff (movement, status, inventory)
+NPC_ -> NPC stuff (AI, portraits)
+DLG_ -> Dialogues and topics
+EVT_ -> Game events (triggers, scripts, cutscenes)
+COL_ -> Collision
+ITM_ -> Items and inventory
+WPN_ -> Weapons and combat
+
+UI_ -> Graphical interface
+TXT_ -> Text and font render
+MAP_ -> Maps and tilemaps
+SPR_ -> Sprites and animations
+FX_ -> Shaders
+
+SND_ -> Sound Effects
+MSC_ -> Music
+
+
+
+
+
