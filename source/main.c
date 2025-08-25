@@ -28,6 +28,8 @@
 #include "textdat.h"
 #include "tile_render.h"
 
+#include <tmx.h>
+
 // EXTERNAL FUNCTION PROTOTYPES /////////////////////////////////////////////
 
 // PRIVATE FUNCTION PROTOTYPES //////////////////////////////////////////////

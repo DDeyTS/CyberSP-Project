@@ -1,0 +1,3 @@
+[submodule "vendor/tmx"]
+	path = vendor/tmx
+	url = https://github.com/baylej/tmx.git
