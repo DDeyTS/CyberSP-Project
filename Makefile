@@ -10,12 +10,12 @@ BUILD_DIR := build
 # CC = gcc
 
 CFLAGS := -Wall -Wextra -O2 \
-	-I$(INC_DIR) -I/usr/local/include \
+	-I$(INC_DIR) -Ivendor/tmx/src \
 	`pkg-config --cflags allegro-5 allegro_audio-5 allegro_acodec-5 allegro_font-5 allegro_ttf-5 allegro_primitives-5 allegro_image-5`
 
-LDFLAGS := -L/usr/local/lib
+LDFLAGS := -Lvendor/tmx
 LDLIBS :=  \
-				-lxml2 -lz -lm -ltmx \
+				-ltmx -lxml2 -lz -lm \
 				`pkg-config --libs allegro-5 allegro_audio-5 allegro_acodec-5 allegro_font-5 allegro_ttf-5 allegro_primitives-5 allegro_image-5` \
 
 

@@ -201,6 +201,15 @@ void UnlockExtraTopics(void)
     }
 }
 
+//==========================================================================
+//
+//    DescStorage
+//
+//    Argument: DescriptionObj *desc[]        - description text index
+//    Return:   void
+//
+//==========================================================================
+
 void DescStorage(DescriptionObj *desc[])
 {
     desc[0]        = malloc(sizeof(DescriptionObj));
@@ -213,8 +222,3 @@ void DescStorage(DescriptionObj *desc[])
     desc[1]->pos_x = 300.0f;
     desc[1]->pos_y = 100.0f;
 }
-
-// void DescStorage(DescriptionObj *desc[])
-// {
-//     FillDesc(desc[0], "A lone bus stop.");
-// }

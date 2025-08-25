@@ -1,3 +1,11 @@
+//**************************************************************************
+//**
+//** File: input.c (CyberSP Project) 
+//** Purpose: Organize all input stuff
+//** Last Update: 25-08-2025 20:36
+//** Author: DDeyTS
+//**
+//**************************************************************************
 
 #include "input.h"
 #include "bitmap.h"
@@ -5,11 +13,15 @@
 #include "dialoguesys.h"
 #include "main.h"
 
+// EXTERNAL DATA DECLARATIONS //////////////////////////////////////////////
+
 Mousecursors cursors;
 ALLEGRO_MOUSE_CURSOR *current_cursor = NULL;
 enum CursorType cursor_flag          = CURSOR_NORMAL;
 ALLEGRO_MOUSE_CURSOR *chosen_cursor;
 bool mouse_animating = false;
+
+// PRIVATE DATA DEFINITIONS ////////////////////////////////////////////////
 
 static double anim_timer    = 0.0;  // NOTE: in case of trouble, use double
 static double anim_duration = 0.15; // NOTE: same above
@@ -22,11 +34,10 @@ static double anim_duration = 0.15; // NOTE: same above
 //    Return:   void
 //
 //    NOTE: this functions contains every keyboard operation.
-//    TODO: optimize it to contain only input stuff.
 //
 //==========================================================================
 
-void KeyboardOn()
+void KeyboardOn(void)
 {
     // Keyboard Boolean
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -75,11 +86,10 @@ void KeyboardOn()
 //    Return:   void
 //
 //    NOTE: this function contains every mouse operation.
-//    TODO: optimize it to contain only input stuff.
 //
 //==========================================================================
 
-void MouseOn()
+void MouseOn(void)
 {
     // Global mouse position
     if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
@@ -163,9 +173,17 @@ void MouseOn()
     }
 }
 
+//==========================================================================
+//
+//    MouseClick
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
 void MouseClick(void)
 {
-    // mouse clicking
     if (mouse_animating) {
         if (current_cursor != cursors.clicking && cursors.clicking) {
             current_cursor = cursors.clicking;
@@ -184,6 +202,15 @@ void MouseClick(void)
         }
     }
 }
+
+//==========================================================================
+//
+//    InitCursor
+//
+//    Argument: ALLEGRO_DISPLAY *disp    - linker for cursor to the display
+//    Return:   bool
+//
+//==========================================================================
 
 bool InitCursor(ALLEGRO_DISPLAY *disp)
 {
@@ -211,10 +238,28 @@ bool InitCursor(ALLEGRO_DISPLAY *disp)
     return true;
 }
 
+//==========================================================================
+//
+//    CloseGame
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
 void CloseGame(void)
 {
     if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) running = false;
 }
+
+//==========================================================================
+//
+//    ToggleToAim
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
 
 void ToggleToAim(void)
 {
@@ -228,11 +273,3 @@ void ToggleToAim(void)
     }
 }
 
-//==========================================================================
-//
-//    InitCursor
-//
-//    Argument: ALLEGRO_DISPLAY *disp    - linker for cursor to the display
-//    Return:   bool
-//
-//==========================================================================

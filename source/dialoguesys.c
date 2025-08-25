@@ -214,6 +214,15 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
     }
 }
 
+//==========================================================================
+//
+//    DlgExit
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
 void DlgExit(void)
 {
     dlg_open     = false;

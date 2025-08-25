@@ -1,7 +1,24 @@
+//**************************************************************************
+//**
+//** File: debug.c (CyberSP Project)
+//** Purpose: Debugging stuff
+//** Last Update: 25-08-2025 20:45
+//** Author: DDeyTS
+//**
+//**************************************************************************
 
 #include "debug.h"
 #include "dialoguesys.h"
 #include "main.h"
+
+//==========================================================================
+//
+//    DBG_DescObjChanger
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
 
 void DBG_DescObjChanger(void)
 {
@@ -12,12 +29,30 @@ void DBG_DescObjChanger(void)
     }
 }
 
+//==========================================================================
+//
+//    DBG_DlgTrigger
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
 void DBG_DlgTrigger(void)
 {
     dlg_open       = true;
     choosing_topic = true;
     show_intro     = true;
 }
+
+//==========================================================================
+//
+//    DBG_NpcChanger
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
 
 void DBG_NpcChanger(void)
 {

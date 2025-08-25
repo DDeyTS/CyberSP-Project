@@ -1,3 +1,11 @@
+//**************************************************************************
+//**
+//** File: game.c (CyberSP Project)
+//** Purpose: Game logic
+//** Last Update: 25-08-2025 20:37
+//** Author: DDeyTS
+//**
+//**************************************************************************
 
 #include "game.h"
 #include "bitmap.h"
@@ -5,6 +13,17 @@
 #include "input.h"
 #include "main.h"
 #include "tile_render.h"
+
+//==========================================================================
+//
+//    GameRun
+//
+//    Argument: void 
+//    Return:   void
+//
+//    NOTE: this function is responsible to redraw bitmaps.
+//
+//==========================================================================
 
 void GameRun(void)
 {
@@ -34,6 +53,15 @@ void GameRun(void)
 
     al_flip_display();
 }
+
+//==========================================================================
+//
+//    GameLoop
+//
+//    Argument: void 
+//    Return:   void
+//
+//==========================================================================
 
 void GameLoop(void)
 {
@@ -65,9 +93,17 @@ void GameLoop(void)
     }
 }
 
+//==========================================================================
+//
+//    GmaeCrusher
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
 void GameCrusher(void)
 {
-
     // Dialogue Sys
     al_destroy_bitmap(npc[speaker]->portrait_id);
     for (int i = 0; i < npc[speaker]->num_topic; i++) {
@@ -78,12 +114,16 @@ void GameCrusher(void)
     free(npc[speaker]);
 
     tmx_map_free(map);
+
     ExplodeFont();
+
     BitmapExplode();
+
     if (cursors.normal) al_destroy_mouse_cursor(cursors.normal);
     if (cursors.view) al_destroy_mouse_cursor(cursors.view);
     if (cursors.aim) al_destroy_mouse_cursor(cursors.aim);
     if (cursors.clicking) al_destroy_mouse_cursor(cursors.clicking);
+
     al_destroy_event_queue(queue);
     al_destroy_timer(timer);
     al_destroy_display(disp);
