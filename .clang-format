@@ -1,0 +1,26 @@
+BasedOnStyle: Linux
+IndentWidth: 4               # Indentação de 4 espaços
+TabWidth: 4                  # Cada tab equivale a 4 espaços
+UseTab: Never                # Sempre espaços, nunca tabs
+ColumnLimit: 80              # Quebra linha se passar de 80 colunas
+
+# Quebra de linha para funções e classes
+BreakBeforeBraces: Custom     # Faz as chaves ficarem embaixo
+BreakBeforeBracesOptions:
+  AfterFunction: false         # chaves de função em linha? false = na linha de baixo
+  AfterClass: true            # chaves de classe
+  AfterControlStatement: false  # if/while/for/do
+  AfterNamespace: true        # namespace
+  AfterObjCDeclaration: true
+  AfterStruct: false
+  AfterUnion: false
+
+# Outras opções úteis
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: false
+SpaceBeforeParens: ControlStatements   # if(...) -> if (...)
+SpacesBeforeTrailingComments: 2
+AllowShortFunctionsOnASingleLine: All
+PointerAlignment: Right        # int *ptr em vez de int* ptr
+SortIncludes: true           # Reordenar includes automaticamente
+

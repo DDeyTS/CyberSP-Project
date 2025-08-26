@@ -1,0 +1,92 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-O2",
+      "-Iinclude",
+      "-Ivendor/tmx/src",
+      "-I/usr/include/x86_64-linux-gnu",
+      "-c",
+      "-o",
+      "build/debug.o",
+      "source/debug.c"
+    ],
+    "directory": "/home/atsxp/projetos_c/cybersp-project",
+    "file": "/home/atsxp/projetos_c/cybersp-project/source/debug.c",
+    "output": "/home/atsxp/projetos_c/cybersp-project/build/debug.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-O2",
+      "-Iinclude",
+      "-Ivendor/tmx/src",
+      "-I/usr/include/x86_64-linux-gnu",
+      "-c",
+      "-o",
+      "build/dialoguesys.o",
+      "source/dialoguesys.c"
+    ],
+    "directory": "/home/atsxp/projetos_c/cybersp-project",
+    "file": "/home/atsxp/projetos_c/cybersp-project/source/dialoguesys.c",
+    "output": "/home/atsxp/projetos_c/cybersp-project/build/dialoguesys.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-O2",
+      "-Iinclude",
+      "-Ivendor/tmx/src",
+      "-I/usr/include/x86_64-linux-gnu",
+      "-c",
+      "-o",
+      "build/game.o",
+      "source/game.c"
+    ],
+    "directory": "/home/atsxp/projetos_c/cybersp-project",
+    "file": "/home/atsxp/projetos_c/cybersp-project/source/game.c",
+    "output": "/home/atsxp/projetos_c/cybersp-project/build/game.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-O2",
+      "-Iinclude",
+      "-Ivendor/tmx/src",
+      "-I/usr/include/x86_64-linux-gnu",
+      "-c",
+      "-o",
+      "build/input.o",
+      "source/input.c"
+    ],
+    "directory": "/home/atsxp/projetos_c/cybersp-project",
+    "file": "/home/atsxp/projetos_c/cybersp-project/source/input.c",
+    "output": "/home/atsxp/projetos_c/cybersp-project/build/input.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-O2",
+      "-Iinclude",
+      "-Ivendor/tmx/src",
+      "-I/usr/include/x86_64-linux-gnu",
+      "-c",
+      "-o",
+      "build/textdat.o",
+      "source/textdat.c"
+    ],
+    "directory": "/home/atsxp/projetos_c/cybersp-project",
+    "file": "/home/atsxp/projetos_c/cybersp-project/source/textdat.c",
+    "output": "/home/atsxp/projetos_c/cybersp-project/build/textdat.o"
+  }
+]
