@@ -9,13 +9,12 @@
 //**************************************************************************
 
 /*
- * LIST OF FEATURES TO DO (24-08-25)
+ * LIST OF FEATURES TO DO (27-08-25)
  * 1. Collision walls on the map.
  * 2. NPC sprite render.
  * 3. Shooter mode.
  *     3a. Shooting with pistol.
  *     3b. Damage system.
- * 4. Description text storage.
  */
 
 #include "main.h"
@@ -43,9 +42,11 @@ ALLEGRO_EVENT ev;
 ALLEGRO_EVENT_QUEUE *queue;
 ALLEGRO_TIMER *timer;
 
+// keyboard stuff
 bool keys[ALLEGRO_KEY_MAX], mouse[MOUSE_MAX + 1];
 int mouse_x, mouse_y = 0;
 
+// dialogue sys stuff
 bool show_intro     = true;  // turn on the intro dialogue
 bool dlg_open       = false; // turn on the chat mode
 bool choosing_topic = true;  // turn on the topic list
@@ -53,12 +54,15 @@ int speaker         = 0;     // flags the current NPC
 int selected_topic  = 0;
 int active_topic    = -1;
 
+// description window stuff
 int obj_desc   = 0; // debugger to change the description texts
 bool show_desc = false;
 
+// sprite stuff
 float sp;
 float frames;
 
+// loop stuff
 bool running, redraw;
 
 // PUBLIC DATA DEFINITIONS //////////////////////////////////////////////////
@@ -88,7 +92,7 @@ int main(void)
     queue = al_create_event_queue();
     timer = al_create_timer(1.0 / 30.0);
     if (!disp || !queue || !timer) {
-        perror("Fail to initialize basic stuff!\n");
+        perror("Fail to initialize basic Allegro stuff!\n");
         return 1;
     }
 
@@ -108,18 +112,12 @@ int main(void)
 
     // PLAYER MOVEMENT //////////////////////////////////////////////////////
 
-    spr.px = 320;
-    spr.py = 200;
-    // Frames (and the initial frame when the program begins)
-    spr.frame_w = 0;
-    spr.frame_h = 0;
-    // Movement Speed
-    sp = 3.5;
-    // Sprite Frames
+    spr.px = 320, spr.py = 200;
+    spr.frame_w = 0, spr.frame_h = 0;
+    sp = 3.5; // movement speed
     frames = 0.f;
 
-    running = true;
-    redraw  = true;
+    // LOOP //////////////////////////////////////////////////////////////// 
 
     // reset these arrays
     memset(keys, 0, sizeof(keys));
@@ -134,8 +132,10 @@ int main(void)
         return 1;
     }
 
+    running = true;
+    redraw  = true;
     while (running) {GameLoop();}
 
-        GameCrusher();
-        return 0;
-    }
+    GameCrusher();
+    return 0;
+}

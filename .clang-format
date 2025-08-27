@@ -1,4 +1,4 @@
-BasedOnStyle: Linux
+BasedOnStyle: Allman
 IndentWidth: 4               # Indentação de 4 espaços
 TabWidth: 4                  # Cada tab equivale a 4 espaços
 UseTab: Never                # Sempre espaços, nunca tabs
