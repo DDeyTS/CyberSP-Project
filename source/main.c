@@ -3,7 +3,7 @@
 //** File: main.c (CyberSP Project)
 //** Purpose: Main game stuff
 //**
-//** Last Update: 25-08-2025 15:44
+//** Last Update: 27-08-2025 13:02
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -17,13 +17,13 @@
  *     3b. Damage system.
  */
 
-#include "main.h"
 #include "bitmap.h"
 #include "collision.h"
 #include "debug.h"
 #include "dialoguesys.h"
 #include "game.h"
 #include "input.h"
+#include "main.h"
 #include "textdat.h"
 #include "tile_render.h"
 
@@ -47,15 +47,15 @@ bool keys[ALLEGRO_KEY_MAX], mouse[MOUSE_MAX + 1];
 int mouse_x, mouse_y = 0;
 
 // dialogue sys stuff
-bool show_intro     = true;  // turn on the intro dialogue
-bool dlg_open       = false; // turn on the chat mode
-bool choosing_topic = true;  // turn on the topic list
-int speaker         = 0;     // flags the current NPC
+bool show_intro     = true;   // turn on the intro dialogue
+bool dlg_open       = false;  // turn on the chat mode
+bool choosing_topic = true;   // turn on the topic list
+int speaker         = 0;      // flags the current NPC
 int selected_topic  = 0;
 int active_topic    = -1;
 
 // description window stuff
-int obj_desc   = 0; // debugger to change the description texts
+int obj_desc   = 0;  // debugger to change the description texts
 bool show_desc = false;
 
 // sprite stuff
@@ -82,8 +82,8 @@ int main(void)
     // INITIALIZERS /////////////////////////////////////////////////////////
 
     if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() ||
-        !al_install_keyboard() || !al_init_font_addon() || !al_init_ttf_addon() ||
-        !al_install_mouse()) {
+        !al_install_keyboard() || !al_init_font_addon() ||
+        !al_init_ttf_addon() || !al_install_mouse()) {
         perror("Fail to initialize Allegro\n");
         return 1;
     }
@@ -114,10 +114,10 @@ int main(void)
 
     spr.px = 320, spr.py = 200;
     spr.frame_w = 0, spr.frame_h = 0;
-    sp = 3.5; // movement speed
+    sp     = 3.5;  // movement speed
     frames = 0.f;
 
-    // LOOP //////////////////////////////////////////////////////////////// 
+    // LOOP ////////////////////////////////////////////////////////////////
 
     // reset these arrays
     memset(keys, 0, sizeof(keys));
@@ -134,7 +134,9 @@ int main(void)
 
     running = true;
     redraw  = true;
-    while (running) {GameLoop();}
+    while (running) {
+        GameLoop();
+    }
 
     GameCrusher();
     return 0;

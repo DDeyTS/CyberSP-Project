@@ -1,26 +1,31 @@
-BasedOnStyle: Allman
-IndentWidth: 4               # Indentação de 4 espaços
-TabWidth: 4                  # Cada tab equivale a 4 espaços
-UseTab: Never                # Sempre espaços, nunca tabs
-ColumnLimit: 80              # Quebra linha se passar de 80 colunas
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 80
 
-# Quebra de linha para funções e classes
-BreakBeforeBraces: Custom     # Faz as chaves ficarem embaixo
-BreakBeforeBracesOptions:
-  AfterFunction: false         # chaves de função em linha? false = na linha de baixo
-  AfterClass: true            # chaves de classe
-  AfterControlStatement: false  # if/while/for/do
-  AfterNamespace: true        # namespace
+# Estilo de chaves (compatível com 14, 15, 16, 17, 18…)
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true          # chaves de função na linha de baixo
+  AfterClass: true
+  AfterControlStatement: false # if/while/for com chave na mesma linha
+  AfterNamespace: true
   AfterObjCDeclaration: true
   AfterStruct: false
   AfterUnion: false
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
 
-# Outras opções úteis
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: false
-SpaceBeforeParens: ControlStatements   # if(...) -> if (...)
+SpaceBeforeParens: ControlStatements
 SpacesBeforeTrailingComments: 2
 AllowShortFunctionsOnASingleLine: All
-PointerAlignment: Right        # int *ptr em vez de int* ptr
-SortIncludes: true           # Reordenar includes automaticamente
+PointerAlignment: Right
+SortIncludes: true
 

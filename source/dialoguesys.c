@@ -8,14 +8,15 @@
 //**
 //**************************************************************************
 
-#include "dialoguesys.h"
 #include "bitmap.h"
+#include "dialoguesys.h"
 #include "main.h"
 #include "textdat.h"
 
 // MACROS ///////////////////////////////////////////////////////////////////
 
 #define WORDS_MAX 1024
+#define DESCRIPTIONS_MAX 100
 
 // EXTERNAL FUNCTION PROTOTYPES /////////////////////////////////////////////
 
@@ -27,8 +28,9 @@ void ExplodeFont();
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
 NPC *npc[NUM_NPCS];
-DescriptionObj *desc[100]; // TODO: finding a lighter way to quantify the amount of
-                           // description texts inside this array
+DescriptionObj
+    *desc[DESCRIPTIONS_MAX];  // TODO: finding a lighter way to quantify the
+                              // amount of description texts inside this array
 ALLEGRO_FONT *font_std, *font_subtitle;
 ALLEGRO_COLOR font_color, name_color;
 bool learned_topics[NUM_TOPICS] = {false};
@@ -86,10 +88,7 @@ void FillTopic(NPC *npc, int index, char *topic, char *text)
 //
 //==========================================================================
 
-void FillIntro(NPC *npc, char *text)
-{
-    npc->topics->intro_text = strdup(text);
-}
+void FillIntro(NPC *npc, char *text) { npc->topics->intro_text = strdup(text); }
 
 //==========================================================================
 //
@@ -121,35 +120,43 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
     float safe_width  = text_max_w - 10.0f;
     float safe_height = text_max_h - 10.0f;
 
+    // render the NPC's face
     if (portrait) {
         al_draw_scaled_bitmap(portrait, 0, 0, al_get_bitmap_width(portrait),
                               al_get_bitmap_height(portrait), x + padding,
-                              y + padding - 12, portrait_size, portrait_size, 0);
-    } else if (!portrait) {
+                              y + padding - 12, portrait_size, portrait_size,
+                              0);
+    }
+    else if (!portrait) {
         perror("Fail to load portrait!\n");
         exit(1);
     }
 
-    // Protagonist's face
+    // render the protagonist's face
     al_draw_scaled_bitmap(protagonist, 0, 0, al_get_bitmap_width(protagonist),
-                          al_get_bitmap_height(protagonist), 450, 215, portrait_size,
-                          portrait_size, 0);
+                          al_get_bitmap_height(protagonist), 450, 215,
+                          portrait_size, portrait_size, 0);
 
-    // Dialogue box sprite
+    // dialogue box sprite
     al_draw_bitmap(chatbox, 0, 0, 0);
 
+    // little green light in the right side of the box
     static int light_frame   = 0;
     static double last_frame = 0;
     const double frame_delay = 0.2;
     const int total_frames   = 8;
     const int frame_w = 8, frame_h = 18;
 
-    if (al_get_time() - last_frame >= frame_delay) {
-        light_frame++;
+    // controls the animation loop of the green light
+    double elapsed_time = al_get_time() - last_frame;
+    for (; elapsed_time >= frame_delay; elapsed_time -= frame_delay) {
+        light_frame++;  // adds a frame
+        // if it reaches its limit, reset it
         if (light_frame >= total_frames) {
             light_frame = 0;
         }
-        last_frame = al_get_time();
+        // animation reset to the beginning
+        last_frame += frame_delay;
     }
 
     if (chatbox_light) {
@@ -158,8 +165,9 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
     }
 
     if (name) {
-        al_draw_text(font_name, name_color, x + portrait_size + 2 * padding - 15,
-                     y + padding / 2, 0, name);
+        al_draw_text(font_name, name_color,
+                     x + portrait_size + 2 * padding - 15, y + padding / 2, 0,
+                     name);
     }
 
     int line_height = al_get_font_line_height(font_std);
@@ -171,9 +179,9 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
     strncpy(buffer, text, sizeof(buffer));
     buffer[sizeof(buffer) - 1] = '\0';
 
-    char *word           = strtok(buffer, " "); // put spaces between each word
-    char line[WORDS_MAX] = "";                  // stores full line
-    float cursor_x       = text_x;              // initial position to write
+    char *word           = strtok(buffer, " ");  // put spaces between each word
+    char line[WORDS_MAX] = "";                   // stores full line
+    float cursor_x       = text_x;               // initial position to write
 
     while (word != NULL && line_count < max_lines) {
         bool is_highlight     = false;
@@ -181,8 +189,8 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
 
         if (word[0] == '|') {
             is_highlight = true;
-            draw_word    = word + 1; // ignores '|'
-            LearnTopic(draw_word);   // memorize via enum
+            draw_word    = word + 1;  // ignores '|'
+            LearnTopic(draw_word);    // memorize via enum
         }
 
         // line break
@@ -194,7 +202,8 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
             line_y += line_height;
             cursor_x = text_x;
             line_count++;
-            if (line_count >= max_lines) break;
+            if (line_count >= max_lines)
+                break;
         }
 
         // print dialogue
@@ -244,7 +253,8 @@ void DlgExit(void)
 
 void InitTopicMenu(NPC *npc, int selected)
 {
-    if (npc->num_topic <= 0) return;
+    if (npc->num_topic <= 0)
+        return;
 
     float x = 100, y = 250;
     ALLEGRO_COLOR color;
@@ -254,9 +264,10 @@ void InitTopicMenu(NPC *npc, int selected)
 
     // Topic Scroller
     for (int i = 0; i < npc->num_topic; i++) {
-        color =
-            (i == selected) ? al_map_rgb(255, 255, 0) : al_map_rgb(255, 255, 255);
-        al_draw_textf(font_std, color, x, y + i * 20, 0, "%s", npc->topics[i].topic);
+        color = (i == selected) ? al_map_rgb(255, 255, 0)
+                                : al_map_rgb(255, 255, 255);
+        al_draw_textf(font_std, color, x, y + i * 20, 0, "%s",
+                      npc->topics[i].topic);
     }
 }
 
@@ -302,10 +313,14 @@ void LoadDlg(NPC *npc, const char *dialogue)
 
 TopicID GetTopicID(const char *topic)
 {
-    if (strcmp(topic, "corp") == 0) return TOPIC_CORP;
-    if (strcmp(topic, "price.") == 0) return TOPIC_PRICE;
-    if (strcmp(topic, "kingdom") == 0) return TOPIC_KINGDOM_OF_CASH;
-    if (strcmp(topic, "Ronaldo.") == 0) return TOPIC_RONALDO;
+    if (strcmp(topic, "corp") == 0)
+        return TOPIC_CORP;
+    if (strcmp(topic, "price.") == 0)
+        return TOPIC_PRICE;
+    if (strcmp(topic, "kingdom") == 0)
+        return TOPIC_KINGDOM_OF_CASH;
+    if (strcmp(topic, "Ronaldo.") == 0)
+        return TOPIC_RONALDO;
 
     return NONE_TOPIC;
 }
@@ -346,12 +361,13 @@ void LearnTopic(const char *topic)
 
 void InitDescBox(float box_x, float box_y, const char *text)
 {
-    const float padding    = 10.0f;
-    const float wrap_w_cap = 200.0f; // max width to line break (without padding)
-    const int line_h       = al_get_font_line_height(
-        font_std); // height of each line based on the used font
+    const float padding = 10.0f;
+    const float wrap_w_cap =
+        200.0f;  // max width to line break (without padding)
+    const int line_h = al_get_font_line_height(
+        font_std);  // height of each line based on the used font
     const int space_w = al_get_text_width(
-        font_std, " "); // width of each space key based on the used font
+        font_std, " ");  // width of each space key based on the used font
 
     // copy the description text to a word buffer
     char buffer[WORDS_MAX];
@@ -359,37 +375,42 @@ void InitDescBox(float box_x, float box_y, const char *text)
     buffer[sizeof(buffer) - 1] = '\0';
 
     // acumulators to size the box
-    float line_w = 0.0f; // max width of the current line (without padding)
-    float widest = 0.0f; // bigger width between all the lines (without padding)
-    int lines    = 1;    // starts from 1st line
+    float line_w = 0.0f;  // max width of the current line (without padding)
+    float widest =
+        0.0f;       // bigger width between all the lines (without padding)
+    int lines = 1;  // starts from 1st line
 
     // it's time to size how much lines and what width it need
-    // for each word in the buffer, split by spaces and stored in the pointer, as
-    // long as it isn't null, the pointer will update to store the next word:
+    // for each word in the buffer, split by spaces and stored in the pointer,
+    // as long as it isn't null, the pointer will update to store the next word:
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
         const char *draw = (w[0] == '|') ? w + 1 : w;
-        int ww           = al_get_text_width(font_std, draw); // current width
+        int ww           = al_get_text_width(font_std, draw);  // current width
 
         // adds padding before printed words (except at first line)
         int add = (line_w > 0) ? space_w : 0;
 
         // if it adding this word + space will blow up the width limit:
         if (line_w + add + ww > wrap_w_cap) {
-            if (line_w > widest) widest = line_w; // stores bigger line so far
-            lines++;                              // new line
-            line_w = (float)ww;                   // original width of the new line
-        } else {
-            line_w += add + ww; // continues accmulating in the same line
+            if (line_w > widest)
+                widest = line_w;  // stores bigger line so far
+            lines++;              // new line
+            line_w = (float)ww;   // original width of the new line
+        }
+        else {
+            line_w += add + ww;  // continues accmulating in the same line
         }
     }
-    if (line_w > widest) widest = line_w; // last line can be the widest
+    if (line_w > widest)
+        widest = line_w;  // last line can be the widest
 
     // computes description window with padding around the text
     float inner_w = widest;
     float box_w   = inner_w + 2 * padding;
-    if (box_w < 60.0f) box_w = 60.0f; // minimum width
+    if (box_w < 60.0f)
+        box_w = 60.0f;  // minimum width
     if (box_w > wrap_w_cap + 2 * padding)
-        box_w = wrap_w_cap + 2 * padding; // maximum width
+        box_w = wrap_w_cap + 2 * padding;  // maximum width
 
     float box_h = lines * line_h + 2 * padding;
 
@@ -400,16 +421,16 @@ void InitDescBox(float box_x, float box_y, const char *text)
     // Print description text
     float text_x = box_x + padding;
     float text_y = box_y + padding;
-    float safe_w = box_w - 2 * padding; // safe width inside the box
+    float safe_w = box_w - 2 * padding;  // safe width inside the box
 
     // resets word buffer to use strtok() again
     strncpy(buffer, text, sizeof(buffer));
     buffer[sizeof(buffer) - 1] = '\0';
 
-    float cx = 0.0f; // horizontal cursor inside the current line
+    float cx = 0.0f;  // horizontal cursor inside the current line
 
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
-        bool is_highlight = (w[0] == '|'); // checks if it has '|'
+        bool is_highlight = (w[0] == '|');  // checks if it has '|'
         const char *draw  = is_highlight ? w + 1 : w;
         int ww            = al_get_text_width(font_std, draw);
 
@@ -418,8 +439,8 @@ void InitDescBox(float box_x, float box_y, const char *text)
         // if it goes beyond the safe width, break the line
         if (cx + add + ww > safe_w) {
             // next line
-            text_y += line_h; // resets cursor
-            cx  = 0.0f;       // first word doesn't have space before it
+            text_y += line_h;  // resets cursor
+            cx  = 0.0f;        // first word doesn't have space before it
             add = 0;
         }
 
@@ -471,9 +492,9 @@ void InitStdFont()
 
     font_subtitle = al_load_ttf_font("fonts/Steelflight.ttf", f_size + 2, 0);
 
-    font_color      = al_map_rgb(255, 255, 255); // white
-    name_color      = al_map_rgb(255, 255, 0);   // yellow
-    highlight_color = al_map_rgb(255, 215, 0);   // golden yellow
+    font_color      = al_map_rgb(255, 255, 255);  // white
+    name_color      = al_map_rgb(255, 255, 0);    // yellow
+    highlight_color = al_map_rgb(255, 215, 0);    // golden yellow
 }
 
 //==========================================================================
