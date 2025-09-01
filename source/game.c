@@ -2,7 +2,7 @@
 //**
 //** File: game.c (CyberSP Project)
 //** Purpose: Game logic
-//** Last Update: 25-08-2025 20:37
+//** Last Update: 01-09-2025 12:29
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -18,7 +18,7 @@
 //
 //    GameRun
 //
-//    Argument: void 
+//    Argument: void
 //    Return:   void
 //
 //    NOTE: this function is responsible to redraw bitmaps.
@@ -31,6 +31,7 @@ void GameRun(void)
     RenderMap(map);
 
     DrawProtag();
+    DrawEntity();
 
     // NOTE: rectangle to debug description window
     // al_draw_filled_rectangle(350, 125, 450, 200, al_map_rgba(0, 100, 0,
@@ -44,7 +45,8 @@ void GameRun(void)
         if (show_intro) {
             InitDlgBox(npc[speaker]->portrait_id, npc[speaker]->name,
                        npc[speaker]->topics->intro_text);
-        } else if (active_topic >= 0) {
+        }
+        else if (active_topic >= 0) {
             const char *topic = npc[speaker]->topics[selected_topic].topic;
             LoadDlg(npc[speaker], topic);
         }
@@ -58,7 +60,7 @@ void GameRun(void)
 //
 //    GameLoop
 //
-//    Argument: void 
+//    Argument: void
 //    Return:   void
 //
 //==========================================================================
@@ -76,9 +78,12 @@ void GameLoop(void)
     if (ev.type == ALLEGRO_EVENT_TIMER) {
         MouseClick();
 
+        //
         // character animation
-        frames += 0.3f;   // frame speed
-        if (frames > 4) { // reset frame queue
+        //
+
+        frames += 0.3f;    // frame speed
+        if (frames > 4) {  // reset frame queue
             frames -= 4;
         }
 

@@ -2,7 +2,7 @@
 //**
 //** File: input.c (CyberSP Project) 
 //** Purpose: Organize all input stuff
-//** Last Update: 25-08-2025 20:36
+//** Last Update: 01-09-2025 12:49
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -39,38 +39,53 @@ static double anim_duration = 0.15; // NOTE: same above
 
 void KeyboardOn(void)
 {
+    // 
     // Keyboard Boolean
+    //
+
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         keys[ev.keyboard.keycode] = true;
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
         keys[ev.keyboard.keycode] = false;
     }
 
+    //
     // Cursor Bitmap Changer
+    //
+
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         CursorChanger();
     }
 
+    //
     // Object Description Changer
-    // NOTE: for debugging
+    //
+
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_O]) {
         DBG_DescObjChanger();
     }
 
+    //
     // Dialogue Trigger Button
-    // NOTE: for debugging
+    //
+
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_SPACE]) {
         DBG_DlgTrigger();
     }
 
+    //
     // Dialogue Box Exit
-    // TODO: bitmap button to do it
+    //
+
+    // TODO: bitmap button to trigger it
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_ESCAPE]) {
         DlgExit();
     }
 
+    //
     // NPC Changer
-    // NOTE: for debugging
+    //
+
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_1]) {
         DBG_NpcChanger();
     } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_2]) {
@@ -91,13 +106,19 @@ void KeyboardOn(void)
 
 void MouseOn(void)
 {
-    // Global mouse position
+    //
+    // Global Mouse Position
+    //
+  
     if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
         mouse_x = ev.mouse.x;
         mouse_y = ev.mouse.y;
     }
 
+    //
     // Mouse Boolean
+    //
+
     if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         mouse[ev.mouse.button] = true;
 
@@ -118,7 +139,10 @@ void MouseOn(void)
         mouse[ev.mouse.button] = false;
     }
 
+    //
     // Click Animation
+    //
+
     if (mouse[1] && chosen_cursor == cursors.normal) {
         mouse_animating = true;
         anim_timer      = al_get_time();
@@ -128,7 +152,10 @@ void MouseOn(void)
         }
     }
 
+    //
     // Dialogue Interaction
+    //
+
     if ((ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
          ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) &&
         dlg_open) {
@@ -265,10 +292,10 @@ void ToggleToAim(void)
 {
     // sprite follows cursor when aiming
     if (chosen_cursor == cursors.aim) {
-        SpriteAimAtCursor(spr.px, spr.py, &spr.frame_h);
-        spr.frame_w = 0;
+        SpriteAimAtCursor(protag.px, protag.py, &protag.frame_h);
+        protag.frame_w = 0;
     } else {
-        SpriteMovement(keys, &spr.px, &spr.py, sp, &spr.frame_w, &spr.frame_h,
+        ProtagMovement(keys, &protag.px, &protag.py, sp, &protag.frame_w, &protag.frame_h,
                        (int)frames);
     }
 }

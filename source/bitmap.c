@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Sprite handling (animation, movement)
 //**
-//** Last Update: 31-08-2025 23:56
+//** Last Update: 01-09-2025 12:40
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -16,7 +16,7 @@
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
-SpriteSheetInfo spr, ent[NUM_ENTITY];
+SpriteSheetInfo protag, ent[NUM_ENTITY];
 ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light = NULL;
 
 // PRIVATE DATA DEFINITIONS /////////////////////////////////////////////////
@@ -36,12 +36,15 @@ static int reset_frame = 0;
 
 void InitBitmap(void)
 {
-    spr.protag  = al_load_bitmap("sprites/regis_spritesheet.png");
+    protag.spr  = al_load_bitmap("sprites/regis_spritesheet.png");
     protagonist = al_load_bitmap("portraits/regis_face.png");
-    if (!spr.protag || !protagonist) {
+    if (!protag.spr || !protagonist) {
         perror("Fail to load protagonist bitmap!\n");
         exit(1);
     }
+
+    // sprite to debug entity render
+    ent[ENTITY_GANGMEMBER].spr = al_load_bitmap("sprites/regis_spritesheet.png");
 
     chatbox       = al_load_bitmap("sprites/chatbox_sprite.png");
     chatbox_light = al_load_bitmap("sprites/signal_light_chatbox_spritesheet.png");
@@ -74,7 +77,8 @@ void InitBitmap(void)
 
 void BitmapExplode(void)
 {
-    al_destroy_bitmap(spr.protag);
+    al_destroy_bitmap(protag.spr);
+    al_destroy_bitmap(ent[ENTITY_GANGMEMBER].spr);
     al_destroy_bitmap(chatbox);
     al_destroy_bitmap(chatbox_light);
     al_destroy_bitmap(protagonist);
@@ -99,29 +103,48 @@ void BitmapExplode(void)
 
 void DrawProtag(void)
 {
-    al_draw_scaled_bitmap(spr.protag, spr.frame_w, spr.frame_h, 16, 24, spr.px,
-                          spr.py, 32, 48, 0);
+    al_draw_scaled_bitmap(protag.spr, protag.frame_w, protag.frame_h, 16, 24,
+                          protag.px, protag.py, 32, 48, 0);
+}
+
+//
+//======================
+//
+// DrawEntity
+//
+// TODO: managing a lot of entities over here.
+//
+//======================
+//
+
+void DrawEntity(void)
+{
+    // TODO: finding the best way to store every entity in the array
+    al_draw_scaled_bitmap(
+        ent[ENTITY_GANGMEMBER].spr, ent[ENTITY_GANGMEMBER].frame_w,
+        ent[ENTITY_GANGMEMBER].frame_h, 16, 24, ent[ENTITY_GANGMEMBER].px,
+        ent[ENTITY_GANGMEMBER].py, 32, 48, 0);
 }
 
 //==========================================================================
 //
-//    SpriteMovement
+//    ProtagMovement
 //
 //    Argument: bool keys[]        - read which keys are pressed
-//              float *px          - entity's current X position
-//              float *py          - entity's current Y position
+//              float *px          - protagonist's current X position
+//              float *py          - protagonist's current Y position
 //              float sp           - movement speed
 //              int *fx            - sprite sheet's row to animate
 //              int *fy            - sprite sheet's column to animate
 //              float frames       - number of frames per second
 //    Return:   void
 //
-//    TODO: try to use it with NPCs, too.
+//    TODO: another function to control entity's movement.
 //    TODO: aligning the movement when another key is pressed at the same time.
 //
 //==========================================================================
 
-void SpriteMovement(bool keys[], float *px, float *py, float sp, int *fx, int *fy,
+void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *fy,
                     float frames)
 {
     int dx = 0, dy = 0;                 // current direction
@@ -210,13 +233,15 @@ void SpriteMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
 //              float *fy       - sprite sheet's column to animate
 //    Return:   void
 //
+//    NOTE: ignores both px and py warning below.
+//
 //==========================================================================
 
 void SpriteAimAtCursor(float px, float py, int *fy)
 {
-    float t_dx    = mouse_x - (spr.px + 16);  // sprite center
-    float t_dy    = mouse_y - (spr.py + 24);  // same above
-    float t_angle = atan2(t_dy, t_dx);        // radianus (-PI to +PI)
+    float t_dx    = mouse_x - (protag.px + 16);  // sprite center
+    float t_dy    = mouse_y - (protag.py + 24);  // same above
+    float t_angle = atan2(t_dy, t_dx);           // radianus (-PI to +PI)
 
     int dir;
     // right

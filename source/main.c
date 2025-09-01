@@ -3,7 +3,7 @@
 //** File: main.c (CyberSP Project)
 //** Purpose: Main game stuff
 //**
-//** Last Update: 27-08-2025 13:02
+//** Last Update: 01-09-2025 12:36
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -11,7 +11,8 @@
 /*
  * LIST OF FEATURES TO DO (27-08-25)
  * 1. Collision walls on the map.
- * 2. NPC sprite render.
+ * 2. NPC sprite render. (Done but it call for updates)
+ *     2a. Entity movement manager.
  * 3. Shooter mode.
  *     3a. Shooting with pistol.
  *     3b. Damage system.
@@ -80,12 +81,12 @@ bool running, redraw;
 int main(void)
 {
     //
-    // INITIALIZERS /////////////////////////////////////////////////////////
+    // initializers
     //
 
     if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() ||
-        !al_install_keyboard() || !al_init_font_addon() ||
-        !al_init_ttf_addon() || !al_install_mouse()) {
+        !al_install_keyboard() || !al_init_font_addon() || !al_init_ttf_addon() ||
+        !al_install_mouse()) {
         perror("Fail to initialize Allegro\n");
         return 1;
     }
@@ -104,7 +105,9 @@ int main(void)
     NpcDlgStorage(npc);
     DescStorage(desc);
 
-    // EVENT QUEUE //////////////////////////////////////////////////////////
+    //
+    // event queue
+    //
 
     al_register_event_source(queue, al_get_display_event_source(disp));
     al_register_event_source(queue, al_get_timer_event_source(timer));
@@ -113,13 +116,22 @@ int main(void)
     al_start_timer(timer);
 
     //
-    // PLAYER MOVEMENT //////////////////////////////////////////////////////
+    // sprites movement
     //
 
-    spr.px = 320, spr.py = 200;
-    spr.frame_w = 0, spr.frame_h = 0;
+    protag.px = 320, protag.py = 200;
+    protag.frame_w = 0, protag.frame_h = 0;
     sp     = 3.5;  // movement speed
     frames = 0.f;
+
+    ent[ENTITY_GANGMEMBER].px      = 200;
+    ent[ENTITY_GANGMEMBER].py      = 200;
+    ent[ENTITY_GANGMEMBER].frame_w = 0;
+    ent[ENTITY_GANGMEMBER].frame_h = 0;
+
+    //
+    // main loop
+    //
 
     // reset these arrays
     memset(keys, 0, sizeof(keys));
@@ -134,9 +146,6 @@ int main(void)
         return 1;
     }
 
-    //
-    // LOOP ////////////////////////////////////////////////////////////////
-    //
     running = true;
     redraw  = true;
     while (running) {
