@@ -2,9 +2,9 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
-ColumnLimit: 80
+ColumnLimit: 84
 
-# Estilo de chaves (compatível com 14, 15, 16, 17, 18…)
+#Estilo de chaves(compatível com 14, 15, 16, 17, 18…)
 BreakBeforeBraces: Custom
 BraceWrapping:
   AfterFunction: true          # chaves de função na linha de baixo
@@ -26,6 +26,8 @@ AlignConsecutiveDeclarations: false
 SpaceBeforeParens: ControlStatements
 SpacesBeforeTrailingComments: 2
 AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
 PointerAlignment: Right
 SortIncludes: true
-

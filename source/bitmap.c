@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Sprite handling (animation, movement)
 //**
-//** Last Update: 24-08-2025 23:45
+//** Last Update: 31-08-2025 23:56
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -91,8 +91,8 @@ void BitmapExplode(void)
 //    Argument: void
 //    Return:   void
 //
-//    NOTE: Draws the protagonist's sprite.
-//    NOTE: if the sprite is scaled, take care of remembering to adapt
+//    NOTE: this function draws the protagonist's sprite.
+//    NOTE: the sprite is scaled, so take care of remembering to adapt
 //    the code for its new size.
 //
 //==========================================================================
@@ -124,48 +124,64 @@ void DrawProtag(void)
 void SpriteMovement(bool keys[], float *px, float *py, float sp, int *fx, int *fy,
                     float frames)
 {
-    int dx = 0, dy = 0;
-    int cols = 16;
-    int rows = 24;
-    float fq = (cols * frames) + cols; // frame queue
+    int dx = 0, dy = 0;                 // current direction
+    int cols = 16;                      // sprite sheet Y axis
+    int rows = 24;                      // sprite sheet X axis
+    float fq = (cols * frames) + cols;  // frame queue
 
+    //
     // Diagonal Movement
+    //
+
     if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_D]) {
         // Up-right
         *fx = fq, *fy = rows * 5;
         reset_frame = *fy;
-    } else if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_A]) {
+    }
+    else if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_A]) {
         // Up-left
         *fx = fq, *fy = rows * 6;
         reset_frame = *fy;
-    } else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_D]) {
+    }
+    else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_D]) {
         // Down-right
         *fx = fq, *fy = rows * 2;
         reset_frame = *fy;
-    } else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_A]) {
+    }
+    else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_A]) {
         // Down-left
         *fx = fq, *fy = rows;
         reset_frame = *fy;
 
+        //
         // Straight Movement
-    } else if (keys[ALLEGRO_KEY_D]) {
+        //
+    }
+    else if (keys[ALLEGRO_KEY_D]) {
         *fx = fq, *fy = rows * 4;
         reset_frame = *fy;
-    } else if (keys[ALLEGRO_KEY_A]) {
+    }
+    else if (keys[ALLEGRO_KEY_A]) {
         *fx = fq, *fy = rows * 3;
         reset_frame = *fy;
-    } else if (keys[ALLEGRO_KEY_S]) {
+    }
+    else if (keys[ALLEGRO_KEY_S]) {
         *fx = fq, *fy = 0;
         reset_frame = *fy;
-    } else if (keys[ALLEGRO_KEY_W]) {
+    }
+    else if (keys[ALLEGRO_KEY_W]) {
         *fx = fq, *fy = (rows * 7) + 1;
         reset_frame = *fy;
-    } else {
+    }
+    else {
         *fx = 0;
         *fy = reset_frame;
     }
 
+    //
     // Pressed directions
+    //
+
     if (keys[ALLEGRO_KEY_D]) dx += 1;
     if (keys[ALLEGRO_KEY_A]) dx -= 1;
     if (keys[ALLEGRO_KEY_S]) dy += 1;
@@ -173,14 +189,14 @@ void SpriteMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
 
     // Apply speed
     float mov_x = dx * sp, mov_y = dy * sp;
-
     // Adjust speed
     if (dx != 0 && dy != 0) {
-        float adj = 0.707f; // aka 1 / sqrt(2)
+        float adj = 0.707f;  // aka 1 / sqrt(2)
         mov_x *= adj;
         mov_y *= adj;
     }
 
+    // applies adjusted movement values
     *px += mov_x;
     *py += mov_y;
 }
@@ -198,46 +214,65 @@ void SpriteMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
 
 void SpriteAimAtCursor(float px, float py, int *fy)
 {
-    float t_dx    = mouse_x - (spr.px + 16); // sprite center
-    float t_dy    = mouse_y - (spr.py + 24); // same above
-    float t_angle = atan2(t_dy, t_dx);       // radianus (-PI to +PI)
+    float t_dx    = mouse_x - (spr.px + 16);  // sprite center
+    float t_dy    = mouse_y - (spr.py + 24);  // same above
+    float t_angle = atan2(t_dy, t_dx);        // radianus (-PI to +PI)
 
     int dir;
-    if (t_angle >= -ALLEGRO_PI / 8 && t_angle < ALLEGRO_PI / 8)
-        dir = 4; // right
+    // right
+    if (t_angle >= -ALLEGRO_PI / 8 && t_angle < ALLEGRO_PI / 8) dir = 4;
+    // down-right
     else if (t_angle >= ALLEGRO_PI / 8 && t_angle < 3 * ALLEGRO_PI / 8)
-        dir = 2; // down-right
+        dir = 2;
+    // down
     else if (t_angle >= 3 * ALLEGRO_PI / 8 && t_angle < 5 * ALLEGRO_PI / 8)
-        dir = 0; // down
+        dir = 0;
+    // down-left
     else if (t_angle >= 5 * ALLEGRO_PI / 8 && t_angle < 7 * ALLEGRO_PI / 8)
-        dir = 1; // down-left
+        dir = 1;
+    // left
     else if (t_angle >= 7 * ALLEGRO_PI / 8 || t_angle < -7 * ALLEGRO_PI / 8)
-        dir = 3; // left
+        dir = 3;
+    // up-left
     else if (t_angle >= -7 * ALLEGRO_PI / 8 && t_angle < -5 * ALLEGRO_PI / 8)
-        dir = 6; // up-left
+        dir = 6;
+    // up
     else if (t_angle >= -5 * ALLEGRO_PI / 8 && t_angle < -3 * ALLEGRO_PI / 8)
-        dir = 7; // up
+        dir = 7;
+    // up-right
     else
-        dir = 5; // up-right
+        dir = 5;
 
+    // applies current rotation to animate
     *fy = dir * 24;
 }
 
+//==========================================================================
+//
+//    CursorChanger
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
 void CursorChanger(void)
 {
-    if (keys[ALLEGRO_KEY_T]) {          // NOTE: target mode
-        chosen_cursor = cursors.aim;    // the cursor bitmap is changed
-        cursor_flag   = CURSOR_TARGET;  // flagging the current cursor
-        if (dlg_open) dlg_open = false; // doesn't work during chat mode
-        if (!mouse_animating) {         // doesn't work during cursor click
+    if (keys[ALLEGRO_KEY_T]) {           // NOTE: target mode
+        chosen_cursor = cursors.aim;     // changes the cursor bitmap
+        cursor_flag   = CURSOR_TARGET;   // flags the current cursor
+        if (dlg_open) dlg_open = false;  // doesn't work during dialogue window
+        if (!mouse_animating) {          // doesn't work during cursor click
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);
         }
-    } else if (keys[ALLEGRO_KEY_H]) { // NOTE: hand/normal mode
+    }
+    else if (keys[ALLEGRO_KEY_H]) {  // NOTE: hand/normal mode
         chosen_cursor = cursors.normal;
         cursor_flag   = CURSOR_NORMAL;
         al_set_mouse_cursor(disp, current_cursor);
-    } else if (keys[ALLEGRO_KEY_E]) { // NOTE: eye/view mode
+    }
+    else if (keys[ALLEGRO_KEY_E]) {  // NOTE: eye/view mode
         chosen_cursor = cursors.view;
         cursor_flag   = CURSOR_EYE;
         if (dlg_open) dlg_open = false;

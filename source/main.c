@@ -17,13 +17,13 @@
  *     3b. Damage system.
  */
 
+#include "main.h"
 #include "bitmap.h"
 #include "collision.h"
 #include "debug.h"
 #include "dialoguesys.h"
 #include "game.h"
 #include "input.h"
-#include "main.h"
 #include "textdat.h"
 #include "tile_render.h"
 
@@ -79,7 +79,9 @@ bool running, redraw;
 
 int main(void)
 {
+    //
     // INITIALIZERS /////////////////////////////////////////////////////////
+    //
 
     if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() ||
         !al_install_keyboard() || !al_init_font_addon() ||
@@ -110,14 +112,14 @@ int main(void)
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_start_timer(timer);
 
+    //
     // PLAYER MOVEMENT //////////////////////////////////////////////////////
+    //
 
     spr.px = 320, spr.py = 200;
     spr.frame_w = 0, spr.frame_h = 0;
     sp     = 3.5;  // movement speed
     frames = 0.f;
-
-    // LOOP ////////////////////////////////////////////////////////////////
 
     // reset these arrays
     memset(keys, 0, sizeof(keys));
@@ -132,6 +134,9 @@ int main(void)
         return 1;
     }
 
+    //
+    // LOOP ////////////////////////////////////////////////////////////////
+    //
     running = true;
     redraw  = true;
     while (running) {
