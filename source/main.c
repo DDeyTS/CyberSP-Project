@@ -3,19 +3,21 @@
 //** File: main.c (CyberSP Project)
 //** Purpose: Main game stuff
 //**
-//** Last Update: 01-09-2025 12:36
+//** Last Update: 02-09-2025 14:24
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 /*
- * LIST OF FEATURES TO DO (27-08-25)
+ * LIST OF FEATURES TO DO (01-09-25)
  * 1. Collision walls on the map.
  * 2. NPC sprite render. (Done but it call for updates)
  *     2a. Entity movement manager.
  * 3. Shooter mode.
  *     3a. Shooting with pistol.
  *     3b. Damage system.
+ * 4. Simple inventory (like first Metal Gear).
+ * 5. Mouth cursor.
  */
 
 #include "main.h"
@@ -61,7 +63,6 @@ bool show_desc = false;
 
 // sprite stuff
 float sp;
-float frames;
 
 // loop stuff
 bool running, redraw;
@@ -81,7 +82,7 @@ bool running, redraw;
 int main(void)
 {
     //
-    // initializers
+    // Initializers
     //
 
     if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() ||
@@ -106,7 +107,7 @@ int main(void)
     DescStorage(desc);
 
     //
-    // event queue
+    // Event Queue
     //
 
     al_register_event_source(queue, al_get_display_event_source(disp));
@@ -116,21 +117,20 @@ int main(void)
     al_start_timer(timer);
 
     //
-    // sprites movement
+    // Sprites Movement
     //
 
     protag.px = 320, protag.py = 200;
     protag.frame_w = 0, protag.frame_h = 0;
     sp     = 3.5;  // movement speed
-    frames = 0.f;
 
-    ent[ENTITY_GANGMEMBER].px      = 200;
+    ent[ENTITY_GANGMEMBER].px      = 150;
     ent[ENTITY_GANGMEMBER].py      = 200;
     ent[ENTITY_GANGMEMBER].frame_w = 0;
     ent[ENTITY_GANGMEMBER].frame_h = 0;
 
     //
-    // main loop
+    // Main Loop
     //
 
     // reset these arrays

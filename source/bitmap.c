@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Sprite handling (animation, movement)
 //**
-//** Last Update: 01-09-2025 12:40
+//** Last Update: 02-09-2025 12:02
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -16,12 +16,11 @@
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
-SpriteSheetInfo protag, ent[NUM_ENTITY];
+SpriteSheetInfo protag = {.frames = 0.f, .reset_frame = 0};
+SpriteSheetInfo ent[NUM_ENTITY];
 ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light = NULL;
 
 // PRIVATE DATA DEFINITIONS /////////////////////////////////////////////////
-
-static int reset_frame = 0;
 
 //==========================================================================
 //
@@ -159,22 +158,22 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
     if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_D]) {
         // Up-right
         *fx = fq, *fy = rows * 5;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
     }
     else if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_A]) {
         // Up-left
         *fx = fq, *fy = rows * 6;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
     }
     else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_D]) {
         // Down-right
         *fx = fq, *fy = rows * 2;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
     }
     else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_A]) {
         // Down-left
         *fx = fq, *fy = rows;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
 
         //
         // Straight Movement
@@ -182,23 +181,23 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
     }
     else if (keys[ALLEGRO_KEY_D]) {
         *fx = fq, *fy = rows * 4;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
     }
     else if (keys[ALLEGRO_KEY_A]) {
         *fx = fq, *fy = rows * 3;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
     }
     else if (keys[ALLEGRO_KEY_S]) {
         *fx = fq, *fy = 0;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
     }
     else if (keys[ALLEGRO_KEY_W]) {
         *fx = fq, *fy = (rows * 7) + 1;
-        reset_frame = *fy;
+        protag.reset_frame = *fy;
     }
     else {
         *fx = 0;
-        *fy = reset_frame;
+        *fy = protag.reset_frame;
     }
 
     //
@@ -306,4 +305,77 @@ void CursorChanger(void)
             al_set_mouse_cursor(disp, current_cursor);
         }
     }
+}
+
+//
+//===================================
+//
+// EntityMovement
+//
+//===================================
+//
+
+void EntityMovement(int e, float *px, float *py, float sp, int *fx, int *fy, float frames,
+                    int dx, int dy)
+{
+    int cols = 16;
+    int rows = 24;
+    float fq = (cols * frames) + cols;
+
+    if (dx > 0 && dy < 0) {
+        *fx                = fq;
+        *fy                = rows * 5;
+        ent[e].reset_frame = *fy;
+    }
+    else if (dx < 0 && dy < 0) {
+        *fx                = fq;
+        *fy                = rows * 6;
+        ent[e].reset_frame = *fy;
+    }
+    else if (dx > 0 && dy > 0) {
+        *fx                = fq;
+        *fy                = rows * 2;
+        ent[e].reset_frame = *fy;
+    }
+    else if (dx < 0 && dy > 0) {
+        *fx                = fq;
+        *fy                = rows;
+        ent[e].reset_frame = *fy;
+    }
+    else if (dx > 0) {
+        *fx                = fq;
+        *fy                = rows * 4;
+        ent[e].reset_frame = *fy;
+    }
+    else if (dx < 0) {
+        *fx                = fq;
+        *fy                = rows * 3;
+        ent[e].reset_frame = *fy;
+    }
+    else if (dy > 0) {
+        *fx                = fq;
+        *fy                = 0;
+        ent[e].reset_frame = *fy;
+    }
+    else if (dy < 0) {
+        *fx                = fq;
+        *fy                = (rows * 7) + 1;
+        ent[e].reset_frame = *fy;
+    }
+    else {
+        *fx = 0;
+        *fy = ent[e].reset_frame;
+    }
+
+    float mov_x = dx * sp;
+    float mov_y = dy * sp;
+
+    if (dx != 0 && dy != 0) {
+        float adj = 0.707f;
+        mov_x *= adj;
+        mov_y *= adj;
+    }
+
+    *px += mov_x;
+    *py += mov_y;
 }

@@ -1,6 +1,6 @@
 //**************************************************************************
 //**
-//** File: input.c (CyberSP Project) 
+//** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
 //** Last Update: 01-09-2025 12:49
 //** Author: DDeyTS
@@ -23,8 +23,8 @@ bool mouse_animating = false;
 
 // PRIVATE DATA DEFINITIONS ////////////////////////////////////////////////
 
-static double anim_timer    = 0.0;  // NOTE: in case of trouble, use double
-static double anim_duration = 0.15; // NOTE: same above
+static double anim_timer    = 0.0;   // NOTE: in case of trouble, use double
+static double anim_duration = 0.15;  // NOTE: same above
 
 //==========================================================================
 //
@@ -39,13 +39,14 @@ static double anim_duration = 0.15; // NOTE: same above
 
 void KeyboardOn(void)
 {
-    // 
+    //
     // Keyboard Boolean
     //
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         keys[ev.keyboard.keycode] = true;
-    } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+    }
+    else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
         keys[ev.keyboard.keycode] = false;
     }
 
@@ -88,7 +89,8 @@ void KeyboardOn(void)
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_1]) {
         DBG_NpcChanger();
-    } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_2]) {
+    }
+    else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_2]) {
         speaker = 0;
     }
 }
@@ -109,7 +111,7 @@ void MouseOn(void)
     //
     // Global Mouse Position
     //
-  
+
     if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
         mouse_x = ev.mouse.x;
         mouse_y = ev.mouse.y;
@@ -135,7 +137,8 @@ void MouseOn(void)
                 printf("Apareceu a caixa!\n");
             }
         }
-    } else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
+    }
+    else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
         mouse[ev.mouse.button] = false;
     }
 
@@ -162,14 +165,15 @@ void MouseOn(void)
 
         if (!choosing_topic && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             // nothing happens, just ignore the event
-        } else {
+        }
+        else {
             mouse_x = ev.mouse.x;
             mouse_y = ev.mouse.y;
 
-            int tx      = 50;  // topics' axes
-            int ty      = 250; // topics' initial axes
-            int spacing = 20;  // vertical space between topics
-            int topic_w = 150; // area able to click on
+            int tx      = 50;   // topics' axes
+            int ty      = 250;  // topics' initial axes
+            int spacing = 20;   // vertical space between topics
+            int topic_w = 150;  // area able to click on
             int topic_h = spacing;
 
             // as long as integer is lesser than NPC's number of topics, do the loop
@@ -180,20 +184,20 @@ void MouseOn(void)
                 // checks if mouse is inside the clickable area of the topic
                 if (mouse_x >= tx && mouse_x <= tx + topic_w && mouse_y >= top_y &&
                     mouse_y <= top_y + topic_h) {
-                    selected_topic = i; // defines the chosen topic
+                    selected_topic = i;  // defines the chosen topic
 
                     if (!choosing_topic) {
                         choosing_topic = true;
-                        active_topic   = -1; // no active topic, yet
+                        active_topic   = -1;  // no active topic, yet
                     }
 
                     if (mouse[1]) {
-                        active_topic   = selected_topic; // topic is activated
-                        choosing_topic = false;          // quit from choosing mode
-                        show_intro     = false;          // hide the intro dialogue
+                        active_topic   = selected_topic;  // topic is activated
+                        choosing_topic = false;           // quit from choosing mode
+                        show_intro     = false;           // hide the intro dialogue
                     }
 
-                    break; // finish loop when the mouse finds a topic
+                    break;  // finish loop when the mouse finds a topic
                 }
             }
         }
@@ -222,7 +226,8 @@ void MouseClick(void)
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);
         }
-    } else {
+    }
+    else {
         if (current_cursor != cursors.normal) {
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);
@@ -291,12 +296,6 @@ void CloseGame(void)
 void ToggleToAim(void)
 {
     // sprite follows cursor when aiming
-    if (chosen_cursor == cursors.aim) {
-        SpriteAimAtCursor(protag.px, protag.py, &protag.frame_h);
-        protag.frame_w = 0;
-    } else {
-        ProtagMovement(keys, &protag.px, &protag.py, sp, &protag.frame_w, &protag.frame_h,
-                       (int)frames);
-    }
+    SpriteAimAtCursor(protag.px, protag.py, &protag.frame_h);
+    protag.frame_w = 0;
 }
-

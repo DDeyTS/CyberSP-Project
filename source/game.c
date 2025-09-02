@@ -2,7 +2,7 @@
 //**
 //** File: game.c (CyberSP Project)
 //** Purpose: Game logic
-//** Last Update: 01-09-2025 12:29
+//** Last Update: 02-09-2025 14:35
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -13,6 +13,7 @@
 #include "input.h"
 #include "main.h"
 #include "tile_render.h"
+#include <stdlib.h>
 
 //==========================================================================
 //
@@ -79,15 +80,65 @@ void GameLoop(void)
         MouseClick();
 
         //
-        // character animation
+        // protagonist's walking animation
         //
-
-        frames += 0.3f;    // frame speed
-        if (frames > 4) {  // reset frame queue
-            frames -= 4;
+        {
+            protag.frames += 0.3f;    // frame speed
+            if (protag.frames > 4) {  // reset frame queue
+                protag.frames -= 4;
+            }
+            if (chosen_cursor == cursors.aim) {
+                ToggleToAim();
+            }
+            else {
+                ProtagMovement(keys, &protag.px, &protag.py, sp, &protag.frame_w,
+                               &protag.frame_h, (int)protag.frames);
+            }
         }
 
-        ToggleToAim();
+        //
+        // NPC random movement
+        //
+        
+        // TODO: upgrade that into a function
+        {
+            static int move_count = 0;
+            static int npc_x = 0, npc_y = 0;
+
+            move_count++;
+            if (move_count > 15) {
+                move_count = 0;
+                int r      = rand() % 4;
+                switch (r) {
+                case 0:
+                    npc_x = -1;
+                    npc_y = 0;
+                    break;
+                case 1:
+                    npc_x = 1;
+                    npc_y = 0;
+                    break;
+                case 2:
+                    npc_x = 0;
+                    npc_y = -1;
+                    break;
+                case 3: 
+                    npc_x = 0;
+                    npc_y = 1;
+                    break;
+                }
+            }
+
+            ent[ENTITY_GANGMEMBER].frames += 0.3f;
+            if (ent[ENTITY_GANGMEMBER].frames > 4) {
+                ent[ENTITY_GANGMEMBER].frames -= 4;
+            }
+            EntityMovement(ENTITY_GANGMEMBER, &ent[ENTITY_GANGMEMBER].px,
+                           &ent[ENTITY_GANGMEMBER].py, sp,
+                           &ent[ENTITY_GANGMEMBER].frame_w,
+                           &ent[ENTITY_GANGMEMBER].frame_h,
+                           (int)ent[ENTITY_GANGMEMBER].frames, npc_x, npc_y);
+        }
 
         redraw = true;
     }

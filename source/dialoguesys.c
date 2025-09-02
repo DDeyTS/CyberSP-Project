@@ -1,9 +1,9 @@
 //**************************************************************************
 //**
 //** File: dialoguesys.c (CyberSP Project)
-//** Purpose: Any text to display happens here   
+//** Purpose: Any text to display happens here
 //**
-//** Last Update: 31-08-2025 23:43 
+//** Last Update: 31-08-2025 23:43
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -122,7 +122,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
     float safe_height = text_max_h - 10.0f;
 
     //
-    // render the NPC's face
+    // Render NPC's Face
     //
 
     if (portrait) {
@@ -136,7 +136,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
     }
 
     //
-    // render the protagonist's face
+    // Render Protagonist's Face
     //
 
     al_draw_scaled_bitmap(protagonist, 0, 0, al_get_bitmap_width(protagonist),
@@ -144,16 +144,15 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
                           portrait_size, portrait_size, 0);
 
     //
-    // dialogue box sprite
+    // Render Dialogue Box
     //
 
     al_draw_bitmap(chatbox, 0, 0, 0);
 
+    //
+    // Little green light in the right side of the box
+    //
     {
-        //
-        // little green light in the right side of the box
-        //
-
         static int light_frame   = 0;
         static double last_frame = 0;
         const double frame_delay = 0.2;
@@ -183,6 +182,10 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
                      y + padding / 2, 0, name);
     }
 
+    //
+    // Text Loader
+    //
+
     int line_height = al_get_font_line_height(font_std);
     int max_lines   = safe_height / line_height;
     int line_count  = 0;
@@ -207,7 +210,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
         }
 
         //
-        // line break
+        // Line Break
         //
 
         int word_width  = al_get_text_width(font_std, draw_word);
@@ -223,7 +226,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
         }
 
         //
-        // print dialogue
+        // Print Dialogue
         //
 
         al_draw_text(font_std, is_highlight ? highlight_color : font_color,
@@ -238,11 +241,9 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
     }
 
     //
-    // draws the last line
+    // Draws Last Line
     //
 
-    // if amount of lines is lesser than maximum and the length is bigger than
-    // zero:
     if (line_count < max_lines && strlen(line) > 0) {
         al_draw_text(font_std, font_color, text_x, line_y + 20, 0, line);
     }
@@ -278,7 +279,6 @@ void DlgExit(void)
 
 void InitTopicMenu(NPC *npc, int selected)
 {
-    // if number of topics is zero or lesser, it doesn't continue
     if (npc->num_topic <= 0) return;
 
     float x = 100, y = 250;
@@ -289,11 +289,11 @@ void InitTopicMenu(NPC *npc, int selected)
                  "Ask About...");
 
     //
-    // topic scroller
+    // Topic List
     //
 
     // as long as integer is lesser than number of topics, increment to show
-    // each unlocked topic:
+    // each available topic:
     for (int i = 0; i < npc->num_topic; i++) {
         color =
             (i == selected) ? al_map_rgb(255, 255, 0) : al_map_rgb(255, 255, 255);
@@ -315,27 +315,26 @@ void InitTopicMenu(NPC *npc, int selected)
 void LoadDlg(NPC *npc, const char *dialogue)
 {
     //
-    // Introduction dialogue
+    // Introduction
     //
-    // if intro dialogue is true: print it
+
     if (npc->topics->intro_text) {
         InitDlgBox(npc->portrait_id, npc->name, npc->topics->intro_text);
     }
 
     //
-    // Topic dialogue
+    // Topic
     //
-    // as long as integer is lesser than number of topic, increment and return
-    // all the topics
+
     for (int i = 0; i < npc->num_topic; i++) {
-        // if topic and dialogue are the same: print it
         if (strcmp(npc->topics[i].topic, dialogue) == 0) {
             InitDlgBox(npc->portrait_id, npc->name, npc->topics[i].text);
-            // if it doesn't have a portrait: stop and prints a warning
+
             if (!npc->portrait_id) {
                 printf("Warning: NPC '%s' is without portrait\n", npc->name);
                 exit(1);
             }
+
             return;
         }
     }
@@ -372,7 +371,6 @@ TopicID GetTopicID(const char *topic)
 void LearnTopic(const char *topic)
 {
     TopicID id = GetTopicID(topic);
-    // if index isn't empty and doesn't have a topic to learn: learns the topic
     if (id != NONE_TOPIC && !learned_topics[id]) {
         learned_topics[id] = true;
 
@@ -404,55 +402,43 @@ void InitDescBox(float box_x, float box_y, const char *text)
     // width of each space key based on the used font
     const int space_w = al_get_text_width(font_std, " ");
 
-    //
-    // copy the description text to a word buffer
-    //
-
+    // copy description text to word buffer
     char buffer[WORDS_MAX];
     strncpy(buffer, text, sizeof(buffer));
     buffer[sizeof(buffer) - 1] = '\0';
 
-    //
     // acumulators to size the box
-    //
-
     float line_w = 0.0f;  // max width of the current line (without padding)
     float widest = 0.0f;  // bigger width between all the lines (without padding)
     int lines    = 1;     // starts from 1st line
 
+    // sizing how much lines and what width they need to have
     //
-    // Sizing how much lines and what width they need to have
-    //
-
-    // for each word in the buffer, split by spaces and stored in the pointer,
-    // as long as it isn't null: the pointer will update to store the next word
+    // as long as each word in the buffer, split by spaces and stored in the
+    // pointer, isn't null: the pointer will update to store the next word
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
+        // checks if the words have '|' before it
         const char *draw = (w[0] == '|') ? w + 1 : w;
         // current width
         int ww = al_get_text_width(font_std, draw);
 
         // adds padding before printed words (except at first line)
         int add = (line_w > 0) ? space_w : 0;
-        // if it adding these words + space will blow up the width limit: break
-        // the line
+        // if it adding these words + space will blow up the width limit:
         if (line_w + add + ww > wrap_w_cap) {
-            if (line_w > widest)  // if width is bigger than maximum:
-                widest = line_w;  // stores bigger line so far
-            lines++;              // starts a new line...
-            line_w = (float)ww;   // ... with the original width of the last line
+            if (line_w > widest) widest = line_w;  // stores bigger line so far
+            lines++;                               // starts a new line...
+            line_w = (float)ww;  // ... with the original width of the last line
         }
         else {
             // continue accumulating words in the same line
             line_w += add + ww;
         }
-
-        // everything will repeat until strtok() is NULL
     }
-    // if the width of the last line is bigger than maximum: let it be the widest
     if (line_w > widest) widest = line_w;
 
     //
-    // computes description window with padding around the text
+    // Description Window (with padding around the text)
     //
 
     float inner_w = widest;
@@ -464,14 +450,14 @@ void InitDescBox(float box_x, float box_y, const char *text)
     float box_h = lines * line_h + 2 * padding;
 
     //
-    // draws description box
+    // Draws Description Box
     //
 
     al_draw_filled_rectangle(box_x, box_y, box_x + box_w, box_y + box_h,
                              al_map_rgba(0, 0, 50, 100));
 
     //
-    // print description text
+    // Print Text
     //
 
     float text_x = box_x + padding;
@@ -484,21 +470,16 @@ void InitDescBox(float box_x, float box_y, const char *text)
 
     float cx = 0.0f;  // horizontal cursor inside the current line
 
-    // NOTE: below happens nearly the same than last for loop.
-    // for each word in the buffer, split by spaces and stored in the pointer,
-    // as long as it isn't null: the pointer will update to store the next word
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
-        // checks if the words have '|' before it
         bool is_highlight = (w[0] == '|');
         // if there's highlighted word: print it one character ahead otherwise print
         // it normally
         const char *draw = is_highlight ? w + 1 : w;
-        // current width
         int ww = al_get_text_width(font_std, draw);
 
         int add = (cx > 0.0f) ? space_w : 0;
 
-        // if it print words beyond the safe width: break the line
+        // if it print words beyond the safe width:
         if (cx + add + ww > safe_w) {
             text_y += line_h;  // new line
             cx  = 0.0f;        // reset cursor
@@ -532,7 +513,7 @@ void InitDescBox(float box_x, float box_y, const char *text)
 void InitStdFont()
 {
     //
-    // error catcher
+    // Error Catcher
     //
 
     const char *path = "fonts/Steelflight.ttf";
@@ -545,7 +526,7 @@ void InitStdFont()
     fclose(f);
 
     //
-    // loading fonts
+    // Loading Fonts
     //
 
     int f_size = 13;

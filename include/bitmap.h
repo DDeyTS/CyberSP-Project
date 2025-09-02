@@ -17,6 +17,8 @@ typedef struct {
   int frame_w, frame_h, rows, cols; // frame manager
   float px, py;                     // sprite movement
   ALLEGRO_BITMAP *spr;
+  float frames;
+  int reset_frame;
 } SpriteSheetInfo;
 
 extern SpriteSheetInfo protag, ent[];
@@ -29,6 +31,8 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx,
                     int *fy, float frames);
 void SpriteAimAtCursor(float px, float py, int *fy);
 void CursorChanger(void);
+void EntityMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
+                    float frames, int dx, int dy);
 
 extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light;
 
