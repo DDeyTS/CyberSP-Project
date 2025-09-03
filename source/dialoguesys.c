@@ -74,7 +74,7 @@ NPC *CreateNpc(const char *name, int num_topic)
 //
 //==========================================================================
 
-void FillTopic(NPC *npc, int index, char *topic, char *text)
+void FillTopic(NPC *npc, int index, char *topic, const char *text)
 {
     // NOTE: ignore the warnings, perhaps it's a glibc bug.
     npc->topics[index].topic = strdup(topic);
@@ -91,7 +91,10 @@ void FillTopic(NPC *npc, int index, char *topic, char *text)
 //
 //==========================================================================
 
-void FillIntro(NPC *npc, char *text) { npc->topics->intro_text = strdup(text); }
+void FillIntro(NPC *npc, const char *text)
+{
+    npc->topics->intro_text = strdup(text);
+}
 
 //==========================================================================
 //
@@ -104,7 +107,7 @@ void FillIntro(NPC *npc, char *text) { npc->topics->intro_text = strdup(text); }
 //
 //==========================================================================
 
-void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
+void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
 {
     // Box attributes
     float box_w = 640;
@@ -321,7 +324,7 @@ void LoadDlg(NPC *npc, const char *dialogue)
     //
 
     if (npc->topics->intro_text) {
-        InitDlgBox(npc->portrait_id, npc->name, (char*)npc->topics->intro_text);
+        InitDlgBox(npc->portrait_id, npc->name, (char *)npc->topics->intro_text);
     }
 
     //
@@ -330,7 +333,7 @@ void LoadDlg(NPC *npc, const char *dialogue)
 
     for (int i = 0; i < npc->num_topic; i++) {
         if (strcmp(npc->topics[i].topic, dialogue) == 0) {
-            InitDlgBox(npc->portrait_id, npc->name, (char*)npc->topics[i].text);
+            InitDlgBox(npc->portrait_id, npc->name, (char *)npc->topics[i].text);
 
             if (!npc->portrait_id) {
                 printf("Warning: NPC '%s' is without portrait\n", npc->name);

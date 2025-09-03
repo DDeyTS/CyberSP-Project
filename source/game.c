@@ -9,11 +9,11 @@
 
 #include "game.h"
 #include "bitmap.h"
+#include "debug.h"
 #include "dialoguesys.h"
 #include "input.h"
 #include "main.h"
 #include "tile_render.h"
-#include <stdlib.h>
 
 //==========================================================================
 //
@@ -101,7 +101,6 @@ void GameLoop(void)
         //
         // NPC random movement
         //
-
         // TODO: upgrade that into a function
         {
             static int move_count = 0;
@@ -166,32 +165,32 @@ void GameCrusher(void)
 
     al_destroy_bitmap(npc[dlgstats.speaker]->portrait_id);
     for (int i = 0; i < npc[dlgstats.speaker]->num_topic; i++) {
-        free(npc[dlgstats.speaker]->topics[i].topic);
-        free(npc[dlgstats.speaker]->topics[i].text);
+        free((char *)npc[dlgstats.speaker]->topics[i].topic);
+        free((char *)npc[dlgstats.speaker]->topics[i].text);
     }
     free(npc[dlgstats.speaker]->topics);
     free(npc[dlgstats.speaker]);
 
-    // 
-    // Tile Mapping 
+    //
+    // Tile Mapping
     //
 
     tmx_map_free(map);
 
-    // 
-    // Fonts 
+    //
+    // Fonts
     //
 
     ExplodeFont();
 
-    // 
-    // Sprites 
+    //
+    // Sprites
     //
 
     BitmapExplode();
 
-    // 
-    // Cursors 
+    //
+    // Cursors
     //
 
     if (cursors.normal) al_destroy_mouse_cursor(cursors.normal);
@@ -199,8 +198,8 @@ void GameCrusher(void)
     if (cursors.aim) al_destroy_mouse_cursor(cursors.aim);
     if (cursors.clicking) al_destroy_mouse_cursor(cursors.clicking);
 
-    // 
-    // Allegro Stuff 
+    //
+    // Allegro Stuff
     //
 
     al_destroy_event_queue(queue);

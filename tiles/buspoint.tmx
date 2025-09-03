@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="3">
- <tileset firstgid="1" source="street_tiles.tsx"/>
- <tileset firstgid="11" source="bus_stop_tile.tsx"/>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="5">
+ <properties>
+  <property name="collide" type="bool" value="false"/>
+ </properties>
+ <tileset firstgid="1" name="dirtystreet_tiles" tilewidth="32" tileheight="32" tilecount="9" columns="3">
+  <image source="dirtystreet_tiles.png" width="96" height="96"/>
+ </tileset>
+ <tileset firstgid="10" name="bus_stop_tile" tilewidth="32" tileheight="32" tilecount="15" columns="5">
+  <image source="bus_stop_tile.png" width="160" height="96"/>
+ </tileset>
  <layer id="1" name="Camada de Blocos 1" width="8" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjY2BgYCMCczNgApgcIxAzQWkYmwmHPDJNjL20xgCSrAE4
+   eJxjZWBgYKUAMwIxExRzINEgzAzELHj0shEhD8QNlMizY3EbjOYEYgDs4AJF
   </data>
  </layer>
- <objectgroup id="2" name="Camada de Objetos 1">
-  <object id="1" x="64" y="0" width="160" height="32" visible="0">
+ <layer id="4" name="buspoint" width="8" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYGBg4AJibiDmgWJeIOZjQAB+IBYCYkEkLIwkLwLEokAsBsTiUCzBMDQAAPV8ATU=
+  </data>
+ </layer>
+ <objectgroup id="2" name="collision">
+  <properties>
+   <property name="collide" type="bool" value="true"/>
+  </properties>
+  <object id="2" x="32" y="32" width="32" height="32">
    <properties>
-    <property name="collides" type="bool" value="true"/>
+    <property name="collide" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="2" x="64" y="0" width="160" height="64">
+  <object id="3" x="192" y="32" width="32" height="32">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="4" x="32" y="0" width="192" height="32">
    <properties>
     <property name="collide" type="bool" value="true"/>
    </properties>

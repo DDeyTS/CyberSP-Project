@@ -8,6 +8,7 @@
 //**************************************************************************
 
 #include "collision.h"
+#include "main.h"
 
 /*
       Radical change!
@@ -23,6 +24,9 @@
       a lot of CRPG inspirations!
                                             (July 13, 2025)
 */
+
+CollisionRect colliders[256];
+int colliders_count = 0;
 
 //==========================================================================
 //
@@ -40,13 +44,10 @@
 //
 //==========================================================================
 
-bool RectSqColl(float px, float py, int pw, int ph, float wall_x1, float wall_y1,
-                int wall_x2, int wall_y2)
+bool RectSqColl(float px, float py, int pw, int ph, float wx, float wy, int ww,
+                int wh)
 {
-    return !(px + pw <= wall_x1 ||      // left wall
-             px >= wall_x1 + wall_x2 || // right wall
-             py + ph <= wall_y1 ||      // upper wall
-             py >= wall_y1 + wall_y2);  // lower wall
+    return !(px + pw <= wx || px >= wx + ww || py + ph <= wy || py >= wy + wh);
 }
 
 //==========================================================================
@@ -65,8 +66,19 @@ bool RectSqColl(float px, float py, int pw, int ph, float wall_x1, float wall_y1
 
 bool CircleColl(float cx1, float cy1, float r1, float cx2, float cy2, float r2)
 {
-    float dx   = cx1 - cx2; // player_x + circle_x
-    float dy   = cy1 - cy2; // player_y + circle_y
-    float rsum = r1 + r2;   // player_ray (aka frame_w) + circle_ray
+    float dx   = cx1 - cx2;  // player_x + circle_x
+    float dy   = cy1 - cy2;  // player_y + circle_y
+    float rsum = r1 + r2;    // player_ray (aka frame_w) + circle_ray
     return (dx * dx + dy * dy) < (rsum * rsum);
+}
+
+void AddCollRect(float x, float y, int w, int h)
+{
+    if (colliders_count < 256) {
+        colliders[colliders_count].x = x;
+        colliders[colliders_count].y = y;
+        colliders[colliders_count].w = w;
+        colliders[colliders_count].h = h;
+        colliders_count++;
+    }
 }

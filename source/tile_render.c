@@ -8,6 +8,9 @@
 //**************************************************************************
 
 #include "tile_render.h"
+#include "collision.h"
+
+#include <tmx.h>
 
 /*
       This entire code is clipped from libTMX tutorial found in their
@@ -51,10 +54,7 @@ void *AllegTexLoader(const char *path)
 //    Callback to free texture.
 //==========================================================================
 
-void AllegTexFree(void *ptr)
-{
-    al_destroy_bitmap((ALLEGRO_BITMAP *)ptr);
-}
+void AllegTexFree(void *ptr) { al_destroy_bitmap((ALLEGRO_BITMAP *)ptr); }
 
 //==========================================================================
 //
@@ -150,7 +150,8 @@ void DrawPolyline(double **points, double x, double y, int count,
 //
 //==========================================================================
 
-void DrawPolygon(double **points, double x, double y, int count, ALLEGRO_COLOR color)
+void DrawPolygon(double **points, double x, double y, int count,
+                 ALLEGRO_COLOR color)
 {
     DrawPolyline(points, x, y, count, color);
     if (count > 2)
@@ -188,9 +189,17 @@ void DrawObjects(tmx_object_group *objgr)
                                 obj->y + obj->height / 2.0, obj->width / 2.0,
                                 obj->height / 2.0, color, LINE_THICKNESS);
                 break;
-            default:
-                break;
+            default: break;
             }
+        }
+
+        //
+        // Collision Object
+        //
+
+        tmx_property *p = tmx_get_property(obj->properties, "collide");
+        if (p && p->value.boolean) {
+            AddCollRect(obj->x, obj->y, obj->width, obj->height);
         }
         obj = obj->next;
     }
@@ -208,11 +217,14 @@ void DrawAllLayers(tmx_map *map, tmx_layer *layers)
         if (layers->visible) {
             if (layers->type == L_GROUP) {
                 DrawAllLayers(map, layers->content.group_head);
-            } else if (layers->type == L_IMAGE) {
+            }
+            else if (layers->type == L_IMAGE) {
                 DrawImgLayer(layers->content.image);
-            } else if (layers->type == L_LAYER) {
+            }
+            else if (layers->type == L_LAYER) {
                 DrawTileLayer(map, layers);
-            } else if (layers->type == L_OBJGR) {
+            }
+            else if (layers->type == L_OBJGR) {
                 DrawObjects(layers->content.objgr);
             }
         }

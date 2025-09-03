@@ -11,6 +11,7 @@
 /*
  * LIST OF FEATURES TO DO (01-09-25)
  * 1. Collision walls on the map.
+ *     1a. Map changer.
  * 2. NPC sprite render. (Done but it call for updates)
  *     2a. Entity movement manager. (done but it call for updates)
  * 3. Shooter mode.
@@ -61,9 +62,9 @@ bool running, redraw;
 
 //==========================================================================
 //
-//    Main Game
-//
-//    Initializers, game loop, crusher... etc.
+//    main 
+//    Arguments: void 
+//    Return:    void 
 //
 //==========================================================================
 

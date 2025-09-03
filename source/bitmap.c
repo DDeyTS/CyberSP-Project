@@ -230,9 +230,35 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         mov_y *= adj;
     }
 
-    // applies adjusted movement values
-    *px += mov_x;
-    *py += mov_y;
+    // // applies adjusted movement values
+    // *px += mov_x;
+    // *py += mov_y;
+
+    {
+        //
+        // Collision Reader
+        //
+
+        float coll_px = *px + mov_x;
+        float coll_py = *py + mov_y;
+
+        int hitbox_w = protag.frame_w / 2; // 1/2 of width
+        int hitbox_h = protag.frame_h / 4; // 1/4 of height
+
+        bool collided = false;
+        for (int i = 0; i < colliders_count; i++) {
+            if (RectSqColl(coll_px, coll_py, hitbox_w, hitbox_h, colliders[i].x,
+                           colliders[i].y, colliders[i].w, colliders[i].h)) {
+                collided = true;
+                break;
+            }
+        }
+
+        if (!collided) {
+            *px = coll_px;
+            *py = coll_py;
+        }
+    }
 }
 
 //==========================================================================
