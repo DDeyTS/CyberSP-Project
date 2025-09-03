@@ -158,12 +158,14 @@ void MouseOn(void)
     //
     // Dialogue Interaction
     //
+    bool dlg_open = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
+    bool choosing_topic = (dlgstats.flags & CHOOSING_TOPIC) == CHOOSING_TOPIC;
 
     if ((ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
          ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) &&
-        dlgstats.dlg_open) {
+        dlg_open) {
 
-        if (!dlgstats.choosing_topic && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        if (!choosing_topic && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             // nothing happens, just ignore the event
         }
         else {
@@ -186,15 +188,15 @@ void MouseOn(void)
                     mouse_y <= top_y + topic_h) {
                     selected_topic = i;  // defines the chosen topic
 
-                    if (!dlgstats.choosing_topic) {
-                        dlgstats.choosing_topic = true;
-                        active_topic            = -1;  // no active topic, yet
+                    if (!choosing_topic) {
+                        // dlgstats.choosing_topic = true;
+                        dlgstats.flags |= CHOOSING_TOPIC;
+                        active_topic = -1;  // no active topic, yet
                     }
 
                     if (mouse[1]) {
-                        active_topic = selected_topic;    // topic is activated
-                        dlgstats.choosing_topic = false;  // quit from choosing mode
-                        dlgstats.show_intro     = false;  // hide the intro dialogue
+                        active_topic = selected_topic;  // topic is activated
+                        dlgstats.flags &= ~(SHOW_INTRO | CHOOSING_TOPIC);
                     }
 
                     break;  // finish loop when the mouse finds a topic

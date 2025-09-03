@@ -34,6 +34,13 @@ typedef enum {
   NUM_TOPICS,
 } TopicID;
 
+typedef enum : unsigned char {
+  OFF_DLG = 0,
+  SHOW_INTRO = 1 << 1,
+  DLG_OPEN = 1 << 2,
+  CHOOSING_TOPIC = 1 << 3,
+} DlgStatsEnum;
+
 typedef struct {
   const char *topic;
   const char *text;
@@ -53,10 +60,11 @@ typedef struct {
 } DescriptionObj;
 
 typedef struct {
-  bool show_intro;     // turn on the intro dialogue
-  bool dlg_open;       // turn on the chat mode
-  bool choosing_topic; // turn on the topic list
+  // bool show_intro;     // turn on the intro dialogue
+  // bool dlg_open;       // turn on the chat mode
+  // bool choosing_topic; // turn on the topic list
   int speaker;         // flags the current NPC
+  DlgStatsEnum flags;
 } DlgStats;
 
 void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text);

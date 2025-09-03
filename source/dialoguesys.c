@@ -31,7 +31,8 @@ NPC *npc[NUM_NPCS];
 DescriptionObj
     *desc[DESCRIPTIONS_MAX];  // TODO: finding a lighter way to quantify the
                               // amount of description texts inside this array
-DlgStats dlgstats = {true, false, true, 0};
+// DlgStats dlgstats = {true, false, true, 0};
+DlgStats dlgstats = {0, SHOW_INTRO};
 
 ALLEGRO_FONT *font_std, *font_subtitle;
 ALLEGRO_COLOR font_color, name_color;
@@ -265,9 +266,10 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
 
 void DlgExit(void)
 {
-    dlgstats.dlg_open   = false;  // closes the dialogue window
+    dlgstats.flags &= ~(DLG_OPEN | SHOW_INTRO);
+    // dlgstats.dlg_open   = false;  // closes the dialogue window
+    // dlgstats.show_intro = false;  // turn off the intro dialogue
     active_topic        = -1;     // turns unable to choose topics
-    dlgstats.show_intro = false;  // turn off the intro dialogue
 }
 
 //==========================================================================

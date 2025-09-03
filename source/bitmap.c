@@ -246,6 +246,8 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         int hitbox_h = protag.frame_h / 4; // 1/4 of height
 
         bool collided = false;
+        int colliders_count = getColliderCount();
+        CollisionRect *colliders = getColliders();
         for (int i = 0; i < colliders_count; i++) {
             if (RectSqColl(coll_px, coll_py, hitbox_w, hitbox_h, colliders[i].x,
                            colliders[i].y, colliders[i].w, colliders[i].h)) {
@@ -320,11 +322,15 @@ void SpriteAimAtCursor(float px, float py, int *fy)
 
 void CursorChanger(void)
 {
+    bool dlg_open = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
+
     if (keys[ALLEGRO_KEY_T]) {          // NOTE: target mode
         chosen_cursor = cursors.aim;    // changes the cursor bitmap
         cursor_flag   = CURSOR_TARGET;  // flags the current cursor
-        if (dlgstats.dlg_open)
-            dlgstats.dlg_open = false;  // doesn't work during dialogue window
+
+        if (dlg_open)
+            dlgstats.flags &= ~DLG_OPEN;  // doesn't work during dialogue window
+
         if (!mouse_animating) {         // doesn't work during cursor click
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);
@@ -338,7 +344,9 @@ void CursorChanger(void)
     else if (keys[ALLEGRO_KEY_E]) {  // NOTE: eye/view mode
         chosen_cursor = cursors.view;
         cursor_flag   = CURSOR_EYE;
-        if (dlgstats.dlg_open) dlgstats.dlg_open = false;
+
+        if (dlg_open) dlgstats.flags &= ~DLG_OPEN;
+
         if (!mouse_animating) {
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);

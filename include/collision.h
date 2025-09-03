@@ -17,7 +17,10 @@ bool RectSqColl(float px, float py, int pw, int ph, float wall_x1,
 bool CircleColl(float cx1, float cy1, float r1, float cx2, float cy2, float r2);
 void AddCollRect(float x, float y, int w, int h);
 
-extern CollisionRect colliders[];
-extern int colliders_count;
+int getColliderCount();
+CollisionRect *getColliders();
+
+// extern CollisionRect colliders[];
+// extern int colliders_count;
 
 #endif

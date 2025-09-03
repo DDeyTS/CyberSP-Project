@@ -42,8 +42,11 @@ void GameRun(void)
                     desc[obj_desc]->text);
     }
 
-    if (dlgstats.dlg_open) {
-        if (dlgstats.show_intro) {
+    bool dlg_open   = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
+    bool show_intro = (dlgstats.flags & SHOW_INTRO) == SHOW_INTRO;
+
+    if (dlg_open) {
+        if (show_intro) {
             InitDlgBox(npc[dlgstats.speaker]->portrait_id,
                        npc[dlgstats.speaker]->name,
                        npc[dlgstats.speaker]->topics->intro_text);

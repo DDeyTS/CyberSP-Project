@@ -42,9 +42,10 @@ void DBG_DescObjChanger(void)
 
 void DBG_DlgTrigger(void)
 {
-    dlgstats.dlg_open       = true;
-    dlgstats.choosing_topic = true;
-    dlgstats.show_intro     = true;
+    dlgstats.flags = SHOW_INTRO | DLG_OPEN | CHOOSING_TOPIC;
+    // dlgstats.dlg_open       = true;
+    // dlgstats.choosing_topic = true;
+    // dlgstats.show_intro     = true;
 }
 
 //==========================================================================

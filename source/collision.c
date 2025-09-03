@@ -25,8 +25,8 @@
                                             (July 13, 2025)
 */
 
-CollisionRect colliders[256];
-int colliders_count = 0;
+static CollisionRect colliders[256];
+static int colliders_count = 0;
 
 //==========================================================================
 //
@@ -81,4 +81,12 @@ void AddCollRect(float x, float y, int w, int h)
         colliders[colliders_count].h = h;
         colliders_count++;
     }
+}
+
+int getColliderCount() {
+  return colliders_count;
+}
+
+CollisionRect *getColliders() {
+  return colliders;
 }
