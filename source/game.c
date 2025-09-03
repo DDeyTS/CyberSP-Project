@@ -2,7 +2,7 @@
 //**
 //** File: game.c (CyberSP Project)
 //** Purpose: Game logic
-//** Last Update: 02-09-2025 14:35
+//** Last Update: 02-09-2025 23:57
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -42,16 +42,17 @@ void GameRun(void)
                     desc[obj_desc]->text);
     }
 
-    if (dlg_open) {
-        if (show_intro) {
-            InitDlgBox(npc[speaker]->portrait_id, npc[speaker]->name,
-                       npc[speaker]->topics->intro_text);
+    if (dlgstats.dlg_open) {
+        if (dlgstats.show_intro) {
+            InitDlgBox(npc[dlgstats.speaker]->portrait_id,
+                       npc[dlgstats.speaker]->name,
+                       npc[dlgstats.speaker]->topics->intro_text);
         }
         else if (active_topic >= 0) {
-            const char *topic = npc[speaker]->topics[selected_topic].topic;
-            LoadDlg(npc[speaker], topic);
+            const char *topic = npc[dlgstats.speaker]->topics[selected_topic].topic;
+            LoadDlg(npc[dlgstats.speaker], topic);
         }
-        InitTopicMenu(npc[speaker], selected_topic);
+        InitTopicMenu(npc[dlgstats.speaker], selected_topic);
     }
 
     al_flip_display();
@@ -91,15 +92,16 @@ void GameLoop(void)
                 ToggleToAim();
             }
             else {
-                ProtagMovement(keys, &protag.px, &protag.py, sp, &protag.frame_w,
-                               &protag.frame_h, (int)protag.frames);
+                ProtagMovement(keys, &protag.px, &protag.py, protag.speed,
+                               &protag.frame_w, &protag.frame_h,
+                               (int)protag.frames);
             }
         }
 
         //
         // NPC random movement
         //
-        
+
         // TODO: upgrade that into a function
         {
             static int move_count = 0;
@@ -122,22 +124,20 @@ void GameLoop(void)
                     npc_x = 0;
                     npc_y = -1;
                     break;
-                case 3: 
+                case 3:
                     npc_x = 0;
                     npc_y = 1;
                     break;
                 }
             }
 
-            ent[ENTITY_GANGMEMBER].frames += 0.3f;
-            if (ent[ENTITY_GANGMEMBER].frames > 4) {
-                ent[ENTITY_GANGMEMBER].frames -= 4;
+            int e = ENTITY_GANGMEMBER;
+            ent[e].frames += 0.3f;
+            if (ent[e].frames > 4) {
+                ent[e].frames -= 4;
             }
-            EntityMovement(ENTITY_GANGMEMBER, &ent[ENTITY_GANGMEMBER].px,
-                           &ent[ENTITY_GANGMEMBER].py, sp,
-                           &ent[ENTITY_GANGMEMBER].frame_w,
-                           &ent[ENTITY_GANGMEMBER].frame_h,
-                           (int)ent[ENTITY_GANGMEMBER].frames, npc_x, npc_y);
+            EntityMovement(e, &ent[e].px, &ent[e].py, ent[e].speed, &ent[e].frame_w,
+                           &ent[e].frame_h, (int)ent[e].frames, npc_x, npc_y);
         }
 
         redraw = true;
@@ -160,25 +160,48 @@ void GameLoop(void)
 
 void GameCrusher(void)
 {
+    //
     // Dialogue Sys
-    al_destroy_bitmap(npc[speaker]->portrait_id);
-    for (int i = 0; i < npc[speaker]->num_topic; i++) {
-        free(npc[speaker]->topics[i].topic);
-        free(npc[speaker]->topics[i].text);
+    //
+
+    al_destroy_bitmap(npc[dlgstats.speaker]->portrait_id);
+    for (int i = 0; i < npc[dlgstats.speaker]->num_topic; i++) {
+        free(npc[dlgstats.speaker]->topics[i].topic);
+        free(npc[dlgstats.speaker]->topics[i].text);
     }
-    free(npc[speaker]->topics);
-    free(npc[speaker]);
+    free(npc[dlgstats.speaker]->topics);
+    free(npc[dlgstats.speaker]);
+
+    // 
+    // Tile Mapping 
+    //
 
     tmx_map_free(map);
 
+    // 
+    // Fonts 
+    //
+
     ExplodeFont();
 
+    // 
+    // Sprites 
+    //
+
     BitmapExplode();
+
+    // 
+    // Cursors 
+    //
 
     if (cursors.normal) al_destroy_mouse_cursor(cursors.normal);
     if (cursors.view) al_destroy_mouse_cursor(cursors.view);
     if (cursors.aim) al_destroy_mouse_cursor(cursors.aim);
     if (cursors.clicking) al_destroy_mouse_cursor(cursors.clicking);
+
+    // 
+    // Allegro Stuff 
+    //
 
     al_destroy_event_queue(queue);
     al_destroy_timer(timer);

@@ -13,45 +13,51 @@
 #include <string.h>
 
 typedef enum {
-    NPC_JEFFERSON,
-    NPC_CLOWNGIRL,
-    NPC_RAQUEL,
-    NPC_CINDER,
-    NPC_CHEEKS,
-    NPC_BANGER_THE_KILLER,
-    NPC_NICE_CORP,
-    NPC_ANAHI,
-    NPC_BOZZO,
-    NUM_NPCS,
+  NPC_JEFFERSON,
+  NPC_CLOWNGIRL,
+  NPC_RAQUEL,
+  NPC_CINDER,
+  NPC_CHEEKS,
+  NPC_BANGER_THE_KILLER,
+  NPC_NICE_CORP,
+  NPC_ANAHI,
+  NPC_BOZZO,
+  NUM_NPCS,
 } NPCID;
 
 typedef enum {
-    NONE_TOPIC = -1,
-    TOPIC_CORP,
-    TOPIC_PRICE,
-    TOPIC_KINGDOM_OF_CASH,
-    TOPIC_RONALDO,
-    NUM_TOPICS,
+  NONE_TOPIC = -1,
+  TOPIC_CORP,
+  TOPIC_PRICE,
+  TOPIC_KINGDOM_OF_CASH,
+  TOPIC_RONALDO,
+  NUM_TOPICS,
 } TopicID;
 
 typedef struct {
-    char *topic;
-    char *text;
-    char *intro_text; // in case of error, change it for const char.
+  const char *topic;
+  const char *text;
+  const char *intro_text; // in case of error, change it for const char.
 } Topic;
 
 typedef struct {
-    ALLEGRO_BITMAP *portrait_id;
-    const char *name;
-    int num_topic;
-    Topic *topics;
+  ALLEGRO_BITMAP *portrait_id;
+  const char *name;
+  int num_topic;
+  Topic *topics;
 } NPC;
 
 typedef struct {
-    char *text;
-    float pos_x, pos_y;
-    // int index;
+  char *text;
+  float pos_x, pos_y;
 } DescriptionObj;
+
+typedef struct {
+  bool show_intro;     // turn on the intro dialogue
+  bool dlg_open;       // turn on the chat mode
+  bool choosing_topic; // turn on the topic list
+  int speaker;         // flags the current NPC
+} DlgStats;
 
 void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text);
 void DlgExit(void);
@@ -64,6 +70,7 @@ void InitStdFont(void);
 void FillIntro(NPC *npc, char *text);
 void ExplodeFont(void);
 
+extern DlgStats dlgstats;
 extern NPC *npc[];
 extern DescriptionObj *desc[];
 extern ALLEGRO_FONT *font_std, *font_subtitle;

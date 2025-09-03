@@ -31,6 +31,8 @@ NPC *npc[NUM_NPCS];
 DescriptionObj
     *desc[DESCRIPTIONS_MAX];  // TODO: finding a lighter way to quantify the
                               // amount of description texts inside this array
+DlgStats dlgstats = {true, false, true, 0};
+
 ALLEGRO_FONT *font_std, *font_subtitle;
 ALLEGRO_COLOR font_color, name_color;
 bool learned_topics[NUM_TOPICS] = {false};
@@ -260,9 +262,9 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, char *text)
 
 void DlgExit(void)
 {
-    dlg_open     = false;  // closes the dialogue window
-    active_topic = -1;     // turns unable to choose topics
-    show_intro   = false;  // turn off the intro dialogue
+    dlgstats.dlg_open   = false;  // closes the dialogue window
+    active_topic        = -1;     // turns unable to choose topics
+    dlgstats.show_intro = false;  // turn off the intro dialogue
 }
 
 //==========================================================================
@@ -319,7 +321,7 @@ void LoadDlg(NPC *npc, const char *dialogue)
     //
 
     if (npc->topics->intro_text) {
-        InitDlgBox(npc->portrait_id, npc->name, npc->topics->intro_text);
+        InitDlgBox(npc->portrait_id, npc->name, (char*)npc->topics->intro_text);
     }
 
     //
@@ -328,7 +330,7 @@ void LoadDlg(NPC *npc, const char *dialogue)
 
     for (int i = 0; i < npc->num_topic; i++) {
         if (strcmp(npc->topics[i].topic, dialogue) == 0) {
-            InitDlgBox(npc->portrait_id, npc->name, npc->topics[i].text);
+            InitDlgBox(npc->portrait_id, npc->name, (char*)npc->topics[i].text);
 
             if (!npc->portrait_id) {
                 printf("Warning: NPC '%s' is without portrait\n", npc->name);
@@ -475,7 +477,7 @@ void InitDescBox(float box_x, float box_y, const char *text)
         // if there's highlighted word: print it one character ahead otherwise print
         // it normally
         const char *draw = is_highlight ? w + 1 : w;
-        int ww = al_get_text_width(font_std, draw);
+        int ww           = al_get_text_width(font_std, draw);
 
         int add = (cx > 0.0f) ? space_w : 0;
 

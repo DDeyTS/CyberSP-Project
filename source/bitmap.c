@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Sprite handling (animation, movement)
 //**
-//** Last Update: 02-09-2025 12:02
+//** Last Update: 02-09-2025 23:56
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -16,8 +16,20 @@
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
-SpriteSheetInfo protag = {.frames = 0.f, .reset_frame = 0};
-SpriteSheetInfo ent[NUM_ENTITY];
+SpriteSheetInfo protag          = {.frame_w     = 0,
+                                   .frame_h     = 0,
+                                   .px          = 320,
+                                   .py          = 200,
+                                   .speed       = 3.5,
+                                   .frames      = 0.f,
+                                   .reset_frame = 0};
+SpriteSheetInfo ent[NUM_ENTITY] = {[ENTITY_GANGMEMBER] = {.frame_w     = 0,
+                                                          .frame_h     = 0,
+                                                          .px          = 150,
+                                                          .py          = 200,
+                                                          .speed       = 3.5,
+                                                          .frames      = 0.f,
+                                                          .reset_frame = 0}};
 ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light = NULL;
 
 // PRIVATE DATA DEFINITIONS /////////////////////////////////////////////////
@@ -282,11 +294,12 @@ void SpriteAimAtCursor(float px, float py, int *fy)
 
 void CursorChanger(void)
 {
-    if (keys[ALLEGRO_KEY_T]) {           // NOTE: target mode
-        chosen_cursor = cursors.aim;     // changes the cursor bitmap
-        cursor_flag   = CURSOR_TARGET;   // flags the current cursor
-        if (dlg_open) dlg_open = false;  // doesn't work during dialogue window
-        if (!mouse_animating) {          // doesn't work during cursor click
+    if (keys[ALLEGRO_KEY_T]) {          // NOTE: target mode
+        chosen_cursor = cursors.aim;    // changes the cursor bitmap
+        cursor_flag   = CURSOR_TARGET;  // flags the current cursor
+        if (dlgstats.dlg_open)
+            dlgstats.dlg_open = false;  // doesn't work during dialogue window
+        if (!mouse_animating) {         // doesn't work during cursor click
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);
         }
@@ -299,7 +312,7 @@ void CursorChanger(void)
     else if (keys[ALLEGRO_KEY_E]) {  // NOTE: eye/view mode
         chosen_cursor = cursors.view;
         cursor_flag   = CURSOR_EYE;
-        if (dlg_open) dlg_open = false;
+        if (dlgstats.dlg_open) dlgstats.dlg_open = false;
         if (!mouse_animating) {
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);
@@ -315,8 +328,8 @@ void CursorChanger(void)
 //===================================
 //
 
-void EntityMovement(int e, float *px, float *py, float sp, int *fx, int *fy, float frames,
-                    int dx, int dy)
+void EntityMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
+                    float frames, int dx, int dy)
 {
     int cols = 16;
     int rows = 24;

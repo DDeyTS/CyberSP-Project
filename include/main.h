@@ -28,16 +28,10 @@ extern bool keys[ALLEGRO_KEY_MAX], mouse[MOUSE_MAX + 1];
 extern int mouse_x, mouse_y;
 extern bool mouse_animating;
 
-extern int obj_desc;
 extern bool show_desc;
 
-extern bool show_intro, dlg_open, choosing_topic;
-extern int speaker;
 extern int selected_topic;
 extern int active_topic;
-
-extern float sp;
-extern float frames;
 
 extern bool running;
 extern bool redraw;

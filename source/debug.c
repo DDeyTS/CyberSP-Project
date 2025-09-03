@@ -11,6 +11,8 @@
 #include "dialoguesys.h"
 #include "main.h"
 
+int obj_desc = 0;
+
 //==========================================================================
 //
 //    DBG_DescObjChanger
@@ -40,9 +42,9 @@ void DBG_DescObjChanger(void)
 
 void DBG_DlgTrigger(void)
 {
-    dlg_open       = true;
-    choosing_topic = true;
-    show_intro     = true;
+    dlgstats.dlg_open       = true;
+    dlgstats.choosing_topic = true;
+    dlgstats.show_intro     = true;
 }
 
 //==========================================================================
@@ -56,8 +58,8 @@ void DBG_DlgTrigger(void)
 
 void DBG_NpcChanger(void)
 {
-    speaker++;
-    if (speaker >= NUM_NPCS) {
+    dlgstats.speaker++;
+    if (dlgstats.speaker >= NUM_NPCS) {
         perror("You has exceed the NPC limit.\n");
         exit(1);
     }

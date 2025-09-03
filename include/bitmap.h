@@ -14,11 +14,12 @@ typedef enum {
 } EntitiesID;
 
 typedef struct {
-  int frame_w, frame_h, rows, cols; // frame manager
+  int frame_w, frame_h; /*rows, cols;*/ // frame manager
   float px, py;                     // sprite movement
-  ALLEGRO_BITMAP *spr;
+  float speed;                                    
   float frames;
   int reset_frame;
+  ALLEGRO_BITMAP *spr;
 } SpriteSheetInfo;
 
 extern SpriteSheetInfo protag, ent[];

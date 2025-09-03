@@ -91,7 +91,7 @@ void KeyboardOn(void)
         DBG_NpcChanger();
     }
     else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_2]) {
-        speaker = 0;
+        dlgstats.speaker = 0;
     }
 }
 
@@ -161,9 +161,9 @@ void MouseOn(void)
 
     if ((ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
          ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) &&
-        dlg_open) {
+        dlgstats.dlg_open) {
 
-        if (!choosing_topic && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        if (!dlgstats.choosing_topic && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             // nothing happens, just ignore the event
         }
         else {
@@ -178,7 +178,7 @@ void MouseOn(void)
 
             // as long as integer is lesser than NPC's number of topics, do the loop
             // body, then increment integer by 1 for the next topic:
-            for (int i = 0; i < npc[speaker]->num_topic; i++) {
+            for (int i = 0; i < npc[dlgstats.speaker]->num_topic; i++) {
                 int top_y = ty + i * spacing;
 
                 // checks if mouse is inside the clickable area of the topic
@@ -186,15 +186,15 @@ void MouseOn(void)
                     mouse_y <= top_y + topic_h) {
                     selected_topic = i;  // defines the chosen topic
 
-                    if (!choosing_topic) {
-                        choosing_topic = true;
-                        active_topic   = -1;  // no active topic, yet
+                    if (!dlgstats.choosing_topic) {
+                        dlgstats.choosing_topic = true;
+                        active_topic            = -1;  // no active topic, yet
                     }
 
                     if (mouse[1]) {
-                        active_topic   = selected_topic;  // topic is activated
-                        choosing_topic = false;           // quit from choosing mode
-                        show_intro     = false;           // hide the intro dialogue
+                        active_topic = selected_topic;    // topic is activated
+                        dlgstats.choosing_topic = false;  // quit from choosing mode
+                        dlgstats.show_intro     = false;  // hide the intro dialogue
                     }
 
                     break;  // finish loop when the mouse finds a topic
