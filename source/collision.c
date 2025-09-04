@@ -2,7 +2,7 @@
 //**
 //** File: collision.c (CyberSP Project)
 //** Purpose: Sprite interaction logic (triggers, walls)
-//** Last Update: 03-08-2025 14:30
+//** Last Update: 03-08-2025 23:45
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -36,10 +36,10 @@ static int colliders_count = 0;
 //              float py        - player/entity's current Y position
 //              int pw          - player/entity's width colision
 //              int ph          - player/entity's width colision
-//              float wall_x1   - wall left horizontal edge
-//              float wall_y1   - wall left vertical edge
-//              int wall_x2     - wall right horizontal edge
-//              int wall_y2     - wall right vertical edge
+//              float wx        - wall left horizontal edge
+//              float wy        - wall left vertical edge
+//              int ww          - wall right horizontal edge
+//              int wh          - wall right vertical edge
 //    Return:   bool
 //
 //==========================================================================
@@ -71,6 +71,14 @@ bool CircleColl(float cx1, float cy1, float r1, float cx2, float cy2, float r2)
     float rsum = r1 + r2;    // player_ray (aka frame_w) + circle_ray
     return (dx * dx + dy * dy) < (rsum * rsum);
 }
+
+// 
+//==================================== 
+// 
+// AddCollRect 
+//
+//==================================== 
+//
 
 void AddCollRect(float x, float y, int w, int h)
 {

@@ -31,7 +31,6 @@ NPC *npc[NUM_NPCS];
 DescriptionObj
     *desc[DESCRIPTIONS_MAX];  // TODO: finding a lighter way to quantify the
                               // amount of description texts inside this array
-// DlgStats dlgstats = {true, false, true, 0};
 DlgStats dlgstats = {0, SHOW_INTRO};
 
 ALLEGRO_FONT *font_std, *font_subtitle;

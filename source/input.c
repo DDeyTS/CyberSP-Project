@@ -2,7 +2,7 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 01-09-2025 12:49
+//** Last Update: 03-09-2025 23:45
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -158,9 +158,9 @@ void MouseOn(void)
     //
     // Dialogue Interaction
     //
+
     bool dlg_open = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
     bool choosing_topic = (dlgstats.flags & CHOOSING_TOPIC) == CHOOSING_TOPIC;
-
     if ((ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
          ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) &&
         dlg_open) {
@@ -173,13 +173,11 @@ void MouseOn(void)
             mouse_y = ev.mouse.y;
 
             int tx      = 50;   // topics' axes
-            int ty      = 250;  // topics' initial axes
+            int ty      = 250;  
             int spacing = 20;   // vertical space between topics
             int topic_w = 150;  // area able to click on
             int topic_h = spacing;
 
-            // as long as integer is lesser than NPC's number of topics, do the loop
-            // body, then increment integer by 1 for the next topic:
             for (int i = 0; i < npc[dlgstats.speaker]->num_topic; i++) {
                 int top_y = ty + i * spacing;
 
@@ -189,7 +187,6 @@ void MouseOn(void)
                     selected_topic = i;  // defines the chosen topic
 
                     if (!choosing_topic) {
-                        // dlgstats.choosing_topic = true;
                         dlgstats.flags |= CHOOSING_TOPIC;
                         active_topic = -1;  // no active topic, yet
                     }

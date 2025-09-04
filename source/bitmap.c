@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Sprite handling (animation, movement)
 //**
-//** Last Update: 02-09-2025 23:56
+//** Last Update: 03-09-2025 23:45
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -230,23 +230,19 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         mov_y *= adj;
     }
 
-    // // applies adjusted movement values
-    // *px += mov_x;
-    // *py += mov_y;
-
+    //
+    // Collision Reader
+    //
+    // TODO: make specific collision for both axis (x & y)
     {
-        //
-        // Collision Reader
-        //
-
         float coll_px = *px + mov_x;
         float coll_py = *py + mov_y;
 
         int hitbox_w = protag.frame_w;
         int hitbox_h = protag.frame_h;
 
-        bool collided = false;
-        int colliders_count = getColliderCount();
+        bool collided            = false;
+        int colliders_count      = getColliderCount();
         CollisionRect *colliders = getColliders();
         for (int i = 0; i < colliders_count; i++) {
             if (RectSqColl(coll_px, coll_py, hitbox_w, hitbox_h, colliders[i].x,
@@ -331,7 +327,7 @@ void CursorChanger(void)
         if (dlg_open)
             dlgstats.flags &= ~DLG_OPEN;  // doesn't work during dialogue window
 
-        if (!mouse_animating) {         // doesn't work during cursor click
+        if (!mouse_animating) {  // doesn't work during cursor click
             current_cursor = chosen_cursor;
             al_set_mouse_cursor(disp, current_cursor);
         }
