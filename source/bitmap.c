@@ -213,7 +213,7 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
     }
 
     //
-    // Pressed directions
+    // Pressed Directions
     //
 
     if (keys[ALLEGRO_KEY_D]) dx += 1;
@@ -221,9 +221,9 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
     if (keys[ALLEGRO_KEY_S]) dy += 1;
     if (keys[ALLEGRO_KEY_W]) dy -= 1;
 
-    // Apply speed
+    // apply speed
     float mov_x = dx * sp, mov_y = dy * sp;
-    // Adjust speed
+    // adjust speed
     if (dx != 0 && dy != 0) {
         float adj = 0.707f;  // aka 1 / sqrt(2)
         mov_x *= adj;
@@ -242,8 +242,8 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         float coll_px = *px + mov_x;
         float coll_py = *py + mov_y;
 
-        int hitbox_w = protag.frame_w / 2; // 1/2 of width
-        int hitbox_h = protag.frame_h / 4; // 1/4 of height
+        int hitbox_w = protag.frame_w;
+        int hitbox_h = protag.frame_h;
 
         bool collided = false;
         int colliders_count = getColliderCount();
