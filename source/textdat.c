@@ -3,13 +3,14 @@
 //** File: textdat.c (CyberSP Project)
 //** Purpose: Dialogue storage
 //**
-//** Last Update: 22-08-2025 01:09
+//** Last Update: 04-09-2025 21:31
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 #include "textdat.h"
 #include "dialoguesys.h"
+#include <allegro5/bitmap_io.h>
 
 // PUBLIC FUNCTION PROTOYPES ///////////////////////////////////////////////
 
@@ -31,33 +32,19 @@ void UnlockExtraTopics(void);
 
 void NpcDlgStorage(NPC *npc[])
 {
-    /*
-      ID 0, “Jefferson”.
-      Jefferson is a well-known drugdealer throughout São Paulo's slums.
-      He sells enough derma to tranquilize the skinned of a neocangaceiro.
-      Despite of his dirty job, he is famous for building new residences for
-      low-income families, and he collects the lesser taxes in the rainy
-      metroplex.
-    */
-    npc[NPC_JEFFERSON] = CreateNpc("Jefferson", 4);
-    npc[NPC_JEFFERSON]->portrait_id =
-        al_load_bitmap("portraits/drugdealer_portrait.png");
-    FillIntro(npc[NPC_JEFFERSON], "What's up, bro. Are you okay?");
-    FillTopic(npc[NPC_JEFFERSON], 0, "Drugs",
-              "Do ya want which of 'em? Good stuff helps ya to relax the body; of "
-              "course, leavin' behind the cooldown you suffers after the effect "
-              "is gone. Bad stuff, however, it's like a violent punch in your "
-              "pancreas.");
-    FillTopic(npc[NPC_JEFFERSON], 1, "Dolls",
-              "They're everywhere, bro. In every street. They know 'bout "
-              "absolutely everything inside this district!");
-    FillTopic(npc[NPC_JEFFERSON], 2, "Firearms",
-              "If ya wanna some guns to brighten your night up, talks with "
-              "|Ronaldo. He has a lot of stuff to show ya.");
-    FillTopic(npc[NPC_JEFFERSON], 3, "Bettingshop",
-              "Alright. I know one very close o' here. Just go down the slum "
-              "and if ya "
-              "were seeing some hot lights tearing up the sky, you're there.");
+    npc[NPC_BODYGUARD] = CreateNpc("Bodyguard", 1);
+    npc[NPC_BODYGUARD]->portrait_id =
+        al_load_bitmap("portraits/bodyguard_face.png");
+    FillIntro(
+        npc[NPC_BODYGUARD],
+        "Tell me what you doing here otherwise I'll kick your ass out of here.");
+    FillTopic(
+        npc[NPC_BODYGUARD], 0, "Corporation",
+        "Tonight I'm working for RefriFesca, a megacorp of ice and soda. Tomorrow "
+        "I'll work for a nightclub which'll occur a corporative party. Well... "
+        "after that I won't have any job to do. Would ya have one for me? Tell it "
+        "for "
+        "|Ronaldo.");
 
     /*
       ID 1, “Clowngirl”.
@@ -106,11 +93,12 @@ void NpcDlgStorage(NPC *npc[])
     FillIntro(npc[NPC_CINDER],
               "Hi, confuse man. Are you here to stare me like a erect "
               "perv’ or you'll tell something? C'mon. I won't bite you.");
-    FillTopic(npc[NPC_CINDER], 0, "Bettingshop",
-              "That cursed place? The |kingdom |of |cash. I hang out with a |corp "
-              "once; he was disgusting, honestly. Anybody who goes there hardly can "
-              "keep the bank account filled. If you're wanna step on there, take "
-              "care.");
+    FillTopic(
+        npc[NPC_CINDER], 0, "Bettingshop",
+        "That cursed place? The |kingdom |of |cash. I hang out with a |corp "
+        "once; he was disgusting, honestly. Anybody who goes there hardly can "
+        "keep the bank account filled. If you're wanna step on there, take "
+        "care.");
 
     /*
        ID 4, “Cheeks”.
@@ -121,7 +109,8 @@ void NpcDlgStorage(NPC *npc[])
     npc[NPC_CHEEKS] = CreateNpc("Cheeks", 1);
     npc[NPC_CHEEKS]->portrait_id =
         al_load_bitmap("portraits/bigcheeks_portrait.png");
-    FillIntro(npc[NPC_CHEEKS], "What's uuuuup, my friend! How can I help ya today?");
+    FillIntro(npc[NPC_CHEEKS],
+              "What's uuuuup, my friend! How can I help ya today?");
     FillTopic(
         npc[NPC_CHEEKS], 0, "Nightclub",
         "There are a lot of over there. Follow your sixth sense, dude, follow "
@@ -144,19 +133,6 @@ void NpcDlgStorage(NPC *npc[])
               "Where's my boss? I... I cannot remember. He had only gave me an "
               "order: kill that gunman. For my boss I could do anything! Even "
               "terminating a rat like ya!!! ");
-
-    npc[NPC_NICE_CORP] = CreateNpc("Nice Corp", 0);
-    npc[NPC_NICE_CORP]->portrait_id =
-        al_load_bitmap("portraits/nice_corpguy_face.png");
-    FillIntro(npc[NPC_NICE_CORP], "I do not have cash for you, sir. Go away.");
-
-    npc[NPC_ANAHI]              = CreateNpc("Anahi", 0);
-    npc[NPC_ANAHI]->portrait_id = al_load_bitmap("portraits/anahi_face.png");
-    FillIntro(npc[NPC_ANAHI], "Hi. How can I help you, dear soul?");
-
-    npc[NPC_BOZZO]              = CreateNpc("Bozzo", 0);
-    npc[NPC_BOZZO]->portrait_id = al_load_bitmap("portraits/bozzo_face.png");
-    FillIntro(npc[NPC_BOZZO], "You shouldn't be here...");
 }
 
 //==========================================================================
@@ -177,13 +153,14 @@ void UnlockExtraTopics(void)
     // pointers at the same time
 
     {
-        NPC *jeff = npc[NPC_JEFFERSON];
+        NPC *bodyg = npc[NPC_BODYGUARD];
         if (learned_topics[TOPIC_RONALDO]) {
-            jeff->topics =
-                realloc(jeff->topics, sizeof(Topic) * (jeff->num_topic + 1));
-            FillTopic(jeff, jeff->num_topic, "Ronaldo",
-                      "Just get the hell o' here!");
-            jeff->num_topic++; // adds early number of topics by 1
+            bodyg->topics =
+                realloc(bodyg->topics, sizeof(Topic) * (bodyg->num_topic + 1));
+            FillTopic(
+                bodyg, bodyg->num_topic, "Ronaldo",
+                "He keeps smoking behind of that parking. He's a cool weirdo.");
+            bodyg->num_topic++;  // adds early number of topics by 1
         }
     }
 

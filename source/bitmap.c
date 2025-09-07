@@ -16,15 +16,15 @@
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
-SpriteSheetInfo protag          = {.frame_w     = 0,
-                                   .frame_h     = 0,
+SpriteSheetInfo protag          = {.fw     = 0,
+                                   .fh     = 0,
                                    .px          = 320,
                                    .py          = 200,
                                    .speed       = 3.5,
                                    .frames      = 0.f,
                                    .reset_frame = 0};
-SpriteSheetInfo ent[NUM_ENTITY] = {[ENTITY_GANGMEMBER] = {.frame_w     = 0,
-                                                          .frame_h     = 0,
+SpriteSheetInfo ent[NUM_ENTITY] = {[ENTITY_GANGMEMBER] = {.fw     = 0,
+                                                          .fh     = 0,
                                                           .px          = 150,
                                                           .py          = 200,
                                                           .speed       = 3.5,
@@ -114,7 +114,7 @@ void BitmapExplode(void)
 
 void DrawProtag(void)
 {
-    al_draw_scaled_bitmap(protag.spr, protag.frame_w, protag.frame_h, 16, 24,
+    al_draw_scaled_bitmap(protag.spr, protag.fw, protag.fh, 16, 24,
                           protag.px, protag.py, 32, 48, 0);
 }
 
@@ -132,8 +132,8 @@ void DrawEntity(void)
 {
     // TODO: finding the best way to store every entity in the array
     al_draw_scaled_bitmap(
-        ent[ENTITY_GANGMEMBER].spr, ent[ENTITY_GANGMEMBER].frame_w,
-        ent[ENTITY_GANGMEMBER].frame_h, 16, 24, ent[ENTITY_GANGMEMBER].px,
+        ent[ENTITY_GANGMEMBER].spr, ent[ENTITY_GANGMEMBER].fw,
+        ent[ENTITY_GANGMEMBER].fh, 16, 24, ent[ENTITY_GANGMEMBER].px,
         ent[ENTITY_GANGMEMBER].py, 32, 48, 0);
 }
 
@@ -238,8 +238,8 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         float coll_px = *px + mov_x;
         float coll_py = *py + mov_y;
 
-        int hitbox_w = protag.frame_w;
-        int hitbox_h = protag.frame_h;
+        int hitbox_w = protag.fw;
+        int hitbox_h = protag.fh;
 
         bool collided            = false;
         int colliders_count      = getColliderCount();

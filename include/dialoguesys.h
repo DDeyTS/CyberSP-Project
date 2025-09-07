@@ -13,7 +13,7 @@
 #include <string.h>
 
 typedef enum {
-  NPC_JEFFERSON,
+  NPC_BODYGUARD,
   NPC_CLOWNGIRL,
   NPC_RAQUEL,
   NPC_CINDER,

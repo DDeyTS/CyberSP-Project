@@ -14,7 +14,7 @@ typedef enum {
 } EntitiesID;
 
 typedef struct {
-  int frame_w, frame_h; /*rows, cols;*/ // frame manager
+  int fw, fh; /*rows, cols;*/ // frame manager
   float px, py;                     // sprite movement
   float speed;                                    
   float frames;

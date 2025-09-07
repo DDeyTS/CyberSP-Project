@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="5">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="18">
  <properties>
   <property name="collide" type="bool" value="false"/>
  </properties>
- <tileset firstgid="1" name="dirtystreet_tiles" tilewidth="32" tileheight="32" tilecount="9" columns="3">
-  <image source="dirtystreet_tiles.png" width="96" height="96"/>
+ <tileset firstgid="1" name="dirtystreet_tiles" tilewidth="32" tileheight="32" tilecount="18" columns="6">
+  <image source="dirtystreet_tiles.png" width="192" height="96"/>
  </tileset>
- <tileset firstgid="10" name="bus_stop_tile" tilewidth="32" tileheight="32" tilecount="15" columns="5">
+ <tileset firstgid="19" name="bus_stop_tile" tilewidth="32" tileheight="32" tilecount="15" columns="5">
   <image source="bus_stop_tile.png" width="160" height="96"/>
  </tileset>
- <layer id="1" name="Camada de Blocos 1" width="8" height="8">
+ <tileset firstgid="34" name="streetlight_tile" tilewidth="32" tileheight="32" tilecount="3" columns="1">
+  <image source="streetlight_tile.png" width="32" height="96"/>
+ </tileset>
+ <layer id="1" name="street" width="8" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjZWBgYKUAMwIxExRzINEgzAzELHj0shEhD8QNlMizY3EbjOYEYgDs4AJF
+   eJzjYGBg4KAAMwIxExTzIdEgzAzE7EDMA8RCSJgLItbACZUHiiWgmwsUWwCSB+IGIFsBnzzQLAchNAwUOwCS58XiNhjND8QAuDYHxQ==
   </data>
  </layer>
  <layer id="4" name="buspoint" width="8" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYGBg4AJibiDmgWJeIOZjQAB+IBYCYkEkLIwkLwLEokAsBsTiUCzBMDQAAPV8ATU=
+   eJxjYGBgEAZiESAWhWIxIBZnQAAJIJYGYikkLIMkLwvEckAsD8QKUKzIMDQAAHpvAdc=
+  </data>
+ </layer>
+ <layer id="6" name="signal" width="8" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBi8gJWAPDceOQEgFiTCDgAKxAAy
+  </data>
+ </layer>
+ <layer id="5" name="light" width="8" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxTYsAPlAnIqxCQH+wAAFygAGo=
   </data>
  </layer>
  <objectgroup id="2" name="collision">
@@ -24,6 +37,16 @@
    <property name="collide" type="bool" value="true"/>
   </properties>
   <object id="2" x="32" y="32" width="32" height="32">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="16" x="0" y="0" width="32" height="32">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="13" x="224" y="128" width="32" height="32">
    <properties>
     <property name="collide" type="bool" value="true"/>
    </properties>
