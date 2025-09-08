@@ -10,7 +10,10 @@
 #include "tile_render.h"
 #include "collision.h"
 
+#include <allegro5/bitmap_draw.h>
 #include <tmx.h>
+
+#include <stdio.h>
 
 /*
       This entire code is clipped from libTMX tutorial found in their
@@ -91,8 +94,8 @@ void DrawImgLayer(tmx_image *image)
 //
 //==========================================================================
 
-void DrawTile(void *image, unsigned sx, unsigned sy, unsigned sw, unsigned sh,
-              unsigned dx, unsigned dy, float opacity, unsigned flags)
+void DrawTile(void *image, int sx, int sy, int sw, int sh, int dx, int dy,
+              float opacity, int flags)
 {
     ALLEGRO_COLOR tint = al_map_rgba_f(opacity, opacity, opacity, opacity);
     al_draw_tinted_bitmap_region((ALLEGRO_BITMAP *)image, tint, sx, sy, sw, sh, dx,
@@ -119,9 +122,29 @@ void DrawTileLayer(tmx_map *map, tmx_layer *layer)
                 void *img   = im ? im->resource_image : ts->image->resource_image;
                 unsigned sx = map->tiles[gid]->ul_x, sy = map->tiles[gid]->ul_y;
                 unsigned sw = ts->tile_width, sh = ts->tile_height;
-                float op       = layer->opacity;
-                unsigned flags = gid_raw & ~TMX_FLIP_BITS_REMOVAL;
-                DrawTile(img, sx, sy, sw, sh, j * sw, i * sh, op, flags);
+                float op = layer->opacity;
+                // unsigned flags = gid_raw & ~TMX_FLIP_BITS_REMOVAL;
+
+                if ((gid_raw & TMX_FLIPPED_VERTICALLY) == TMX_FLIPPED_VERTICALLY &&
+                    (gid_raw & TMX_FLIPPED_HORIZONTALLY) ==
+                        TMX_FLIPPED_HORIZONTALLY) {
+                    DrawTile(img, sx, sy, sw, sh, j * sw, i * sh, op,
+                             ALLEGRO_FLIP_HORIZONTAL | ALLEGRO_FLIP_VERTICAL);
+                }
+                else if ((gid_raw & TMX_FLIPPED_HORIZONTALLY) ==
+                         TMX_FLIPPED_HORIZONTALLY) {
+                    DrawTile(img, sx, sy, sw, sh, j * sw, i * sh, op,
+                             ALLEGRO_FLIP_HORIZONTAL);
+                }
+                else if ((gid_raw & TMX_FLIPPED_VERTICALLY) ==
+                         TMX_FLIPPED_VERTICALLY) {
+                    DrawTile(img, sx, sy, sw, sh, j * sw, i * sh, op,
+                             ALLEGRO_FLIP_VERTICAL);
+                }
+                else {
+
+                    DrawTile(img, sx, sy, sw, sh, j * sw, i * sh, op, 0);
+                }
             }
         }
     }

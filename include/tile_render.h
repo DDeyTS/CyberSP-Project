@@ -13,8 +13,8 @@ void *AllegTexLoader(const char *path);
 void AllegTexFree(void *ptr);
 ALLEGRO_COLOR IntToAllegColor(int color);
 void DrawImgLayer(tmx_image *image);
-void DrawTile(void *image, unsigned sx, unsigned sy, unsigned sw, unsigned sh,
-              unsigned dx, unsigned dy, float opacity, unsigned flags);
+// void DrawTile(void *image, unsigned sx, unsigned sy, unsigned sw, unsigned sh,
+//               unsigned dx, unsigned dy, float opacity, unsigned flags);
 void DrawTileLayer(tmx_map *map, tmx_layer *layer);
 void DrawPolyline(double **points, double x, double y, int count,
                   ALLEGRO_COLOR color);
