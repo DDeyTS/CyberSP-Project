@@ -91,9 +91,25 @@ void AddCollRect(float x, float y, int w, int h)
     }
 }
 
+// 
+//==================================== 
+// 
+// getColliderCount 
+//
+//==================================== 
+//
+
 int getColliderCount() {
   return colliders_count;
 }
+
+//
+//====================================
+//
+// getColliders 
+//
+//====================================
+// 
 
 CollisionRect *getColliders() {
   return colliders;

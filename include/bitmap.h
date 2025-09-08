@@ -15,26 +15,22 @@ typedef enum {
 
 typedef struct {
   int fw, fh; /*rows, cols;*/ // frame manager
-  float px, py;                     // sprite movement
-  float speed;                                    
+  float px, py;               // sprite movement
+  float speed;
   float frames;
   int reset_frame;
   ALLEGRO_BITMAP *spr;
 } SpriteSheetInfo;
 
-extern SpriteSheetInfo protag, ent[];
-
 void InitBitmap(void);
 void BitmapExplode(void);
 void DrawProtag(void);
 void DrawEntity(void);
-void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx,
-                    int *fy, float frames);
+void DrawEveryStuff(void);
 void SpriteAimAtCursor(float px, float py, int *fy);
 void CursorChanger(void);
-void EntityMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
-                    float frames, int dx, int dy);
 
+extern SpriteSheetInfo protag, ent[];
 extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light;
 
 #endif

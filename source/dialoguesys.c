@@ -3,7 +3,7 @@
 //** File: dialoguesys.c (CyberSP Project)
 //** Purpose: Any text to display happens here
 //**
-//** Last Update: 31-08-2025 23:43
+//** Last Update: 08-09-2025 14:45
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -57,8 +57,7 @@ NPC *CreateNpc(const char *name, int num_topic)
     NPC *npc       = malloc(sizeof(NPC));  // allocates NPC ID
     npc->name      = name;
     npc->num_topic = num_topic;
-    // below it allocates the number of topics
-    npc->topics = malloc(sizeof(Topic) * num_topic);
+    npc->topics    = malloc(sizeof(Topic) * num_topic);
     return npc;
 }
 
@@ -76,7 +75,6 @@ NPC *CreateNpc(const char *name, int num_topic)
 
 void FillTopic(NPC *npc, int index, char *topic, const char *text)
 {
-    // NOTE: ignore the warnings, perhaps it's a glibc bug.
     npc->topics[index].topic = strdup(topic);
     npc->topics[index].text  = strdup(text);
 }
@@ -114,7 +112,6 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     float box_h = 200;
     float x = 0, y = 0;
 
-    // Portrait attributes
     float portrait_size = 173;
 
     // Text attributes
@@ -155,7 +152,9 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     al_draw_bitmap(chatbox, 0, 0, 0);
 
     //
-    // Little green light in the right side of the box
+    // Computer Light
+    //
+    // NOTE: it is that little green light in the right side of the dialogue box
     //
     {
         static int light_frame   = 0;
@@ -195,7 +194,6 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     int max_lines   = safe_height / line_height;
     int line_count  = 0;
 
-    // Text buffer
     char buffer[WORDS_MAX];
     strncpy(buffer, text, sizeof(buffer));
     buffer[sizeof(buffer) - 1] = '\0';
@@ -266,9 +264,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
 void DlgExit(void)
 {
     dlgstats.flags &= ~(DLG_OPEN | SHOW_INTRO);
-    // dlgstats.dlg_open   = false;  // closes the dialogue window
-    // dlgstats.show_intro = false;  // turn off the intro dialogue
-    active_topic        = -1;     // turns unable to choose topics
+    active_topic = -1;  // turns unable to choose topics
 }
 
 //==========================================================================
@@ -298,8 +294,6 @@ void InitTopicMenu(NPC *npc, int selected)
     // Topic List
     //
 
-    // as long as integer is lesser than number of topics, increment to show
-    // each available topic:
     for (int i = 0; i < npc->num_topic; i++) {
         color =
             (i == selected) ? al_map_rgb(255, 255, 0) : al_map_rgb(255, 255, 255);
@@ -400,45 +394,36 @@ void LearnTopic(const char *topic)
 
 void InitDescBox(float box_x, float box_y, const char *text)
 {
-    const float padding = 10.0f;
-    // max width to line break (without padding)
-    const float wrap_w_cap = 200.0f;
-    // height of each line based on the used font
-    const int line_h = al_get_font_line_height(font_std);
-    // width of each space key based on the used font
-    const int space_w = al_get_text_width(font_std, " ");
+    const float padding    = 10.0f;
+    const float wrap_w_cap = 200.0f;  // max width to line break
+    const int line_h       = al_get_font_line_height(font_std);
+    const int space_w      = al_get_text_width(font_std, " ");
 
-    // copy description text to word buffer
     char buffer[WORDS_MAX];
     strncpy(buffer, text, sizeof(buffer));
     buffer[sizeof(buffer) - 1] = '\0';
 
-    // acumulators to size the box
-    float line_w = 0.0f;  // max width of the current line (without padding)
-    float widest = 0.0f;  // bigger width between all the lines (without padding)
+    float line_w = 0.0f;
+    float widest = 0.0f;  // bigger width between all the lines
     int lines    = 1;     // starts from 1st line
 
-    // sizing how much lines and what width they need to have
-    //
     // as long as each word in the buffer, split by spaces and stored in the
     // pointer, isn't null: the pointer will update to store the next word
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
-        // checks if the words have '|' before it
         const char *draw = (w[0] == '|') ? w + 1 : w;
-        // current width
-        int ww = al_get_text_width(font_std, draw);
+        int current_w    = al_get_text_width(font_std, draw);
 
         // adds padding before printed words (except at first line)
         int add = (line_w > 0) ? space_w : 0;
-        // if it adding these words + space will blow up the width limit:
-        if (line_w + add + ww > wrap_w_cap) {
+        // if a word + space will blow up the width limit:
+        if (line_w + add + current_w > wrap_w_cap) {
             if (line_w > widest) widest = line_w;  // stores bigger line so far
-            lines++;                               // starts a new line...
-            line_w = (float)ww;  // ... with the original width of the last line
+            lines++;
+            line_w = (float)current_w;
         }
         else {
             // continue accumulating words in the same line
-            line_w += add + ww;
+            line_w += add + current_w;
         }
     }
     if (line_w > widest) widest = line_w;
@@ -478,8 +463,6 @@ void InitDescBox(float box_x, float box_y, const char *text)
 
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
         bool is_highlight = (w[0] == '|');
-        // if there's highlighted word: print it one character ahead otherwise print
-        // it normally
         const char *draw = is_highlight ? w + 1 : w;
         int ww           = al_get_text_width(font_std, draw);
 
@@ -494,14 +477,11 @@ void InitDescBox(float box_x, float box_y, const char *text)
         // last position of this word
         cx += add;
 
-        // draws the word with normal color or highlight (yellow)
         al_draw_text(font_std, is_highlight ? highlight_color : font_color,
                      text_x + cx, text_y, 0, draw);
 
         // cursor move towards the next word
         cx += ww;
-
-        // everything will repeat until strtok() is NULL
     }
 }
 

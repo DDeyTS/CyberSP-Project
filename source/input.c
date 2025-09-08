@@ -2,7 +2,7 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 03-09-2025 23:45
+//** Last Update: 08-09-2025 13:59
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -159,7 +159,7 @@ void MouseOn(void)
     // Dialogue Interaction
     //
 
-    bool dlg_open = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
+    bool dlg_open       = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
     bool choosing_topic = (dlgstats.flags & CHOOSING_TOPIC) == CHOOSING_TOPIC;
     if ((ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
          ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) &&
@@ -172,8 +172,8 @@ void MouseOn(void)
             mouse_x = ev.mouse.x;
             mouse_y = ev.mouse.y;
 
-            int tx      = 50;   // topics' axes
-            int ty      = 250;  
+            int tx      = 50;  // topics' axes
+            int ty      = 250;
             int spacing = 20;   // vertical space between topics
             int topic_w = 150;  // area able to click on
             int topic_h = spacing;
@@ -271,6 +271,49 @@ bool InitCursor(ALLEGRO_DISPLAY *disp)
 
 //==========================================================================
 //
+//    CursorChanger
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
+void CursorChanger(void)
+{
+    bool dlg_open = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
+
+    if (keys[ALLEGRO_KEY_T]) {          // NOTE: target mode
+        chosen_cursor = cursors.aim;    // changes the cursor bitmap
+        cursor_flag   = CURSOR_TARGET;  // flags the current cursor
+
+        if (dlg_open)
+            dlgstats.flags &= ~DLG_OPEN;  // doesn't work during dialogue window
+
+        if (!mouse_animating) {  // doesn't work during cursor click
+            current_cursor = chosen_cursor;
+            al_set_mouse_cursor(disp, current_cursor);
+        }
+    }
+    else if (keys[ALLEGRO_KEY_H]) {  // NOTE: hand/normal mode
+        chosen_cursor = cursors.normal;
+        cursor_flag   = CURSOR_NORMAL;
+        al_set_mouse_cursor(disp, current_cursor);
+    }
+    else if (keys[ALLEGRO_KEY_E]) {  // NOTE: eye/view mode
+        chosen_cursor = cursors.view;
+        cursor_flag   = CURSOR_EYE;
+
+        if (dlg_open) dlgstats.flags &= ~DLG_OPEN;
+
+        if (!mouse_animating) {
+            current_cursor = chosen_cursor;
+            al_set_mouse_cursor(disp, current_cursor);
+        }
+    }
+}
+
+//==========================================================================
+//
 //    CloseGame
 //
 //    Argument: void
@@ -295,6 +338,6 @@ void CloseGame(void)
 void ToggleToAim(void)
 {
     // sprite follows cursor when aiming
-    SpriteAimAtCursor(protag.px, protag.py, &protag.frame_h);
-    protag.frame_w = 0;
+    SpriteAimAtCursor(protag.px, protag.py, &protag.fh);
+    protag.fw = 0;
 }
