@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Sprite handling (animation, movement)
 //**
-//** Last Update: 08-09-2025 13:59
+//** Last Update: 10-09-2025 14:21
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -30,7 +30,7 @@ SpriteSheetInfo ent[NUM_ENTITY] = {[ENTITY_GANGMEMBER] = {.fw          = 0,
                                                           .speed       = 3.5,
                                                           .frames      = 0.f,
                                                           .reset_frame = 0}};
-ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light = NULL;
+ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light, *DBG_portrait = NULL;
 
 // PRIVATE DATA DEFINITIONS /////////////////////////////////////////////////
 
@@ -49,28 +49,40 @@ void InitBitmap(void)
 {
     protag.spr  = al_load_bitmap("sprites/regis_spritesheet.png");
     protagonist = al_load_bitmap("portraits/regis_face.png");
-    if (!protag.spr || !protagonist) {
-        perror("Fail to load protagonist bitmap!\n");
-        exit(1);
-    }
+    if (!protag.spr) goto error;
+    if (!protagonist) goto placeholder;
 
-    // sprite to debug entity render
     ent[ENTITY_GANGMEMBER].spr = al_load_bitmap("sprites/regis_spritesheet.png");
 
     chatbox       = al_load_bitmap("sprites/dlgbox_sprite.png");
     chatbox_light = al_load_bitmap("sprites/signal_light_chatbox_spritesheet.png");
-    if (!chatbox || !chatbox_light) {
-        perror("Fail to load chatbox bitmap!\n");
-        exit(1);
-    }
+    DBG_portrait  = al_load_bitmap("portraits/balldebug_face.png");
+    if (!chatbox || !chatbox_light) goto error;
 
     cursors.mouse_bmp  = al_load_bitmap("sprites/handcursor_sprite.png");
     cursors.click_bmp  = al_load_bitmap("sprites/handcursor_click_sprite.png");
     cursors.target_bmp = al_load_bitmap("sprites/target_sprite.png");
     cursors.eye_bmp    = al_load_bitmap("sprites/eye_cursor.png");
     if (!cursors.eye_bmp || !cursors.mouse_bmp || !cursors.click_bmp ||
+        !cursors.target_bmp)
+        goto error;
+
+    // NOTE: playing with goto stuff.
+placeholder:
+    if (!protagonist) protagonist = DBG_portrait;
+
+error:
+    if (!protag.spr) {
+        perror("Fail to load protagonist sprite!\n");
+        exit(1);
+    }
+    if (!chatbox || !chatbox_light) {
+        perror("Fail to load chatbox\n");
+        exit(1);
+    }
+    if (!cursors.eye_bmp || !cursors.mouse_bmp || !cursors.click_bmp ||
         !cursors.target_bmp) {
-        perror("Fail to load cursor bitmap\n");
+        perror("Fail to load mouse cursor!\n");
         exit(1);
     }
 }

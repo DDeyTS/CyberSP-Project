@@ -94,7 +94,7 @@ int main(void)
     InitBitmap();
     InitCursor(disp);
     NpcDlgStorage(npc);
-    DescStorage(desc);
+    DescStorage();
 
     //
     // Event Queue

@@ -1,6 +1,5 @@
 #ifndef DIALOGUE_SYS_H
 #define DIALOGUE_SYS_H
-// #define _POSIX_C_SOURCE 200809L
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
@@ -61,7 +60,7 @@ typedef struct {
 } DescriptionObj;
 
 typedef struct {
-  int speaker;         // flags the current NPC
+  int speaker; // flags the current NPC
   unsigned char flags;
 } DlgStats;
 
@@ -72,13 +71,16 @@ void FillTopic(NPC *npc, int index, char *topic, const char *text);
 void LoadDlg(NPC *npc, const char *topic);
 void InitTopicMenu(NPC *npc, int selected);
 void InitDescBox(float box_x, float box_y, const char *text);
+void AddDescription(DescriptionObj ***desc_ptr, unsigned int *count,
+                    const char *text, float x, float y);
 void InitStdFont(void);
 void FillIntro(NPC *npc, const char *text);
 void ExplodeFont(void);
 
 extern DlgStats dlgstats;
 extern NPC *npc[];
-extern DescriptionObj *desc[];
+extern DescriptionObj **desc;
+extern unsigned int desc_count;
 extern ALLEGRO_FONT *font_std, *font_subtitle;
 extern ALLEGRO_COLOR font_color, name_color;
 extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light;

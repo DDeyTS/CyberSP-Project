@@ -4,7 +4,7 @@
 #include "dialoguesys.h"
 
 void NpcDlgStorage(NPC *npc[]);
-void UnlockExtraTopics();
-void DescStorage(DescriptionObj *desc[]);
+void UnlockExtraTopics(void);
+void DescStorage(void);
 
 #endif

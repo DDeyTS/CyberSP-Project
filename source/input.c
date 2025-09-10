@@ -124,6 +124,7 @@ void MouseOn(void)
     if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         mouse[ev.mouse.button] = true;
 
+        // FIXME: align description box with mouse position.
         // checks if eye cursor click on the object
         if (chosen_cursor == cursors.view && mouse[1]) {
             int rect_x = desc[obj_desc]->pos_x, rect_y = desc[obj_desc]->pos_y;

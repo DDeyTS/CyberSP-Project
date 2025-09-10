@@ -31,6 +31,6 @@ void SpriteAimAtCursor(float px, float py, int *fy);
 void CursorChanger(void);
 
 extern SpriteSheetInfo protag, ent[];
-extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light;
+extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light, *DBG_portrait;
 
 #endif

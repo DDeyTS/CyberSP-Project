@@ -201,15 +201,12 @@ void UnlockExtraTopics(void)
 //
 //==========================================================================
 
-void DescStorage(DescriptionObj *desc[])
+void DescStorage()
 {
-    desc[0]        = malloc(sizeof(DescriptionObj));
-    desc[0]->text  = strdup("A lone bus stop.");
-    desc[0]->pos_x = 325.0f;
-    desc[0]->pos_y = 100.0f;
+    desc       = NULL;
+    desc_count = 0;
 
-    desc[1]        = malloc(sizeof(DescriptionObj));
-    desc[1]->text  = strdup("A shattered window.");
-    desc[1]->pos_x = 300.0f;
-    desc[1]->pos_y = 100.0f;
+    AddDescription(&desc, &desc_count, "Trying to use description window.", 325.0f,
+                   100.0f);
+    AddDescription(&desc, &desc_count, "Another description!", 390.0f, 100.0f);
 }

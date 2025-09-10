@@ -3,7 +3,7 @@
 //** File: dialoguesys.c (CyberSP Project)
 //** Purpose: Any text to display happens here
 //**
-//** Last Update: 09-09-2025 23:22
+//** Last Update: 10-09-2025 14:21
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -28,10 +28,10 @@ void ExplodeFont();
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
 NPC *npc[NUM_NPCS];
-DescriptionObj
-    *desc[DESCRIPTIONS_MAX];  // TODO: finding a lighter way to quantify the
-                              // amount of description texts inside this array
-DlgStats dlgstats = {0, SHOW_INTRO};
+DescriptionObj **desc = NULL;  // TODO: finding a lighter way to quantify the
+                               // amount of description texts inside this array
+unsigned int desc_count = 0;
+DlgStats dlgstats       = {0, SHOW_INTRO};
 
 ALLEGRO_FONT *font_std, *font_subtitle;
 ALLEGRO_COLOR font_color, name_color;
@@ -124,22 +124,20 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     float safe_height = text_max_h - 10.0f;
 
     //
-    // Render NPC's Face
+    // Render Faces
     //
 
     if (portrait) {
         al_draw_scaled_bitmap(portrait, 0, 0, al_get_bitmap_width(portrait),
                               al_get_bitmap_height(portrait), x + padding,
                               y + padding - 12, portrait_size, portrait_size, 0);
+        // }
+        // else if (!portrait) {
+        //     perror("Fail to load portrait!\n");
+        //     exit(1);
     }
-    else if (!portrait) {
-        perror("Fail to load portrait!\n");
-        exit(1);
-    }
-
-    //
-    // Render Protagonist's Face
-    //
+    else if (!portrait)
+        portrait = DBG_portrait;
 
     al_draw_scaled_bitmap(protagonist, 0, 0, al_get_bitmap_width(protagonist),
                           al_get_bitmap_height(protagonist), 450, 290,
@@ -151,11 +149,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
 
     al_draw_bitmap(chatbox, 0, 0, 0);
 
-    //
-    // Computer Light
-    //
-    // NOTE: it is that little green light in the right side of the dialogue box
-    //
+    // NOTE: below there's that little green light in the right side
     {
         static int light_frame   = 0;
         static double last_frame = 0;
@@ -202,14 +196,14 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     char line[WORDS_MAX] = "";                   // stores full line
     float cursor_x       = text_x;               // initial position to write
 
-    while (word != NULL && line_count < max_lines) {
+    do {
         bool is_highlight     = false;
         const char *draw_word = word;
 
         if (word[0] == '|') {
-            is_highlight = true;      // word turns into yellow
+            is_highlight = true;
             draw_word    = word + 1;  // ignores '|'
-            LearnTopic(draw_word);    // memorize the word (aka topic) via enum
+            LearnTopic(draw_word);
         }
 
         //
@@ -219,12 +213,11 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
         int word_width  = al_get_text_width(font_std, draw_word);
         int space_width = al_get_text_width(font_std, " ");
 
-        // if current cursor position is bigger than text width:
         if (cursor_x + word_width > text_x + safe_width) {
-            line_y += line_height;  // gets the height
-            cursor_x = text_x;      // updates cursor
-            line_count++;           // new line
-            // if amount of lines is bigger than maximum: stop
+            line_y += line_height;
+            cursor_x = text_x;
+            line_count++;
+
             if (line_count >= max_lines) break;
         }
 
@@ -240,11 +233,11 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
         // word. The next word will come in the
         // sequence with a space between it.
 
-        word = strtok(NULL, " ");  // ends the loop if there are no words
-    }
+        word = strtok(NULL, " ");
+    } while (word != NULL && line_count < max_lines);
 
     //
-    // Draws Last Line
+    // Print Last Line
     //
 
     if (line_count < max_lines && strlen(line) > 0) {
@@ -331,7 +324,7 @@ void InitTopicMenu(NPC *npc, int selected)
     //
     // Topic List
     //
-    
+
     int topic_per_col = 4;
     int spacing_x     = 120;
     int spacing_y     = 20;
@@ -494,6 +487,17 @@ void InitDescBox(float box_x, float box_y, const char *text)
         // cursor move towards the next word
         cx += ww;
     }
+}
+
+void AddDescription(DescriptionObj ***desc_ptr, unsigned int *count,
+                    const char *text, float x, float y)
+{
+    *desc_ptr = realloc(*desc_ptr, sizeof(DescriptionObj *) * (*count + 1));
+    (*desc_ptr)[*count] = malloc(sizeof(DescriptionObj));
+    (*desc_ptr)[*count]->text = strdup(text);
+    (*desc_ptr)[*count]->pos_x = x;
+    (*desc_ptr)[*count]->pos_y = y;
+    (*count)++;
 }
 
 //==========================================================================

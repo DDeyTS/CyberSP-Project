@@ -126,6 +126,16 @@ void GameCrusher(void)
     free(npc[dlgstats.speaker]->topics);
     free(npc[dlgstats.speaker]);
 
+    //
+    // Description System
+    //
+
+    for (unsigned int i = 0; i < desc_count; i++) {
+        free(desc[i]->text);
+        free(desc[i]);
+    }
+    free(desc);
+
     tmx_map_free(map);
 
     ExplodeFont();
