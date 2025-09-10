@@ -3,13 +3,13 @@
 //** File: main.c (CyberSP Project)
 //** Purpose: Main game stuff
 //**
-//** Last Update: 02-09-2025 14:24
+//** Last Update: 09-09-2025 14:24
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 /*
- * LIST OF FEATURES TO DO (01-09-25)
+ * LIST OF FEATURES TO DO (09-09-25)
  * 1. Collision walls on the map.
  *     1a. Map changer.
  * 2. NPC sprite render. (Done but it call for updates)
@@ -19,6 +19,7 @@
  *     3b. Damage system.
  * 4. Simple inventory (like first Metal Gear).
  * 5. Mouth cursor.
+ * 6. Game state system.
  */
 
 #include "main.h"
@@ -62,9 +63,9 @@ bool running, redraw;
 
 //==========================================================================
 //
-//    main 
-//    Arguments: void 
-//    Return:    void 
+//    main
+//    Arguments: void
+//    Return:    void
 //
 //==========================================================================
 

@@ -3,14 +3,13 @@
 //** File: textdat.c (CyberSP Project)
 //** Purpose: Dialogue storage
 //**
-//** Last Update: 04-09-2025 21:31
+//** Last Update: 09-09-2025 23:21
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 #include "textdat.h"
 #include "dialoguesys.h"
-#include <allegro5/bitmap_io.h>
 
 // PUBLIC FUNCTION PROTOYPES ///////////////////////////////////////////////
 
@@ -41,10 +40,9 @@ void NpcDlgStorage(NPC *npc[])
     FillTopic(
         npc[NPC_BODYGUARD], 0, "Corporation",
         "Tonight I'm working for RefriFesca, a megacorp of ice and soda. Tomorrow "
-        "I'll work for a nightclub which'll occur a corporative party. Well... "
+        "I'll work for a |nightclub which'll occur a corporative party. Well... "
         "after that I won't have any job to do. Would ya have one for me? Tell it "
-        "for "
-        "|Ronaldo.");
+        "for |Ronaldo. Otherwise get the hell of here, mano.");
 
     /*
       ID 1, “Clowngirl”.
@@ -154,25 +152,41 @@ void UnlockExtraTopics(void)
 
     {
         NPC *bodyg = npc[NPC_BODYGUARD];
+
         if (learned_topics[TOPIC_RONALDO]) {
             bodyg->topics =
                 realloc(bodyg->topics, sizeof(Topic) * (bodyg->num_topic + 1));
+
             FillTopic(
                 bodyg, bodyg->num_topic, "Ronaldo",
                 "He keeps smoking behind of that parking. He's a cool weirdo.");
+
             bodyg->num_topic++;  // adds early number of topics by 1
+        }
+        else if (learned_topics[TOPIC_NIGHTCLUB]) {
+            bodyg->topics =
+                realloc(bodyg->topics, sizeof(Topic) * (bodyg->num_topic + 1));
+
+            FillTopic(
+                bodyg, bodyg->num_topic, "Nightclub",
+                "It's a funny place. Just staying on yourself drinking alone.");
+
+            bodyg->num_topic++;
         }
     }
 
     {
         NPC *raquel = npc[NPC_RAQUEL];
+
         if (learned_topics[TOPIC_PRICE]) {
             raquel->topics =
                 realloc(raquel->topics, sizeof(Topic) * (raquel->num_topic + 1));
+
             FillTopic(raquel, raquel->num_topic, "Price",
                       "Gimme 500 reais and the brunette girl here will give "
                       "you the best "
                       "night o' your life.");
+
             raquel->num_topic++;
         }
     }

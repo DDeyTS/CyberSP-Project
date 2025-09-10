@@ -14,7 +14,7 @@
 #include <tmx.h>
 
 #define DISPW 640
-#define DISPH 400
+#define DISPH 480
 #define MOUSE_MAX 5
 
 extern tmx_map *map;

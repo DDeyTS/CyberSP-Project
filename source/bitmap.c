@@ -57,7 +57,7 @@ void InitBitmap(void)
     // sprite to debug entity render
     ent[ENTITY_GANGMEMBER].spr = al_load_bitmap("sprites/regis_spritesheet.png");
 
-    chatbox       = al_load_bitmap("sprites/chatbox_sprite.png");
+    chatbox       = al_load_bitmap("sprites/dlgbox_sprite.png");
     chatbox_light = al_load_bitmap("sprites/signal_light_chatbox_spritesheet.png");
     if (!chatbox || !chatbox_light) {
         perror("Fail to load chatbox bitmap!\n");

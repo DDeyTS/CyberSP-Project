@@ -173,7 +173,7 @@ void MouseOn(void)
             mouse_y = ev.mouse.y;
 
             int tx      = 50;  // topics' axes
-            int ty      = 250;
+            int ty      = 350;
             int spacing = 20;   // vertical space between topics
             int topic_w = 150;  // area able to click on
             int topic_h = spacing;

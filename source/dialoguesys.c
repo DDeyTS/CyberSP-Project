@@ -3,7 +3,7 @@
 //** File: dialoguesys.c (CyberSP Project)
 //** Purpose: Any text to display happens here
 //**
-//** Last Update: 08-09-2025 14:45
+//** Last Update: 09-09-2025 23:22
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -109,7 +109,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
 {
     // Box attributes
     float box_w = 640;
-    float box_h = 200;
+    float box_h = 300;
     float x = 0, y = 0;
 
     float portrait_size = 173;
@@ -119,7 +119,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     float text_x      = x + portrait_size + 2 * padding;
     float line_y      = y + padding / 2;
     float text_max_w  = (x + box_w) - text_x - padding + 30;
-    float text_max_h  = (y + box_h) - line_y - padding + 15;
+    float text_max_h  = (y + box_h) - line_y - padding + 60;
     float safe_width  = text_max_w - 10.0f;
     float safe_height = text_max_h - 10.0f;
 
@@ -142,7 +142,7 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     //
 
     al_draw_scaled_bitmap(protagonist, 0, 0, al_get_bitmap_width(protagonist),
-                          al_get_bitmap_height(protagonist), 450, 215,
+                          al_get_bitmap_height(protagonist), 450, 290,
                           portrait_size, portrait_size, 0);
 
     //
@@ -269,41 +269,6 @@ void DlgExit(void)
 
 //==========================================================================
 //
-//    InitTopicMenu
-//
-//    Argument: NPC *npc        - pointer to the specific NPC
-//              int selected    - index of the currently selected topic
-//    Return    void
-//
-//    FIXME: need to control the height of the topic list.
-//
-//==========================================================================
-
-void InitTopicMenu(NPC *npc, int selected)
-{
-    if (npc->num_topic <= 0) return;
-
-    float x = 100, y = 250;
-    ALLEGRO_COLOR color;
-
-    // upper title
-    al_draw_text(font_subtitle, al_map_rgb(255, 255, 255), x, y - 15, 0,
-                 "Ask About...");
-
-    //
-    // Topic List
-    //
-
-    for (int i = 0; i < npc->num_topic; i++) {
-        color =
-            (i == selected) ? al_map_rgb(255, 255, 0) : al_map_rgb(255, 255, 255);
-        al_draw_textf(font_std, color, x, y + i * 20, 0, "%s",
-                      npc->topics[i].topic);
-    }
-}
-
-//==========================================================================
-//
 //    LoadDlg
 //
 //    Argument: NPC *npc            - pointer to the specific NPC
@@ -342,6 +307,51 @@ void LoadDlg(NPC *npc, const char *dialogue)
 
 //==========================================================================
 //
+//    InitTopicMenu
+//
+//    Argument: NPC *npc        - pointer to the specific NPC
+//              int selected    - index of the currently selected topic
+//    Return    void
+//
+//    FIXME: need to control the height of the topic list.
+//
+//==========================================================================
+
+void InitTopicMenu(NPC *npc, int selected)
+{
+    if (npc->num_topic <= 0) return;
+
+    float x = 100, y = 350;
+    ALLEGRO_COLOR color;
+
+    // upper title
+    al_draw_text(font_subtitle, al_map_rgb(255, 255, 255), x, y - 15, 0,
+                 "Ask About...");
+
+    //
+    // Topic List
+    //
+    
+    int topic_per_col = 4;
+    int spacing_x     = 120;
+    int spacing_y     = 20;
+
+    for (int t = 0; t < npc->num_topic; t++) {
+        int col = t / topic_per_col;
+        int row = t % topic_per_col;
+
+        float draw_x = x + col * spacing_x;
+        float draw_y = y + row * spacing_y;
+
+        color =
+            (t == selected) ? al_map_rgb(255, 255, 0) : al_map_rgb(255, 255, 255);
+        al_draw_textf(font_std, color, draw_x, draw_y, 0, "%s",
+                      npc->topics[t].topic);
+    }
+}
+
+//==========================================================================
+//
 //    GetTopicID
 //
 //    Argument: const char* topic       - specific topic to get
@@ -355,6 +365,7 @@ TopicID GetTopicID(const char *topic)
     if (strcmp(topic, "price.") == 0) return TOPIC_PRICE;
     if (strcmp(topic, "kingdom") == 0) return TOPIC_KINGDOM_OF_CASH;
     if (strcmp(topic, "Ronaldo.") == 0) return TOPIC_RONALDO;
+    if (strcmp(topic, "nightclub") == 0) return TOPIC_NIGHTCLUB;
 
     return NONE_TOPIC;
 }
@@ -463,8 +474,8 @@ void InitDescBox(float box_x, float box_y, const char *text)
 
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
         bool is_highlight = (w[0] == '|');
-        const char *draw = is_highlight ? w + 1 : w;
-        int ww           = al_get_text_width(font_std, draw);
+        const char *draw  = is_highlight ? w + 1 : w;
+        int ww            = al_get_text_width(font_std, draw);
 
         int add = (cx > 0.0f) ? space_w : 0;
 
