@@ -2,7 +2,7 @@
 //**
 //** File: game.c (CyberSP Project)
 //** Purpose: Game logic
-//** Last Update: 08-09-2025 14:06
+//** Last Update: 15-09-2025 15:24
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -31,9 +31,8 @@ static void EntityMoveAnim();
 void GameRedraw(void)
 {
     al_clear_to_color(al_map_rgb(0, 0, 0));
-    RenderMap(map);
 
-    DrawEveryStuff();
+    BitmapDraw();
 
     //
     // Description Window
@@ -173,68 +172,9 @@ void GameCrusher(void)
 void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *fy,
                     float frames)
 {
-    int dx = 0, dy = 0;                 // current direction
-    int cols = 16;                      // sprite sheet Y axis
-    int rows = 24;                      // sprite sheet X axis
-    float fq = (cols * frames) + cols;  // frame queue
+    int dx = 0, dy = 0;  // current direction
 
-    //
-    // Diagonal Movement
-    //
-
-    if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_D]) {
-        // Up-right
-        *fx = fq, *fy = rows * 5;
-        protag.reset_frame = *fy;
-    }
-    else if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_A]) {
-        // Up-left
-        *fx = fq, *fy = rows * 6;
-        protag.reset_frame = *fy;
-    }
-    else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_D]) {
-        // Down-right
-        *fx = fq, *fy = rows * 2;
-        protag.reset_frame = *fy;
-    }
-    else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_A]) {
-        // Down-left
-        *fx = fq, *fy = rows;
-        protag.reset_frame = *fy;
-
-        //
-        // Straight Movement
-        //
-    }
-    else if (keys[ALLEGRO_KEY_D]) {
-        *fx = fq, *fy = rows * 4;
-        protag.reset_frame = *fy;
-    }
-    else if (keys[ALLEGRO_KEY_A]) {
-        *fx = fq, *fy = rows * 3;
-        protag.reset_frame = *fy;
-    }
-    else if (keys[ALLEGRO_KEY_S]) {
-        *fx = fq, *fy = 0;
-        protag.reset_frame = *fy;
-    }
-    else if (keys[ALLEGRO_KEY_W]) {
-        *fx = fq, *fy = (rows * 7) + 1;
-        protag.reset_frame = *fy;
-    }
-    else {
-        *fx = 0;
-        *fy = protag.reset_frame;
-    }
-
-    //
-    // Pressed Directions
-    //
-
-    if (keys[ALLEGRO_KEY_D]) dx += 1;
-    if (keys[ALLEGRO_KEY_A]) dx -= 1;
-    if (keys[ALLEGRO_KEY_S]) dy += 1;
-    if (keys[ALLEGRO_KEY_W]) dy -= 1;
+    MoveInput(keys, &dx, &dy, fx, fy, frames);
 
     // apply speed
     float mov_x = dx * sp, mov_y = dy * sp;
@@ -281,6 +221,54 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
             *py = coll_py;
         }
     }
+}
+
+//==========================================================================
+//
+//    SpriteAimAtCursor
+//
+//    Argument: float px        - current sprite's X position
+//              float py        - current sprite's Y position
+//              float *fy       - sprite sheet's column to animate
+//    Return:   void
+//
+//    NOTE: ignores both px and py warning below.
+//
+//==========================================================================
+
+void SpriteAimAtCursor(float px, float py, int *fy)
+{
+    float t_dx    = mouse_x - (protag.px + 16);  // sprite center
+    float t_dy    = mouse_y - (protag.py + 24);  // same above
+    float t_angle = atan2(t_dy, t_dx);           // radianus (-PI to +PI)
+
+    int dir;
+    // right
+    if (t_angle >= -ALLEGRO_PI / 8 && t_angle < ALLEGRO_PI / 8) dir = 4;
+    // down-right
+    else if (t_angle >= ALLEGRO_PI / 8 && t_angle < 3 * ALLEGRO_PI / 8)
+        dir = 2;
+    // down
+    else if (t_angle >= 3 * ALLEGRO_PI / 8 && t_angle < 5 * ALLEGRO_PI / 8)
+        dir = 0;
+    // down-left
+    else if (t_angle >= 5 * ALLEGRO_PI / 8 && t_angle < 7 * ALLEGRO_PI / 8)
+        dir = 1;
+    // left
+    else if (t_angle >= 7 * ALLEGRO_PI / 8 || t_angle < -7 * ALLEGRO_PI / 8)
+        dir = 3;
+    // up-left
+    else if (t_angle >= -7 * ALLEGRO_PI / 8 && t_angle < -5 * ALLEGRO_PI / 8)
+        dir = 6;
+    // up
+    else if (t_angle >= -5 * ALLEGRO_PI / 8 && t_angle < -3 * ALLEGRO_PI / 8)
+        dir = 7;
+    // up-right
+    else
+        dir = 5;
+
+    // applies current rotation to animate
+    *fy = dir * 24;
 }
 
 //

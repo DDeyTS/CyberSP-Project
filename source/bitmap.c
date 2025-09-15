@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Sprite handling (animation, movement)
 //**
-//** Last Update: 10-09-2025 14:21
+//** Last Update: 15-09-2025 15:24
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -13,6 +13,7 @@
 #include "dialoguesys.h"
 #include "input.h"
 #include "main.h"
+#include "tile_render.h"
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
@@ -125,8 +126,54 @@ void DrawEntity(void)
                           48, 0);
 }
 
-void DrawEveryStuff()
+//==========================================================================
+//
+//    InitCursor
+//
+//    Argument: ALLEGRO_DISPLAY *disp    - linker for cursor to the display
+//    Return:   bool
+//
+//==========================================================================
+
+bool InitCursor(ALLEGRO_DISPLAY *disp)
 {
+    if (!cursors.eye_bmp || !cursors.mouse_bmp || !cursors.click_bmp ||
+        !cursors.target_bmp)
+        goto error;
+
+    cursors.normal   = al_create_mouse_cursor(cursors.mouse_bmp, 0, 0);
+    cursors.clicking = al_create_mouse_cursor(cursors.click_bmp, 0, 0);
+    cursors.aim      = al_create_mouse_cursor(cursors.target_bmp, 0, 0);
+    cursors.view     = al_create_mouse_cursor(cursors.eye_bmp, 0, 0);
+    if (!cursors.normal || !cursors.clicking || !cursors.aim || !cursors.view)
+        goto error;
+
+    chosen_cursor  = cursors.normal;
+    cursor_flag    = CURSOR_NORMAL;
+    current_cursor = chosen_cursor;
+    al_set_mouse_cursor(disp, current_cursor);
+    al_show_mouse_cursor(disp);
+
+    return true;
+
+error:
+    perror("Fail to load cursor bitmap or create mouse cursor!\n");
+    return false;
+}
+
+//==========================================================================
+//
+//    BitmapDraw
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
+
+
+void BitmapDraw()
+{
+    RenderMap(map);
     DrawProtag();
     DrawEntity();
 }
@@ -153,52 +200,4 @@ void BitmapExplode(void)
     if (cursors.click_bmp) al_destroy_bitmap(cursors.click_bmp);
     if (cursors.target_bmp) al_destroy_bitmap(cursors.target_bmp);
     if (cursors.eye_bmp) al_destroy_bitmap(cursors.eye_bmp);
-}
-
-//==========================================================================
-//
-//    SpriteAimAtCursor
-//
-//    Argument: float px        - current sprite's X position
-//              float py        - current sprite's Y position
-//              float *fy       - sprite sheet's column to animate
-//    Return:   void
-//
-//    NOTE: ignores both px and py warning below.
-//
-//==========================================================================
-
-void SpriteAimAtCursor(float px, float py, int *fy)
-{
-    float t_dx    = mouse_x - (protag.px + 16);  // sprite center
-    float t_dy    = mouse_y - (protag.py + 24);  // same above
-    float t_angle = atan2(t_dy, t_dx);           // radianus (-PI to +PI)
-
-    int dir;
-    // right
-    if (t_angle >= -ALLEGRO_PI / 8 && t_angle < ALLEGRO_PI / 8) dir = 4;
-    // down-right
-    else if (t_angle >= ALLEGRO_PI / 8 && t_angle < 3 * ALLEGRO_PI / 8)
-        dir = 2;
-    // down
-    else if (t_angle >= 3 * ALLEGRO_PI / 8 && t_angle < 5 * ALLEGRO_PI / 8)
-        dir = 0;
-    // down-left
-    else if (t_angle >= 5 * ALLEGRO_PI / 8 && t_angle < 7 * ALLEGRO_PI / 8)
-        dir = 1;
-    // left
-    else if (t_angle >= 7 * ALLEGRO_PI / 8 || t_angle < -7 * ALLEGRO_PI / 8)
-        dir = 3;
-    // up-left
-    else if (t_angle >= -7 * ALLEGRO_PI / 8 && t_angle < -5 * ALLEGRO_PI / 8)
-        dir = 6;
-    // up
-    else if (t_angle >= -5 * ALLEGRO_PI / 8 && t_angle < -3 * ALLEGRO_PI / 8)
-        dir = 7;
-    // up-right
-    else
-        dir = 5;
-
-    // applies current rotation to animate
-    *fy = dir * 24;
 }

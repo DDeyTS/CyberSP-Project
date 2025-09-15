@@ -12,21 +12,20 @@
 #include <stdio.h>
 
 typedef struct {
-    ALLEGRO_BITMAP *mouse_bmp, *target_bmp, *click_bmp, *eye_bmp;
-    ALLEGRO_MOUSE_CURSOR *aim, *clicking, *normal, *view;
+  ALLEGRO_BITMAP *mouse_bmp, *target_bmp, *click_bmp, *eye_bmp;
+  ALLEGRO_MOUSE_CURSOR *aim, *clicking, *normal, *view;
 } Mousecursors;
 
 enum CursorType {
-    CURSOR_NORMAL,
-    // CURSOR_CLICK,
-    CURSOR_TARGET,
-    CURSOR_EYE,
+  CURSOR_NORMAL,
+  CURSOR_TARGET,
+  CURSOR_EYE,
 };
 
 void KeyboardOn(void);
+void MoveInput(bool keys[], int *dx, int *dy, int *fx, int *fy, float frames);
 void MouseOn(void);
 void MouseClick(void);
-bool InitCursor(ALLEGRO_DISPLAY *disp);
 void CloseGame(void);
 void ToggleToAim(void);
 

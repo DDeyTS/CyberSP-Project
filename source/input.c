@@ -2,7 +2,7 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 08-09-2025 13:59
+//** Last Update: 15-09-2025 15:19
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -11,6 +11,7 @@
 #include "bitmap.h"
 #include "debug.h"
 #include "dialoguesys.h"
+#include "game.h"
 #include "main.h"
 
 // EXTERNAL DATA DECLARATIONS //////////////////////////////////////////////
@@ -93,6 +94,79 @@ void KeyboardOn(void)
     else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_2]) {
         dlgstats.speaker = 0;
     }
+}
+//==========================================================================
+//
+//    MoveInput
+//
+//    Argument: bool keys        - read pressed keys
+//              int *dx, *dy     - read direction to walk
+//              int *fx, *fy     - sprite sheet axis
+//              float frames     - amount of them
+//    Return:   void
+//
+//==========================================================================
+
+
+void MoveInput(bool keys[], int *dx, int *dy, int *fx, int *fy, float frames)
+{
+    int cols = 16;                      // sprite sheet Y axis
+    int rows = 24;                      // sprite sheet X axis
+    float fq = (cols * frames) + cols;  // frame queue
+
+    //
+    // Diagonal Movement
+    //
+
+    if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_D]) {
+        // Up-right
+        *fx = fq, *fy = rows * 5;
+        protag.reset_frame = *fy;
+    }
+    else if (keys[ALLEGRO_KEY_W] && keys[ALLEGRO_KEY_A]) {
+        // Up-left
+        *fx = fq, *fy = rows * 6;
+        protag.reset_frame = *fy;
+    }
+    else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_D]) {
+        // Down-right
+        *fx = fq, *fy = rows * 2;
+        protag.reset_frame = *fy;
+    }
+    else if (keys[ALLEGRO_KEY_S] && keys[ALLEGRO_KEY_A]) {
+        // Down-left
+        *fx = fq, *fy = rows;
+        protag.reset_frame = *fy;
+
+        //
+        // Straight Movement
+        //
+    }
+    else if (keys[ALLEGRO_KEY_D]) {
+        *fx = fq, *fy = rows * 4;
+        protag.reset_frame = *fy;
+    }
+    else if (keys[ALLEGRO_KEY_A]) {
+        *fx = fq, *fy = rows * 3;
+        protag.reset_frame = *fy;
+    }
+    else if (keys[ALLEGRO_KEY_S]) {
+        *fx = fq, *fy = 0;
+        protag.reset_frame = *fy;
+    }
+    else if (keys[ALLEGRO_KEY_W]) {
+        *fx = fq, *fy = (rows * 7) + 1;
+        protag.reset_frame = *fy;
+    }
+    else {
+        *fx = 0;
+        *fy = protag.reset_frame;
+    }
+
+    if (keys[ALLEGRO_KEY_D]) (*dx) += 1;
+    if (keys[ALLEGRO_KEY_A]) (*dx) -= 1;
+    if (keys[ALLEGRO_KEY_S]) (*dy) += 1;
+    if (keys[ALLEGRO_KEY_W]) (*dy) -= 1;
 }
 
 //==========================================================================
@@ -233,41 +307,6 @@ void MouseClick(void)
             al_set_mouse_cursor(disp, current_cursor);
         }
     }
-}
-
-//==========================================================================
-//
-//    InitCursor
-//
-//    Argument: ALLEGRO_DISPLAY *disp    - linker for cursor to the display
-//    Return:   bool
-//
-//==========================================================================
-
-bool InitCursor(ALLEGRO_DISPLAY *disp)
-{
-    if (!cursors.eye_bmp || !cursors.mouse_bmp || !cursors.click_bmp ||
-        !cursors.target_bmp) {
-        perror("Fail to load cursor bitmap\n");
-        return false;
-    }
-
-    cursors.normal   = al_create_mouse_cursor(cursors.mouse_bmp, 0, 0);
-    cursors.clicking = al_create_mouse_cursor(cursors.click_bmp, 0, 0);
-    cursors.aim      = al_create_mouse_cursor(cursors.target_bmp, 0, 0);
-    cursors.view     = al_create_mouse_cursor(cursors.eye_bmp, 0, 0);
-    if (!cursors.normal || !cursors.clicking || !cursors.aim || !cursors.view) {
-        fprintf(stderr, "Error: fail to to create mouse cursor!\n");
-        return false;
-    }
-
-    chosen_cursor  = cursors.normal;
-    cursor_flag    = CURSOR_NORMAL;
-    current_cursor = chosen_cursor;
-    al_set_mouse_cursor(disp, current_cursor);
-    al_show_mouse_cursor(disp);
-
-    return true;
 }
 
 //==========================================================================

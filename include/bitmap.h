@@ -23,11 +23,11 @@ typedef struct {
 } SpriteSheetInfo;
 
 void InitBitmap(void);
-void BitmapExplode(void);
 void DrawProtag(void);
 void DrawEntity(void);
-void DrawEveryStuff(void);
-void SpriteAimAtCursor(float px, float py, int *fy);
+bool InitCursor(ALLEGRO_DISPLAY *disp);
+void BitmapDraw(void);
+void BitmapExplode(void);
 void CursorChanger(void);
 
 extern SpriteSheetInfo protag, ent[];
