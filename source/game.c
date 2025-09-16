@@ -2,7 +2,7 @@
 //**
 //** File: game.c (CyberSP Project)
 //** Purpose: Game logic
-//** Last Update: 15-09-2025 15:24
+//** Last Update: 16-09-2025 15:38
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -103,7 +103,7 @@ void GameLoop(void)
 
 //==========================================================================
 //
-//    GmaeCrusher
+//    GameCrusher
 //
 //    Argument: void
 //    Return:   void
@@ -173,7 +173,8 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
     MoveInput(keys, &dx, &dy, fx, fy, frames);
 
     // apply speed
-    float mov_x = dx * sp, mov_y = dy * sp;
+    float mov_x = dx * sp;
+    float mov_y = dy * sp;
     // adjust speed
     if (dx != 0 && dy != 0) {
         float adj = 0.707f;  // aka 1 / sqrt(2)
@@ -182,44 +183,35 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
     }
 
     //
-    // Collision Reader
+    // Collision Logic
     //
-    // FIXME: sprite keeps getting into the wall collision
     {
-        int colliders_count      = getColliderCount();
-        CollisionRect *colliders = getColliders();
-        int hitbox_w             = protag.fw;
-        int hitbox_h             = protag.fh;
+        int colliders_count = getColliderCount();
+        AABB2D_t *colliders = getColliders();
 
-        float coll_px   = *px + mov_x;
-        bool collided_x = false;
+        // X Axis
+        AABB2D_t nextX;
+        AABBInit(&nextX, *px + mov_x, *py, protag.fw, protag.fh);
+        bool collideX = false;
         for (int i = 0; i < colliders_count; i++) {
-            if (RectSqColl(coll_px, *py, hitbox_w, hitbox_h,
-                           colliders[i].x - EPSILON, colliders[i].y - EPSILON,
-                           colliders[i].w + 2 * EPSILON,
-                           colliders[i].h + 2 * EPSILON)) {
-                collided_x = true;
+            if (AABBCollides(&nextX, &colliders[i])) {
+                collideX = true;
                 break;
             }
         }
-        if (!collided_x) {
-            *px = coll_px;
-        }
+        if (!collideX) *px += mov_x;
 
-        float coll_py   = *py + mov_y;
-        bool collided_y = false;
+        // Y Axis
+        AABB2D_t nextY;
+        AABBInit(&nextY, *px, *py + mov_y, protag.fw, protag.fh);
+        bool collideY = false;
         for (int i = 0; i < colliders_count; i++) {
-            if (RectSqColl(*px, coll_py, hitbox_w, hitbox_h,
-                           colliders[i].x - EPSILON, colliders[i].y - EPSILON,
-                           colliders[i].w + 2 * EPSILON,
-                           colliders[i].h + 2 * EPSILON)) {
-                collided_y = true;
+            if (AABBCollides(&nextY, &colliders[i])) {
+                collideY = true;
                 break;
             }
         }
-        if (!collided_y) {
-            *py = coll_py;
-        }
+        if (!collideY) *py += mov_y;
     }
 }
 

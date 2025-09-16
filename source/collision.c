@@ -2,7 +2,7 @@
 //**
 //** File: collision.c (CyberSP Project)
 //** Purpose: Sprite interaction logic (triggers, walls)
-//** Last Update: 03-09-2025 23:45
+//** Last Update: 16-09-2025 14:30
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -25,17 +25,36 @@
                                             (July 13, 2025)
 */
 
-static CollisionRect colliders[256];
+static AABB2D_t colliders[5];
 static int colliders_count = 0;
+
+void AABBInit(AABB2D_t *aabb, float x, float y, float w, float h)
+{
+    aabb->x  = x;
+    aabb->y  = y;
+    aabb->w  = w;
+    aabb->h  = h;
+    aabb->vx = 0;
+    aabb->vy = 0;
+}
+
+int AABBCollides(AABB2D_t *a, AABB2D_t *b)
+{
+    return (a->x < b->x + b->w) && (a->x + a->w > b->x) &&
+           (a->y < b->y + b->h) && (a->y + a->h > b->y);
+}
+
+int AABBCollidesWithPoint(AABB2D_t *a, float px, float py)
+{
+    return (px >= a->x && px <= a->x + a->w && py >= a->y && py <= a->y + a->h);
+}
 
 //==========================================================================
 //
 //    RectSqColl
 //
-//    Argument: float px        - player/entity's current X position
-//              float py        - player/entity's current Y position
-//              int pw          - player/entity's width colision
-//              int ph          - player/entity's width colision
+//    Argument: float px, py    - actor's current X and Y position
+//              int pw, ph      - actor's width and height colision
 //              float wx        - wall left horizontal edge
 //              float wy        - wall left vertical edge
 //              int ww          - wall right horizontal edge
@@ -47,29 +66,27 @@ static int colliders_count = 0;
 bool RectSqColl(float ax, float ay, int aw, int ah, float bx, float by, int bw,
                 int bh)
 {
-    return (ax < bx + bw) && (ax + aw > bx) && (ay < by + bh) && (ay + ah > by);
-    // return !(px + pw <= wx || px >= wx + ww || py + ph <= wy || py >= wy + wh);
+    // return (ax < bx + bw) && (ax + aw > bx) && (ay < by + bh) && (ay + ah > by);
+    return !(ax + aw <= bx || ax >= bx + bw || ay + ah <= by || ay >= by + bh);
 }
 
 //==========================================================================
 //
 //    CircleColl
 //
-//    Argument: float cx1       - player/entity's current X position
-//              float cy1       - player/entity's current Y position
+//    Argument: float px, py    - actor's current X and Y position
 //              float r1        - player/entity's ray
-//              float cx2       - circle's current X position
-//              float cy2       - circle's current Y position
+//              float cx, cy    - circle's current X and Y position
 //              float r2        - circle's ray
 //    Return:   bool
 //
 //==========================================================================
 
-bool CircleColl(float cx1, float cy1, float r1, float cx2, float cy2, float r2)
+bool CircleColl(float px, float py, float r1, float cx, float cy, float r2)
 {
-    float dx   = cx1 - cx2;  // player_x + circle_x
-    float dy   = cy1 - cy2;  // player_y + circle_y
-    float rsum = r1 + r2;    // player_ray (aka frame_w) + circle_ray
+    float dx   = px - cx;
+    float dy   = py - cy;
+    float rsum = r1 + r2;
     return (dx * dx + dy * dy) < (rsum * rsum);
 }
 
@@ -83,11 +100,8 @@ bool CircleColl(float cx1, float cy1, float r1, float cx2, float cy2, float r2)
 
 void AddCollRect(float x, float y, int w, int h)
 {
-    if (colliders_count < 256) {
-        colliders[colliders_count].x = x;
-        colliders[colliders_count].y = y;
-        colliders[colliders_count].w = w;
-        colliders[colliders_count].h = h;
+    if (colliders_count < 5) {
+        AABBInit(&colliders[colliders_count], x, y, w, h);
         colliders_count++;
     }
 }
@@ -110,4 +124,4 @@ int getColliderCount() { return colliders_count; }
 //====================================
 //
 
-CollisionRect *getColliders() { return colliders; }
+AABB2D_t *getColliders() { return colliders; }
