@@ -2,7 +2,7 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 15-09-2025 15:19
+//** Last Update: 16-09-2025 14:33
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -11,6 +11,7 @@
 #include "bitmap.h"
 #include "debug.h"
 #include "dialoguesys.h"
+#include "dice.h"
 #include "game.h"
 #include "main.h"
 
@@ -24,8 +25,10 @@ bool mouse_animating = false;
 
 // PRIVATE DATA DEFINITIONS ////////////////////////////////////////////////
 
-static double anim_timer    = 0.0;   // NOTE: in case of trouble, use double
-static double anim_duration = 0.15;  // NOTE: same above
+static double anim_timer    = 0.0;
+static double anim_duration = 0.15;
+
+// CODE ////////////////////////////////////////////////////////////////////
 
 //==========================================================================
 //
@@ -34,7 +37,7 @@ static double anim_duration = 0.15;  // NOTE: same above
 //    Argument: void
 //    Return:   void
 //
-//    NOTE: this functions contains every keyboard operation.
+//    NOTE: this function contains every keyboard operation.
 //
 //==========================================================================
 
@@ -57,6 +60,14 @@ void KeyboardOn(void)
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         CursorChanger();
+    }
+
+    //
+    // Damage Spawner
+    //
+    // TODO: put it into mouse function everytime the player press the left button.
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_ENTER]) {
+        SpawnDamageNum(100, 150, RollD6());
     }
 
     //
@@ -95,6 +106,7 @@ void KeyboardOn(void)
         dlgstats.speaker = 0;
     }
 }
+
 //==========================================================================
 //
 //    MoveInput
@@ -106,7 +118,6 @@ void KeyboardOn(void)
 //    Return:   void
 //
 //==========================================================================
-
 
 void MoveInput(bool keys[], int *dx, int *dy, int *fx, int *fy, float frames)
 {

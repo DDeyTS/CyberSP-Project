@@ -46,4 +46,10 @@ run:
 	@echo "Running..."
 	@$(BUILD_DIR)/$(TARGET)
 
+DEBUG_FLAGS := -g -O0
+debug: CFLAGS := $(filter-out -O2,$(CFLAGS)) $(DEBUG_FLAGS)
+debug: clean all 
+	@echo "Iniciando GDB"
+	@gdb $(BUILD_DIR)/$(TARGET)
+
 .PHONY: all clean

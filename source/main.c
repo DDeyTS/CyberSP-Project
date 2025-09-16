@@ -89,6 +89,7 @@ int main(void)
         perror("Fail to initialize basic Allegro stuff!\n");
         return 1;
     }
+    srand(time(NULL));
 
     InitStdFont();
     InitBitmap();

@@ -44,10 +44,11 @@ static int colliders_count = 0;
 //
 //==========================================================================
 
-bool RectSqColl(float px, float py, int pw, int ph, float wx, float wy, int ww,
-                int wh)
+bool RectSqColl(float ax, float ay, int aw, int ah, float bx, float by, int bw,
+                int bh)
 {
-    return !(px + pw <= wx || px >= wx + ww || py + ph <= wy || py >= wy + wh);
+    return (ax < bx + bw) && (ax + aw > bx) && (ay < by + bh) && (ay + ah > by);
+    // return !(px + pw <= wx || px >= wx + ww || py + ph <= wy || py >= wy + wh);
 }
 
 //==========================================================================
@@ -72,12 +73,12 @@ bool CircleColl(float cx1, float cy1, float r1, float cx2, float cy2, float r2)
     return (dx * dx + dy * dy) < (rsum * rsum);
 }
 
-// 
-//==================================== 
-// 
-// AddCollRect 
 //
-//==================================== 
+//====================================
+//
+// AddCollRect
+//
+//====================================
 //
 
 void AddCollRect(float x, float y, int w, int h)
@@ -91,26 +92,22 @@ void AddCollRect(float x, float y, int w, int h)
     }
 }
 
-// 
-//==================================== 
-// 
-// getColliderCount 
 //
-//==================================== 
+//====================================
+//
+// getColliderCount
+//
+//====================================
 //
 
-int getColliderCount() {
-  return colliders_count;
-}
+int getColliderCount() { return colliders_count; }
 
 //
 //====================================
 //
-// getColliders 
+// getColliders
 //
 //====================================
-// 
+//
 
-CollisionRect *getColliders() {
-  return colliders;
-}
+CollisionRect *getColliders() { return colliders; }

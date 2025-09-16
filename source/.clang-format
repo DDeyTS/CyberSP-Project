@@ -31,3 +31,4 @@ AllowShortLoopsOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
 PointerAlignment: Right
 SortIncludes: true
+

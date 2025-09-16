@@ -8,16 +8,12 @@
 //**************************************************************************
 
 #include "game.h"
-#include "bitmap.h"
 #include "collision.h"
-#include "debug.h"
-#include "dialoguesys.h"
-#include "input.h"
-#include "main.h"
-#include "tile_render.h"
+
+static float dt = 1.0f / 30;
 
 static void ProtagMoveAnim();
-static void EntityMoveAnim();
+static void EnemyMoveAnim();
 
 //==========================================================================
 //
@@ -33,6 +29,8 @@ void GameRedraw(void)
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     BitmapDraw();
+    // DamageNumAnim(10);
+    DrawDamageNum(font_std);
 
     //
     // Description Window
@@ -82,6 +80,7 @@ void GameLoop(void)
 
     KeyboardOn();
     MouseOn();
+    UpdateDamageNum(dt);
 
     CloseGame();
 
@@ -91,7 +90,7 @@ void GameLoop(void)
 
         ProtagMoveAnim();
 
-        EntityMoveAnim();
+        EnemyMoveAnim();
 
         redraw = true;
     }
@@ -156,16 +155,13 @@ void GameCrusher(void)
 //    ProtagMovement
 //
 //    Argument: bool keys[]        - read which keys are pressed
-//              float *px          - protagonist's current X position
-//              float *py          - protagonist's current Y position
+//              float *px, *py     - current either X and Y position
 //              float sp           - movement speed
-//              int *fx            - sprite sheet's row to animate
-//              int *fy            - sprite sheet's column to animate
+//              int *fx, *fy       - sprite sheet's row and column to animate
 //              float frames       - number of frames per second
 //    Return:   void
 //
-//    TODO: another function to control entity's movement.
-//    TODO: aligning the movement when another key is pressed at the same time.
+//    FIXME: aligning the movement when another key is pressed at the same time.
 //
 //==========================================================================
 
@@ -198,8 +194,10 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         float coll_px   = *px + mov_x;
         bool collided_x = false;
         for (int i = 0; i < colliders_count; i++) {
-            if (RectSqColl(coll_px, *py, hitbox_w, hitbox_h, colliders[i].x,
-                           colliders[i].y, colliders[i].w, colliders[i].h)) {
+            if (RectSqColl(coll_px, *py, hitbox_w, hitbox_h,
+                           colliders[i].x - EPSILON, colliders[i].y - EPSILON,
+                           colliders[i].w + 2 * EPSILON,
+                           colliders[i].h + 2 * EPSILON)) {
                 collided_x = true;
                 break;
             }
@@ -211,8 +209,10 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         float coll_py   = *py + mov_y;
         bool collided_y = false;
         for (int i = 0; i < colliders_count; i++) {
-            if (RectSqColl(*px, coll_py, hitbox_w, hitbox_h, colliders[i].x,
-                           colliders[i].y, colliders[i].w, colliders[i].h)) {
+            if (RectSqColl(*px, coll_py, hitbox_w, hitbox_h,
+                           colliders[i].x - EPSILON, colliders[i].y - EPSILON,
+                           colliders[i].w + 2 * EPSILON,
+                           colliders[i].h + 2 * EPSILON)) {
                 collided_y = true;
                 break;
             }
@@ -297,61 +297,61 @@ void ProtagMoveAnim()
 //
 //===================================
 //
-// EntityMovement
+// EnemyMovement
 //
 //===================================
 //
 
-void EntityMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
-                    float frames, int dx, int dy)
+void EnemyMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
+                   float frames, int dx, int dy)
 {
     int cols = 16;
     int rows = 24;
     float fq = (cols * frames) + cols;
 
     if (dx > 0 && dy < 0) {
-        *fx                = fq;
-        *fy                = rows * 5;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = rows * 5;
+        en[e].reset_frame = *fy;
     }
     else if (dx < 0 && dy < 0) {
-        *fx                = fq;
-        *fy                = rows * 6;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = rows * 6;
+        en[e].reset_frame = *fy;
     }
     else if (dx > 0 && dy > 0) {
-        *fx                = fq;
-        *fy                = rows * 2;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = rows * 2;
+        en[e].reset_frame = *fy;
     }
     else if (dx < 0 && dy > 0) {
-        *fx                = fq;
-        *fy                = rows;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = rows;
+        en[e].reset_frame = *fy;
     }
     else if (dx > 0) {
-        *fx                = fq;
-        *fy                = rows * 4;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = rows * 4;
+        en[e].reset_frame = *fy;
     }
     else if (dx < 0) {
-        *fx                = fq;
-        *fy                = rows * 3;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = rows * 3;
+        en[e].reset_frame = *fy;
     }
     else if (dy > 0) {
-        *fx                = fq;
-        *fy                = 0;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = 0;
+        en[e].reset_frame = *fy;
     }
     else if (dy < 0) {
-        *fx                = fq;
-        *fy                = (rows * 7) + 1;
-        ent[e].reset_frame = *fy;
+        *fx               = fq;
+        *fy               = (rows * 7) + 1;
+        en[e].reset_frame = *fy;
     }
     else {
         *fx = 0;
-        *fy = ent[e].reset_frame;
+        *fy = en[e].reset_frame;
     }
 
     float mov_x = dx * sp;
@@ -370,14 +370,14 @@ void EntityMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
 //
 //====================================
 //
-// EntityMoveAnim
+// EnemyMoveAnim
 //
 // TODO: upgrade that into a function
 //
 //====================================
 //
 
-void EntityMoveAnim()
+void EnemyMoveAnim()
 {
     static int move_count = 0;
     static int npc_x = 0, npc_y = 0;
@@ -406,11 +406,11 @@ void EntityMoveAnim()
         }
     }
 
-    int e = ENTITY_GANGMEMBER;
-    ent[e].frames += 0.3f;
-    if (ent[e].frames > 4) {
-        ent[e].frames -= 4;
+    int e1 = EN_GANGMEMBER;
+    en[e1].frames += 0.3f;
+    if (en[e1].frames > 4) {
+        en[e1].frames -= 4;
     }
-    EntityMovement(e, &ent[e].px, &ent[e].py, ent[e].speed, &ent[e].fw, &ent[e].fh,
-                   (int)ent[e].frames, npc_x, npc_y);
+    EnemyMovement(e1, &en[e1].px, &en[e1].py, en[e1].speed, &en[e1].fw, &en[e1].fh,
+                  (int)en[e1].frames, npc_x, npc_y);
 }
