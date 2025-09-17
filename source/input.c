@@ -2,26 +2,22 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 16-09-2025 14:33
+//** Last Update: 17-09-2025 14:26
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 #include "input.h"
 #include "bitmap.h"
-#include "debug.h"
-#include "dialoguesys.h"
-#include "dice.h"
-#include "game.h"
-#include "main.h"
+#include "combat.h"
 
 // EXTERNAL DATA DECLARATIONS //////////////////////////////////////////////
 
-Mousecursors cursors;
+Mousecursors          cursors;
 ALLEGRO_MOUSE_CURSOR *current_cursor = NULL;
-enum CursorType cursor_flag          = CURSOR_NORMAL;
+enum CursorType       cursor_flag    = CURSOR_NORMAL;
 ALLEGRO_MOUSE_CURSOR *chosen_cursor;
-bool mouse_animating = false;
+bool                  mouse_animating = false;
 
 // PRIVATE DATA DEFINITIONS ////////////////////////////////////////////////
 
@@ -60,14 +56,6 @@ void KeyboardOn(void)
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         CursorChanger();
-    }
-
-    //
-    // Damage Spawner
-    //
-    // TODO: put it into mouse function everytime the player press the left button.
-    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_ENTER]) {
-        SpawnDamageNum(100, 150, RollD6());
     }
 
     //
@@ -121,9 +109,9 @@ void KeyboardOn(void)
 
 void MoveInput(bool keys[], int *dx, int *dy, int *fx, int *fy, float frames)
 {
-    int cols = 16;                      // sprite sheet Y axis
-    int rows = 24;                      // sprite sheet X axis
-    float fq = (cols * frames) + cols;  // frame queue
+    int   cols = 16;                      // sprite sheet Y axis
+    int   rows = 24;                      // sprite sheet X axis
+    float fq   = (cols * frames) + cols;  // frame queue
 
     //
     // Diagonal Movement
@@ -223,22 +211,30 @@ void MouseOn(void)
                 printf("Apareceu a caixa!\n");
             }
         }
+
+        //
+        // Hand Click Animation
+        //
+
+        if (mouse[1] && chosen_cursor == cursors.normal) {
+            mouse_animating = true;
+            anim_timer      = al_get_time();
+            if (cursors.clicking) {
+                current_cursor = cursors.clicking;
+                al_set_mouse_cursor(disp, current_cursor);
+            }
+        }
+
+        // 
+        // Click to Shoot 
+        //
+
+        if (mouse[1] && chosen_cursor == cursors.aim) {
+            SpawnDamageNum(en[EN_GANGMEMBER].px, en[EN_GANGMEMBER].py, RollD6());
+        }
     }
     else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
         mouse[ev.mouse.button] = false;
-    }
-
-    //
-    // Click Animation
-    //
-
-    if (mouse[1] && chosen_cursor == cursors.normal) {
-        mouse_animating = true;
-        anim_timer      = al_get_time();
-        if (cursors.clicking) {
-            current_cursor = cursors.clicking;
-            al_set_mouse_cursor(disp, current_cursor);
-        }
     }
 
     //
@@ -388,7 +384,6 @@ void CloseGame(void)
 
 void ToggleToAim(void)
 {
-    // sprite follows cursor when aiming
     SpriteAimAtCursor(protag.px, protag.py, &protag.fh);
     protag.fw = 0;
 }

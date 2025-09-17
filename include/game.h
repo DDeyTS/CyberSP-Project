@@ -7,6 +7,7 @@
 #include "input.h"
 #include "main.h"
 #include "tile_render.h"
+#include "combat.h"
 
 #define EPSILON 0.1f
 

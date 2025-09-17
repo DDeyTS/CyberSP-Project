@@ -1,5 +1,11 @@
-#ifndef INPUT_H
-#define INPUT_H
+#pragma once
+
+#include "bitmap.h"
+#include "debug.h"
+#include "dialoguesys.h"
+#include "dice.h"
+#include "game.h"
+#include "main.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -33,5 +39,3 @@ extern Mousecursors cursors;
 extern ALLEGRO_MOUSE_CURSOR *current_cursor;
 extern enum CursorType cursor_flag;
 extern ALLEGRO_MOUSE_CURSOR *chosen_cursor;
-
-#endif

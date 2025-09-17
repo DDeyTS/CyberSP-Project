@@ -9,14 +9,14 @@
 //**************************************************************************
 
 /*
- * LIST OF FEATURES TO DO (09-09-25)
- * 1. Collision walls on the map.
+ * LIST OF FEATURES TO DO (17-09-25)
+ * 1. Collision walls on the map. (Done!)
  *     1a. Map changer.
  * 2. NPC sprite render. (Done but it call for updates)
  *     2a. Entity movement manager. (done but it call for updates)
  * 3. Shooter mode.
  *     3a. Shooting with pistol.
- *     3b. Damage system.
+ *     3b. Damage system. (Partially done!)
  * 4. Simple inventory (like first Metal Gear).
  * 5. Mouth cursor.
  * 6. Game state system.

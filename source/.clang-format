@@ -2,7 +2,7 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
-ColumnLimit: 84
+ColumnLimit: 83
 
 #Estilo de chaves(compatível com 14, 15, 16, 17, 18…)
 BreakBeforeBraces: Custom
@@ -22,7 +22,7 @@ BraceWrapping:
   SplitEmptyNamespace: false
 
 AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: false
+AlignConsecutiveDeclarations: true
 SpaceBeforeParens: ControlStatements
 SpacesBeforeTrailingComments: 2
 AllowShortFunctionsOnASingleLine: All

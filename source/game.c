@@ -8,7 +8,6 @@
 //**************************************************************************
 
 #include "game.h"
-#include "collision.h"
 
 static float dt = 1.0f / 30;
 
@@ -150,6 +149,8 @@ void GameCrusher(void)
     al_destroy_display(disp);
 }
 
+
+
 //==========================================================================
 //
 //    ProtagMovement
@@ -161,7 +162,8 @@ void GameCrusher(void)
 //              float frames       - number of frames per second
 //    Return:   void
 //
-//    FIXME: aligning the movement when another key is pressed at the same time.
+//    FIXME: aligning the movement when another key is pressed at the same
+//    time.
 //
 //==========================================================================
 
@@ -182,57 +184,24 @@ void ProtagMovement(bool keys[], float *px, float *py, float sp, int *fx, int *f
         mov_y *= adj;
     }
 
-    //
-    // Collision Logic
-    //
-    {
-        int colliders_count = getColliderCount();
-        AABB2D_t *colliders = getColliders();
-
-        // X Axis
-        AABB2D_t nextX;
-        AABBInit(&nextX, *px + mov_x, *py, protag.fw, protag.fh);
-        bool collideX = false;
-        for (int i = 0; i < colliders_count; i++) {
-            if (AABBCollides(&nextX, &colliders[i])) {
-                collideX = true;
-                break;
-            }
-        }
-        if (!collideX) *px += mov_x;
-
-        // Y Axis
-        AABB2D_t nextY;
-        AABBInit(&nextY, *px, *py + mov_y, protag.fw, protag.fh);
-        bool collideY = false;
-        for (int i = 0; i < colliders_count; i++) {
-            if (AABBCollides(&nextY, &colliders[i])) {
-                collideY = true;
-                break;
-            }
-        }
-        if (!collideY) *py += mov_y;
-    }
+    CollVSMove(px, py, mov_x, mov_y);
 }
 
 //==========================================================================
 //
 //    SpriteAimAtCursor
 //
-//    Argument: float px        - current sprite's X position
-//              float py        - current sprite's Y position
+//    Argument: float px, py    - actor's X and Y position
 //              float *fy       - sprite sheet's column to animate
 //    Return:   void
-//
-//    NOTE: ignores both px and py warning below.
 //
 //==========================================================================
 
 void SpriteAimAtCursor(float px, float py, int *fy)
 {
-    float t_dx    = mouse_x - (protag.px + 16);  // sprite center
-    float t_dy    = mouse_y - (protag.py + 24);  // same above
-    float t_angle = atan2(t_dy, t_dx);           // radianus (-PI to +PI)
+    float t_dx    = mouse_x - (px + 16);  // sprite center
+    float t_dy    = mouse_y - (py + 24);  // same above
+    float t_angle = atan2(t_dy, t_dx);    // radianus (-PI to +PI)
 
     int dir;
     // right
@@ -297,48 +266,40 @@ void ProtagMoveAnim()
 void EnemyMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
                    float frames, int dx, int dy)
 {
-    int cols = 16;
-    int rows = 24;
-    float fq = (cols * frames) + cols;
+    int   cols = 16;
+    int   rows = 24;
+    float fq   = (cols * frames) + cols;
 
     if (dx > 0 && dy < 0) {
-        *fx               = fq;
-        *fy               = rows * 5;
+        *fx = fq, *fy = rows * 5;
         en[e].reset_frame = *fy;
     }
     else if (dx < 0 && dy < 0) {
-        *fx               = fq;
-        *fy               = rows * 6;
+        *fx = fq, *fy = rows * 6;
         en[e].reset_frame = *fy;
     }
     else if (dx > 0 && dy > 0) {
-        *fx               = fq;
-        *fy               = rows * 2;
+        *fx = fq, *fy = rows * 2;
         en[e].reset_frame = *fy;
     }
     else if (dx < 0 && dy > 0) {
-        *fx               = fq;
-        *fy               = rows;
+        *fx = fq, *fy = rows;
         en[e].reset_frame = *fy;
     }
     else if (dx > 0) {
-        *fx               = fq;
-        *fy               = rows * 4;
+        *fx = fq, *fy = rows * 4;
         en[e].reset_frame = *fy;
     }
     else if (dx < 0) {
-        *fx               = fq;
-        *fy               = rows * 3;
+        *fx = fq, *fy = rows * 3;
         en[e].reset_frame = *fy;
     }
     else if (dy > 0) {
-        *fx               = fq;
-        *fy               = 0;
+        *fx = fq, *fy = 0;
         en[e].reset_frame = *fy;
     }
     else if (dy < 0) {
-        *fx               = fq;
-        *fy               = (rows * 7) + 1;
+        *fx = fq, *fy = (rows * 7) + 1;
         en[e].reset_frame = *fy;
     }
     else {

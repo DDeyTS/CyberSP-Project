@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="22">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="8" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="28">
  <properties>
   <property name="collide" type="bool" value="false"/>
  </properties>
@@ -36,27 +36,27 @@
   <properties>
    <property name="collide" type="bool" value="true"/>
   </properties>
-  <object id="2" x="32" y="32" width="16" height="32">
+  <object id="2" x="32" y="32" width="8" height="24">
    <properties>
     <property name="collide" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="16" x="8" y="0" width="24" height="40">
+  <object id="16" x="8" y="0" width="8" height="32">
    <properties>
     <property name="collide" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="13" x="232" y="128" width="16" height="32">
+  <object id="13" x="232" y="128" width="16" height="16">
    <properties>
     <property name="collide" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="3" x="208" y="32" width="16" height="32">
+  <object id="3" x="216" y="32" width="8" height="24">
    <properties>
     <property name="collide" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="4" x="32" y="8" width="192" height="24">
+  <object id="22" x="32" y="8" width="192" height="24">
    <properties>
     <property name="collide" type="bool" value="true"/>
    </properties>

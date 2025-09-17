@@ -1,10 +1,5 @@
 #pragma once
 
-#include "collision.h"
-#include "dialoguesys.h"
-#include "input.h"
-#include "main.h"
-#include "tile_render.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
@@ -28,25 +23,11 @@ typedef struct {
   ALLEGRO_BITMAP *spr;
 } SpriteSheet_t;
 
-typedef struct {
-  bool active;
-  float x, start_y;
-  float y;
-  float anim_duration;
-  float total_duration;
-  float fly_distance;
-  int dmg;
-  char text[12];
-} DamageNum_t;
-
 void InitBitmap(void);
 void DrawProtag(void);
 void DrawEnemy(void);
 bool InitCursor(ALLEGRO_DISPLAY *disp);
 void BitmapDraw(void);
-void SpawnDamageNum(float x, float y, int damage);
-void UpdateDamageNum(float dt);
-void DrawDamageNum(ALLEGRO_FONT *font);
 void BitmapExplode(void);
 void CursorChanger(void);
 

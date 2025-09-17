@@ -1,5 +1,4 @@
-#ifndef MAIN_H
-#define MAIN_H
+#pragma once
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -36,4 +35,4 @@ extern int active_topic;
 extern bool running;
 extern bool redraw;
 
-#endif
+

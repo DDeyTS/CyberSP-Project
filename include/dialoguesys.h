@@ -1,5 +1,4 @@
-#ifndef DIALOGUE_SYS_H
-#define DIALOGUE_SYS_H
+#pragma once
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
@@ -85,5 +84,3 @@ extern ALLEGRO_FONT *font_std, *font_subtitle;
 extern ALLEGRO_COLOR font_color, name_color;
 extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light;
 extern bool learned_topics[NUM_TOPICS];
-
-#endif

@@ -20,22 +20,22 @@
 
 // EXTERNAL FUNCTION PROTOTYPES /////////////////////////////////////////////
 
-void InitStdFont();
+void    InitStdFont();
 TopicID GetTopicID(const char *topic);
-void LearnTopic(const char *topic);
-void ExplodeFont();
+void    LearnTopic(const char *topic);
+void    ExplodeFont();
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
-NPC *npc[NUM_NPCS];
+NPC             *npc[NUM_NPCS];
 DescriptionObj **desc = NULL;  // TODO: finding a lighter way to quantify the
                                // amount of description texts inside this array
 unsigned int desc_count = 0;
-DlgStats dlgstats       = {0, SHOW_INTRO};
+DlgStats     dlgstats   = {0, SHOW_INTRO};
 
 ALLEGRO_FONT *font_std, *font_subtitle;
 ALLEGRO_COLOR font_color, name_color;
-bool learned_topics[NUM_TOPICS] = {false};
+bool          learned_topics[NUM_TOPICS] = {false};
 
 // PRIVATE DATA DEFINITIONS /////////////////////////////////////////////////
 
@@ -151,11 +151,11 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
 
     // NOTE: below there's that little green light in the right side
     {
-        static int light_frame   = 0;
-        static double last_frame = 0;
-        const double frame_delay = 0.2;
-        const int total_frames   = 8;
-        const int frame_w = 8, frame_h = 18;
+        static int    light_frame  = 0;
+        static double last_frame   = 0;
+        const double  frame_delay  = 0.2;
+        const int     total_frames = 8;
+        const int     frame_w = 8, frame_h = 18;
 
         // controls the animation loop of the green light
         double elapsed_time = al_get_time() - last_frame;
@@ -192,13 +192,13 @@ void InitDlgBox(ALLEGRO_BITMAP *portrait, const char *name, const char *text)
     strncpy(buffer, text, sizeof(buffer));
     buffer[sizeof(buffer) - 1] = '\0';
 
-    char *word           = strtok(buffer, " ");  // put spaces between each word
-    char line[WORDS_MAX] = "";                   // stores full line
-    float cursor_x       = text_x;               // initial position to write
+    char *word            = strtok(buffer, " ");  // put spaces between each word
+    char  line[WORDS_MAX] = "";                   // stores full line
+    float cursor_x        = text_x;               // initial position to write
 
     do {
-        bool is_highlight     = false;
-        const char *draw_word = word;
+        bool        is_highlight = false;
+        const char *draw_word    = word;
 
         if (word[0] == '|') {
             is_highlight = true;
@@ -314,7 +314,7 @@ void InitTopicMenu(NPC *npc, int selected)
 {
     if (npc->num_topic <= 0) return;
 
-    float x = 100, y = 350;
+    float         x = 100, y = 350;
     ALLEGRO_COLOR color;
 
     // upper title
@@ -400,8 +400,8 @@ void InitDescBox(float box_x, float box_y, const char *text)
 {
     const float padding    = 10.0f;
     const float wrap_w_cap = 200.0f;  // max width to line break
-    const int line_h       = al_get_font_line_height(font_std);
-    const int space_w      = al_get_text_width(font_std, " ");
+    const int   line_h     = al_get_font_line_height(font_std);
+    const int   space_w    = al_get_text_width(font_std, " ");
 
     char buffer[WORDS_MAX];
     strncpy(buffer, text, sizeof(buffer));
@@ -409,13 +409,13 @@ void InitDescBox(float box_x, float box_y, const char *text)
 
     float line_w = 0.0f;
     float widest = 0.0f;  // bigger width between all the lines
-    int lines    = 1;     // starts from 1st line
+    int   lines  = 1;     // starts from 1st line
 
     // as long as each word in the buffer, split by spaces and stored in the
     // pointer, isn't null: the pointer will update to store the next word
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
-        const char *draw = (w[0] == '|') ? w + 1 : w;
-        int current_w    = al_get_text_width(font_std, draw);
+        const char *draw      = (w[0] == '|') ? w + 1 : w;
+        int         current_w = al_get_text_width(font_std, draw);
 
         // adds padding before printed words (except at first line)
         int add = (line_w > 0) ? space_w : 0;
@@ -466,9 +466,9 @@ void InitDescBox(float box_x, float box_y, const char *text)
     float cx = 0.0f;  // horizontal cursor inside the current line
 
     for (char *w = strtok(buffer, " "); w; w = strtok(NULL, " ")) {
-        bool is_highlight = (w[0] == '|');
-        const char *draw  = is_highlight ? w + 1 : w;
-        int ww            = al_get_text_width(font_std, draw);
+        bool        is_highlight = (w[0] == '|');
+        const char *draw         = is_highlight ? w + 1 : w;
+        int         ww           = al_get_text_width(font_std, draw);
 
         int add = (cx > 0.0f) ? space_w : 0;
 
@@ -493,8 +493,8 @@ void AddDescription(DescriptionObj ***desc_ptr, unsigned int *count,
                     const char *text, float x, float y)
 {
     *desc_ptr = realloc(*desc_ptr, sizeof(DescriptionObj *) * (*count + 1));
-    (*desc_ptr)[*count] = malloc(sizeof(DescriptionObj));
-    (*desc_ptr)[*count]->text = strdup(text);
+    (*desc_ptr)[*count]        = malloc(sizeof(DescriptionObj));
+    (*desc_ptr)[*count]->text  = strdup(text);
     (*desc_ptr)[*count]->pos_x = x;
     (*desc_ptr)[*count]->pos_y = y;
     (*count)++;
@@ -518,7 +518,7 @@ void InitStdFont()
     //
 
     const char *path = "fonts/Steelflight.ttf";
-    FILE *f          = fopen(path, "r");
+    FILE       *f    = fopen(path, "r");
     if (!f) {
         perror("Error from fopen");
         fprintf(stderr, "Font doesn't found: %s\n", path);
