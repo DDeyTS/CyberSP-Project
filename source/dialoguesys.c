@@ -3,13 +3,14 @@
 //** File: dialoguesys.c (CyberSP Project)
 //** Purpose: Any text to display happens here
 //**
-//** Last Update: 10-09-2025 14:21
+//** Last Update: 17-09-2025 15:09
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 #include "dialoguesys.h"
 #include "bitmap.h"
+#include "game.h"
 #include "main.h"
 #include "textdat.h"
 
@@ -30,6 +31,8 @@ void    ExplodeFont();
 NPC             *npc[NUM_NPCS];
 DescriptionObj **desc = NULL;  // TODO: finding a lighter way to quantify the
                                // amount of description texts inside this array
+int obj_desc = 0;
+
 unsigned int desc_count = 0;
 DlgStats     dlgstats   = {0, SHOW_INTRO};
 
@@ -562,4 +565,74 @@ void ExplodeFont()
 {
     al_destroy_font(font_std);
     al_destroy_font(font_name);
+}
+
+//==========================================================================
+//
+//    DescBoxIsOpen
+//
+//    Argument: bool show_desc        - checks if description box is open
+//    Return:   bool
+//
+//==========================================================================
+
+bool DescBoxIsOpen(bool show_desc)
+{
+    if (!show_desc) return false;
+
+    InitDescBox(desc[obj_desc]->pos_x, desc[obj_desc]->pos_y,
+                desc[obj_desc]->text);
+
+    return true;
+}
+
+//==========================================================================
+//
+//    DlgBoxIsOpen
+//
+//    Argument: bool open_desc        - checks if dialogue box is open
+//    Return:   bool
+//
+//==========================================================================
+
+bool DlgBoxIsOpen(bool open_dlg)
+{
+    if (!open_dlg) return false;
+
+    bool show_intro = (dlgstats.flags & SHOW_INTRO) == SHOW_INTRO;
+
+    if (open_dlg) {
+        if (show_intro) {
+            InitDlgBox(npc[dlgstats.speaker]->portrait_id,
+                       npc[dlgstats.speaker]->name,
+                       npc[dlgstats.speaker]->topics->intro_text);
+        }
+        else if (active_topic >= 0) {
+            const char *topic =
+                npc[dlgstats.speaker]->topics[selected_topic].topic;
+            LoadDlg(npc[dlgstats.speaker], topic);
+        }
+        InitTopicMenu(npc[dlgstats.speaker], selected_topic);
+    }
+
+    return true;
+}
+
+//==========================================================================
+//
+//    InitTextBoxes
+//
+//    Argument: void
+//    Return:   bool
+//
+//==========================================================================
+
+bool InitTextBoxes(void)
+{
+    bool dlg_open = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
+
+    bool descbox = DescBoxIsOpen(show_desc);
+    bool dlgbox  = DlgBoxIsOpen(dlg_open);
+
+    return descbox || dlgbox;
 }

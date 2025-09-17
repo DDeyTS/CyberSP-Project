@@ -23,6 +23,8 @@ extern ALLEGRO_DISPLAY *disp;
 extern ALLEGRO_TIMER *timer;
 extern ALLEGRO_EVENT_QUEUE *queue;
 
+extern float dt;
+
 extern bool keys[ALLEGRO_KEY_MAX], mouse[MOUSE_MAX + 1];
 extern int mouse_x, mouse_y;
 extern bool mouse_animating;

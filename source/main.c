@@ -42,13 +42,15 @@
 
 tmx_map *map = NULL;
 
-ALLEGRO_DISPLAY *disp;
-ALLEGRO_EVENT ev;
+ALLEGRO_DISPLAY     *disp;
+ALLEGRO_EVENT        ev;
 ALLEGRO_EVENT_QUEUE *queue;
-ALLEGRO_TIMER *timer;
+ALLEGRO_TIMER       *timer;
+
+float dt = 1.0 / 30;
 
 bool keys[ALLEGRO_KEY_MAX], mouse[MOUSE_MAX + 1];
-int mouse_x, mouse_y = 0;
+int  mouse_x, mouse_y = 0;
 
 int selected_topic = 0;
 int active_topic   = -1;
@@ -84,7 +86,7 @@ int main(void)
 
     disp  = al_create_display(DISPW, DISPH);
     queue = al_create_event_queue();
-    timer = al_create_timer(1.0 / 30.0);
+    timer = al_create_timer(dt);
     if (!disp || !queue || !timer) {
         perror("Fail to initialize basic Allegro stuff!\n");
         return 1;

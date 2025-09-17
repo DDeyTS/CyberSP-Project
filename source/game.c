@@ -8,11 +8,12 @@
 //**************************************************************************
 
 #include "game.h"
-
-static float dt = 1.0f / 30;
+#include "collision.h"
+#include "dialoguesys.h"
 
 static void ProtagMoveAnim();
 static void EnemyMoveAnim();
+
 
 //==========================================================================
 //
@@ -28,38 +29,14 @@ void GameRedraw(void)
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     BitmapDraw();
-    // DamageNumAnim(10);
+
+    InitTextBoxes();
+
     DrawDamageNum(font_std);
 
     //
     // Description Window
     //
-
-    if (show_desc) {
-        InitDescBox(desc[obj_desc]->pos_x, desc[obj_desc]->pos_y,
-                    desc[obj_desc]->text);
-    }
-
-    //
-    // Dialogue Window
-    //
-    {
-        bool dlg_open   = (dlgstats.flags & DLG_OPEN) == DLG_OPEN;
-        bool show_intro = (dlgstats.flags & SHOW_INTRO) == SHOW_INTRO;
-        if (dlg_open) {
-            if (show_intro) {
-                InitDlgBox(npc[dlgstats.speaker]->portrait_id,
-                           npc[dlgstats.speaker]->name,
-                           npc[dlgstats.speaker]->topics->intro_text);
-            }
-            else if (active_topic >= 0) {
-                const char *topic =
-                    npc[dlgstats.speaker]->topics[selected_topic].topic;
-                LoadDlg(npc[dlgstats.speaker], topic);
-            }
-            InitTopicMenu(npc[dlgstats.speaker], selected_topic);
-        }
-    }
 
     al_flip_display();
 }
@@ -148,8 +125,6 @@ void GameCrusher(void)
     al_destroy_timer(timer);
     al_destroy_display(disp);
 }
-
-
 
 //==========================================================================
 //
@@ -316,8 +291,10 @@ void EnemyMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
         mov_y *= adj;
     }
 
-    *px += mov_x;
-    *py += mov_y;
+    CollVSMove(px, py, mov_x, mov_y);
+
+    // *px += mov_x;
+    // *py += mov_y;
 }
 
 //

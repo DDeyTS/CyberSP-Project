@@ -74,12 +74,16 @@ void AddDescription(DescriptionObj ***desc_ptr, unsigned int *count,
                     const char *text, float x, float y);
 void InitStdFont(void);
 void FillIntro(NPC *npc, const char *text);
+bool DescBoxIsOpen(bool show_desc);
+bool DlgBoxIsOpen(bool open_dlg);
+bool InitTextBoxes(void);
 void ExplodeFont(void);
 
 extern DlgStats dlgstats;
 extern NPC *npc[];
 extern DescriptionObj **desc;
 extern unsigned int desc_count;
+extern int obj_desc;
 extern ALLEGRO_FONT *font_std, *font_subtitle;
 extern ALLEGRO_COLOR font_color, name_color;
 extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light;

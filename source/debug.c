@@ -11,8 +11,6 @@
 #include "dialoguesys.h"
 #include "main.h"
 
-int obj_desc = 0;
-
 //==========================================================================
 //
 //    DBG_DescObjChanger
