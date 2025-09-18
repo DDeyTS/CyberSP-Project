@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="21">
+ <tileset firstgid="1" name="dirtystreet_tiles" tilewidth="32" tileheight="32" tilecount="63" columns="7">
+  <image source="dirtystreet_tiles.png" width="224" height="288"/>
+ </tileset>
+ <tileset firstgid="64" name="bus_stop_tile" tilewidth="32" tileheight="32" tilecount="15" columns="5">
+  <image source="bus_stop_tile.png" width="160" height="96"/>
+ </tileset>
+ <tileset firstgid="79" name="building_tiles" tilewidth="32" tileheight="32" tilecount="18" columns="3">
+  <image source="building_tiles.png" width="96" height="192"/>
+ </tileset>
+ <layer id="1" name="street" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzjZGBg4CSAuYBYlAh1xOKBNI+JCEyKeSJImFr+wYfZoXjUPKxx4cCAB4DksWEWLGK8DAwHGPEZBgQCQHVMEBqOYWkIJIeE4fLobkYGsLRMzfRCDfOQAanmIYcPExofhAVJNA8Aq4APWQ==
+  </data>
+ </layer>
+ <layer id="6" name="building" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4B44A/EkUAcAKWRcSAZ5gUBcQgaRhYjFQQDcRQemlQQBtWHix5u7gsF4nA89EADAGMkEuI=
+  </data>
+ </layer>
+ <layer id="5" name="wall" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAuEANiCSCWBGJxKBuEpaBi0iSaJwvEclBaAUrLQ2kQVqSGo6kEWIBYBAcmFYhS0V2jYBQMFwAA1DcCfQ==
+  </data>
+ </layer>
+ <layer id="2" name="buspoint" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzMcNADAIwEBGS+/J/uPEOyB+WLqvRWwKiEjIKMpfRUPHwFT+FjYOLp7y53mefR+ZiAQq
+  </data>
+ </layer>
+ <layer id="3" name="signal" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgYoESiei0sYqxIbE0SzeMhIGZAgllCQCyMR8wMiM2JNIsTCY+CUTAKUAEAqqcBlQ==
+  </data>
+ </layer>
+ <objectgroup id="4" name="collision">
+  <object id="1" x="232" y="72" width="16" height="8">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="5" x="64" y="40" width="160" height="32">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="17" x="256" y="40" width="32" height="8">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="18" x="328" y="32" width="16" height="32">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="19" x="336" y="64" height="24">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="20" x="0" y="232" width="256" height="184">
+   <properties>
+    <property name="collide" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

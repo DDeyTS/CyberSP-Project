@@ -153,7 +153,7 @@ void UnlockExtraTopics(void)
     {
         NPC *bodyg = npc[NPC_BODYGUARD];
 
-        if (learned_topics[TOPIC_RONALDO]) {
+        if (learned_topics[T_RONALDO]) {
             bodyg->topics =
                 realloc(bodyg->topics, sizeof(Topic) * (bodyg->num_topic + 1));
 
@@ -163,7 +163,7 @@ void UnlockExtraTopics(void)
 
             bodyg->num_topic++;  // adds early number of topics by 1
         }
-        else if (learned_topics[TOPIC_NIGHTCLUB]) {
+        else if (learned_topics[T_NIGHTCLUB]) {
             bodyg->topics =
                 realloc(bodyg->topics, sizeof(Topic) * (bodyg->num_topic + 1));
 
@@ -178,7 +178,7 @@ void UnlockExtraTopics(void)
     {
         NPC *raquel = npc[NPC_RAQUEL];
 
-        if (learned_topics[TOPIC_PRICE]) {
+        if (learned_topics[T_PRICE]) {
             raquel->topics =
                 realloc(raquel->topics, sizeof(Topic) * (raquel->num_topic + 1));
 

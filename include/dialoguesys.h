@@ -25,11 +25,11 @@ typedef enum {
 
 typedef enum {
   NONE_TOPIC = -1,
-  TOPIC_CORP,
-  TOPIC_PRICE,
-  TOPIC_KINGDOM_OF_CASH,
-  TOPIC_RONALDO,
-  TOPIC_NIGHTCLUB,
+  T_CORP,
+  T_PRICE,
+  T_KINGDOM_OF_CASH,
+  T_RONALDO,
+  T_NIGHTCLUB,
   NUM_TOPICS,
 } TopicID;
 

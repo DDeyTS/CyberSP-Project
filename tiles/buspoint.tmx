@@ -14,7 +14,7 @@
  </tileset>
  <layer id="1" name="street" width="8" height="8">
   <data encoding="base64" compression="zlib">
-   eJzjZGBg4KQAMwIxExQLINEgzAzEHEDMC8QiSJgbItbABZUXxWKuKFQeiBsIyQPNchBBw0CxAyB5fixug9GCQAwAjyIHVA==
+   eJzjZGBg4KQAMwIxExQLINEgzAzEHEDMC8QiSJgFItbABZUXxWKuKFQeiBsIyQPNcuAGYhEkDBQ7AJLnx+I2GC0IxACJVgdE
   </data>
  </layer>
  <layer id="4" name="buspoint" width="8" height="8">

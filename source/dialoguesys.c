@@ -357,11 +357,11 @@ void InitTopicMenu(NPC *npc, int selected)
 
 TopicID GetTopicID(const char *topic)
 {
-    if (strcmp(topic, "corp") == 0) return TOPIC_CORP;
-    if (strcmp(topic, "price.") == 0) return TOPIC_PRICE;
-    if (strcmp(topic, "kingdom") == 0) return TOPIC_KINGDOM_OF_CASH;
-    if (strcmp(topic, "Ronaldo.") == 0) return TOPIC_RONALDO;
-    if (strcmp(topic, "nightclub") == 0) return TOPIC_NIGHTCLUB;
+    if (strcmp(topic, "corp") == 0) return T_CORP;
+    if (strcmp(topic, "price.") == 0) return T_PRICE;
+    if (strcmp(topic, "kingdom") == 0) return T_KINGDOM_OF_CASH;
+    if (strcmp(topic, "Ronaldo.") == 0) return T_RONALDO;
+    if (strcmp(topic, "nightclub") == 0) return T_NIGHTCLUB;
 
     return NONE_TOPIC;
 }
