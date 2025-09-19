@@ -98,7 +98,7 @@ int main(void)
     InitCursor(disp);
     NpcDlgStorage(npc);
     DescStorage();
-    SpawnAllEnemies();
+    SpawnAllEnemies(num_active_enemies);
 
     //
     // Event Queue

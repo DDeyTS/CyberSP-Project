@@ -2,6 +2,8 @@
 
 #include "dialoguesys.h"
 
+#define MAX_DMG_NUM 32
+
 typedef struct {
   bool active;
   float x, start_y;
@@ -20,4 +22,3 @@ void SpawnDamageNum(float x, float y, int damage);
 void UpdateDamageNum(float dt);
 void DrawDamageNum(ALLEGRO_FONT *font);
 void ShootHit(float x, float y, int d20);
-

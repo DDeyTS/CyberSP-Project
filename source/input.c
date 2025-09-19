@@ -2,7 +2,7 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 18-09-2025 22:17
+//** Last Update: 19-09-2025 13:01
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -11,8 +11,8 @@
 #include "bitmap.h"
 #include "collision.h"
 #include "combat.h"
+#include "debug.h"
 #include "dice.h"
-#include <allegro5/color.h>
 
 // PRIVATE FUNCTION PROTOTYPES /////////////////////////////////////////////
 
@@ -97,6 +97,14 @@ void KeyboardOn(void)
     }
     else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_2]) {
         dlgstats.speaker = 0;
+    }
+
+    // 
+    // Enemy Spawner 
+    //
+
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_M]) {
+        DBG_EnemySpawner();
     }
 }
 

@@ -2,13 +2,14 @@
 //**
 //** File: debug.c (CyberSP Project)
 //** Purpose: Debugging stuff
-//** Last Update: 25-08-2025 20:45
+//** Last Update: 19-09-2025 13:17
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 #include "debug.h"
 #include "dialoguesys.h"
+#include "enemy.h"
 #include "main.h"
 
 //==========================================================================
@@ -41,9 +42,6 @@ void DBG_DescObjChanger(void)
 void DBG_DlgTrigger(void)
 {
     dlgstats.flags = SHOW_INTRO | DLG_OPEN | CHOOSING_TOPIC;
-    // dlgstats.dlg_open       = true;
-    // dlgstats.choosing_topic = true;
-    // dlgstats.show_intro     = true;
 }
 
 //==========================================================================
@@ -57,9 +55,17 @@ void DBG_DlgTrigger(void)
 
 void DBG_NpcChanger(void)
 {
-    dlgstats.speaker++;
-    if (dlgstats.speaker >= NUM_NPCS) {
-        perror("You has exceed the NPC limit.\n");
-        exit(1);
+    if (dlgstats.speaker < NUM_NPCS) {
+        dlgstats.speaker++;
+        printf("Hello, NPC number %d!\n", dlgstats.speaker);
+    }
+}
+
+void DBG_EnemySpawner(void)
+{
+    if (num_active_enemies < MAX_ENEMIES) {
+        num_active_enemies++;
+        SpawnAllEnemies(num_active_enemies);
+        printf("%d inimigos spawnados\n", num_active_enemies);
     }
 }

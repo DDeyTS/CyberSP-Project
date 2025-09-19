@@ -3,7 +3,7 @@
 //** File: bitmap.c (CyberSP Project)
 //** Purpose: Load graphic stuff
 //**
-//** Last Update: 16-09-2025 13:49
+//** Last Update: 19-09-2025 12:38
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -17,20 +17,16 @@
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
-SpriteSheet_t protag        = {.fw          = 0,
-                               .fh          = 0,
-                               .px          = 320,
-                               .py          = 200,
-                               .speed       = 3.5,
-                               .frames      = 0.f,
-                               .reset_frame = 0};
-SpriteSheet_t en[NUM_ENEMY] = {[EN_GANGMEMBER] = {.fw          = 0,
-                                                  .fh          = 0,
-                                                  .px          = 150,
-                                                  .py          = 200,
-                                                  .speed       = 3.5,
-                                                  .frames      = 0.f,
-                                                  .reset_frame = 0}};
+SpriteInfo_t    protag = {.fw          = 0,
+                          .fh          = 0,
+                          .px          = 320,
+                          .py          = 200,
+                          .speed       = 3.5,
+                          .frames      = 0.f,
+                          .reset_frame = 0};
+
+SpriteInfo_t    en[MAX_ENEMIES];
+ALLEGRO_BITMAP *enemy_sprites[NUM_ENEMY_ID] = {NULL};
 
 ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light, *DBG_portrait = NULL;
 
@@ -60,11 +56,10 @@ void InitBitmap(void)
         goto placeholder;
     }
 
-    for (int i = 0; i < NUM_ENEMY; i++) {
-        int id = spawndata[i].id;
-        en[id].spr = al_load_bitmap("sprites/regis_spritesheet.png");
-        if (!en[id].spr) {
-            perror("Failed to load enemy sprite!\n");
+    for (int i = 0; i < num_spawn; i++) {
+        enemy_sprites[i] = al_load_bitmap("sprites/regis_spritesheet.png");
+        if (!enemy_sprites[i]) {
+            perror("Fail to load enemy sprite!\n");
             exit(1);
         }
     }
@@ -98,7 +93,6 @@ placeholder:
 //    Argument: void
 //    Return:   void
 //
-//    NOTE: this function draws the protagonist's sprite.
 //    NOTE: the sprite is scaled, so take care of remembering to adapt
 //    the code for its new size.
 //
@@ -106,28 +100,28 @@ placeholder:
 
 void DrawProtag(void)
 {
-    al_draw_scaled_bitmap(protag.spr, protag.fw, protag.fh, 16, 24, protag.px,
-                          protag.py, 32, 48, 0);
+    al_draw_scaled_bitmap(protag.spr, protag.fw, protag.fh, FRAME_W, FRAME_H, protag.px,
+                          protag.py, HITBOX_W, HITBOX_H, 0);
 }
 
+//==========================================================================
 //
-//======================
+//    DrawEnemy
 //
-// DrawEN
+//    Argument: void
+//    Return:   void
 //
-// TODO: managing a lot of entities over here.
+//    NOTE: the sprite is scaled, so take care of remembering to adapt
+//    the code for its new size.
 //
-//======================
-//
+//==========================================================================
 
-void DrawEnemy(void)
+void DrawEnemies(void)
 {
-    for (int i = 0; i < NUM_ENEMY; i++) {
-        int id = spawndata[i].id;
-        if (id < 0 || id >= NUM_ENEMY) continue;
-        if (!en[id].spr) continue;
-        al_draw_scaled_bitmap(en[id].spr, en[id].fw, en[id].fh, 16, 24, en[id].px,
-                              en[id].py, 32, 48, 0);
+    for (int i = 0; i < num_active_enemies; i++) {
+        if (!en[i].spr) continue;
+        al_draw_scaled_bitmap(en[i].spr, en[i].fw, en[i].fh, FRAME_W, FRAME_H, en[i].px,
+                              en[i].py, HITBOX_W, HITBOX_H, 0);
     }
 }
 
@@ -179,40 +173,8 @@ void BitmapDraw()
 {
     RenderMap(map);
     DrawProtag();
-    DrawEnemy();
+    DrawEnemies();
 }
-
-/* Damage numbers
- * in:
- * font, amount of damage, floating distance and limit, number position.
- * during:
- * when the debug key is pressed, a random number is
- * rolled for the damage value, which is put into print function together to
- * floating distance for the animation.
- * out:
- * little number floating above the target's head.
- *
- * FIXME: make it floating smoothly
- * */
-
-//
-// void DamageNumAnim(int damage)
-// {
-//     float x             = 100;
-//     float y             = 150;
-//     float fly_distance  = 30;
-//     float speed         = 0.5;
-//     ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-//
-//     char damage_str[10];
-//     sprintf(damage_str, "%d", damage);
-//
-//     for (float offset = 0; offset < fly_distance; offset += speed) {
-//         al_draw_text(font_std, color, x, y - offset, 0, damage_str);
-//     }
-//
-//     fly_distance = -30;
-// }
 
 //==========================================================================
 //

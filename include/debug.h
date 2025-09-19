@@ -6,5 +6,6 @@
 void DBG_DescObjChanger(void);
 void DBG_DlgTrigger(void);
 void DBG_NpcChanger(void);
+void DBG_EnemySpawner(void);
 
 #endif

@@ -15,7 +15,6 @@
 #include "enemy.h"
 
 static void ProtagMoveAnim();
-static void EnemyMoveAnim(int id);
 
 //==========================================================================
 //
@@ -36,10 +35,6 @@ void GameRedraw(void)
 
     DrawDamageNum(font_std);
 
-    //
-    // Description Window
-    //
-
     al_flip_display();
 }
 
@@ -58,6 +53,7 @@ void GameLoop(void)
 
     KeyboardOn();
     MouseOn();
+
     UpdateDamageNum(dt);
 
     CloseGame();
@@ -67,9 +63,7 @@ void GameLoop(void)
         MouseClick();
 
         ProtagMoveAnim();
-
-        EnemyMoveAnim(EN_GANGMEMBER);
-        EnemyMoveAnim(EN_GANGMEMBER2);
+        EnemyEncounter(num_spawn);
 
         redraw = true;
     }
@@ -231,116 +225,4 @@ void ProtagMoveAnim()
         ProtagMovement(keys, &protag.px, &protag.py, protag.speed, &protag.fw,
                        &protag.fh, (int)protag.frames);
     }
-}
-
-//
-//===================================
-//
-// EnemyMovement
-//
-//===================================
-//
-
-void EnemyMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
-                   float frames, int dx, int dy)
-{
-    int   cols = 16;
-    int   rows = 24;
-    float fq   = (cols * frames) + cols;
-
-    if (dx > 0 && dy < 0) {
-        *fx = fq, *fy = rows * 5;
-        en[e].reset_frame = *fy;
-    }
-    else if (dx < 0 && dy < 0) {
-        *fx = fq, *fy = rows * 6;
-        en[e].reset_frame = *fy;
-    }
-    else if (dx > 0 && dy > 0) {
-        *fx = fq, *fy = rows * 2;
-        en[e].reset_frame = *fy;
-    }
-    else if (dx < 0 && dy > 0) {
-        *fx = fq, *fy = rows;
-        en[e].reset_frame = *fy;
-    }
-    else if (dx > 0) {
-        *fx = fq, *fy = rows * 4;
-        en[e].reset_frame = *fy;
-    }
-    else if (dx < 0) {
-        *fx = fq, *fy = rows * 3;
-        en[e].reset_frame = *fy;
-    }
-    else if (dy > 0) {
-        *fx = fq, *fy = 0;
-        en[e].reset_frame = *fy;
-    }
-    else if (dy < 0) {
-        *fx = fq, *fy = (rows * 7) + 1;
-        en[e].reset_frame = *fy;
-    }
-    else {
-        *fx = 0;
-        *fy = en[e].reset_frame;
-    }
-
-    float mov_x = dx * sp;
-    float mov_y = dy * sp;
-
-    if (dx != 0 && dy != 0) {
-        float adj = 0.707f;
-        mov_x *= adj;
-        mov_y *= adj;
-    }
-
-    CollVSMove(px, py, mov_x, mov_y);
-}
-
-//
-//====================================
-//
-// EnemyMoveAnim
-//
-//====================================
-//
-
-void EnemyMoveAnim(int id)
-{
-    static int move_count = 0;
-    static int npc_x = 0, npc_y = 0;
-
-    move_count++;
-    if (move_count > 15) {
-        move_count = 0;
-        int r      = rand() % 4;
-        switch (r) {
-        case 0:
-            npc_x = -1;
-            npc_y = 0;
-            break;
-        case 1:
-            npc_x = 1;
-            npc_y = 0;
-            break;
-        case 2:
-            npc_x = 0;
-            npc_y = -1;
-            break;
-        case 3:
-            npc_x = 0;
-            npc_y = 1;
-            break;
-        }
-    }
-
-    en[id].frames += 0.3f;
-    if (en[id].frames > 4) {
-        en[id].frames -= 4;
-    }
-    EnemyMovement(id, &en[id].px, &en[id].py, en[id].speed, &en[id].fw, &en[id].fh,
-                  (int)en[id].frames, npc_x, npc_y);
-
-    // printf("Enemy pos: %.1f %.1f dx=%d dy=%d\n", en[id].px, en[id].py, npc_x,
-    //        npc_y);
 }

@@ -1,8 +1,8 @@
 //**************************************************************************
 //**
-//** File: combat.c
+//** File: combat.c (CyberSP Project)
 //** Purpose: Combat system
-//** Last Update: 17-09-25 13:45
+//** Last Update: 19-09-25 12:57
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -11,6 +11,7 @@
 #include "bitmap.h"
 #include "collision.h"
 #include "dice.h"
+#include "enemy.h"
 #include "input.h"
 
 // EXTERNAL FUNCTION PROTOTYPES ////////////////////////////////////////////
@@ -24,9 +25,19 @@
 // PUBLIC DATA DEFINITIONS /////////////////////////////////////////////////
 
 // PRIVATE DATA DEFINITIONS ////////////////////////////////////////////////
-static DamageNum_t dmgnum[32];
+static DamageNum_t dmgnum[MAX_DMG_NUM];
 
 // CODE ////////////////////////////////////////////////////////////////////
+
+//==========================================================================
+//
+//    GetEnemyPos
+//
+//    Argument: int enemy_id        - which enemy is on the map
+//              float *x, *y        - enemy's position
+//    Return:   void
+//
+//==========================================================================
 
 void GetEnemyPos(int enemy_id, float *x, float *y)
 {
@@ -34,9 +45,18 @@ void GetEnemyPos(int enemy_id, float *x, float *y)
     *y = en[enemy_id].py;
 }
 
+//==========================================================================
+//
+//    EnemyWasHit
+//
+//    Argument: int mx, my        - cursor position to read
+//    Return:   int
+//
+//==========================================================================
+
 int EnemyWasHit(int mx, int my)
 {
-    for (int i = 0; i < NUM_ENEMY; i++) {
+    for (int i = 0; i < num_active_enemies; i++) {
         float ex, ey;
         GetEnemyPos(i, &ex, &ey);
         if (mx >= ex && mx <= ex + (HITBOX_W - OFFSET_X) && my >= ey &&
@@ -138,9 +158,6 @@ void DrawDamageNum(ALLEGRO_FONT *font)
 void ShootHit(float x, float y, int d20)
 {
     int dmg = RollD6();
-    // FIXME: find a better way to read what enemy is hit.
-    // x = en[EN_GANGMEMBER].px;
-    // y = en[EN_GANGMEMBER].py;
 
     if (d20 == 1) {
         dmg *= 2;
