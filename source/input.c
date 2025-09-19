@@ -2,14 +2,19 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 17-09-2025 14:26
+//** Last Update: 18-09-2025 22:17
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 #include "input.h"
 #include "bitmap.h"
+#include "collision.h"
 #include "combat.h"
+#include "dice.h"
+#include <allegro5/color.h>
+
+// PRIVATE FUNCTION PROTOTYPES /////////////////////////////////////////////
 
 // EXTERNAL DATA DECLARATIONS //////////////////////////////////////////////
 
@@ -225,12 +230,17 @@ void MouseOn(void)
             }
         }
 
-        // 
-        // Click to Shoot 
+        //
+        // Click to Shoot
         //
 
         if (mouse[1] && chosen_cursor == cursors.aim) {
-            SpawnDamageNum(en[EN_GANGMEMBER].px, en[EN_GANGMEMBER].py, RollD6());
+            int target = EnemyWasHit(mouse_x, mouse_y);
+            if (target != -1) {
+                float ex, ey;
+                GetEnemyPos(target, &ex, &ey);
+                ShootHit(ex, ey, RollD20());
+            }
         }
     }
     else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {

@@ -2,18 +2,20 @@
 //**
 //** File: game.c (CyberSP Project)
 //** Purpose: Game logic
-//** Last Update: 16-09-2025 15:38
+//** Last Update: 18-09-2025 22:51
 //** Author: DDeyTS
 //**
 //**************************************************************************
 
 #include "game.h"
+#include "bitmap.h"
 #include "collision.h"
+#include "combat.h"
 #include "dialoguesys.h"
+#include "enemy.h"
 
 static void ProtagMoveAnim();
-static void EnemyMoveAnim();
-
+static void EnemyMoveAnim(int id);
 
 //==========================================================================
 //
@@ -66,7 +68,8 @@ void GameLoop(void)
 
         ProtagMoveAnim();
 
-        EnemyMoveAnim();
+        EnemyMoveAnim(EN_GANGMEMBER);
+        EnemyMoveAnim(EN_GANGMEMBER2);
 
         redraw = true;
     }
@@ -292,9 +295,6 @@ void EnemyMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
     }
 
     CollVSMove(px, py, mov_x, mov_y);
-
-    // *px += mov_x;
-    // *py += mov_y;
 }
 
 //
@@ -302,12 +302,10 @@ void EnemyMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
 //
 // EnemyMoveAnim
 //
-// TODO: upgrade that into a function
-//
 //====================================
 //
 
-void EnemyMoveAnim()
+void EnemyMoveAnim(int id)
 {
     static int move_count = 0;
     static int npc_x = 0, npc_y = 0;
@@ -336,11 +334,13 @@ void EnemyMoveAnim()
         }
     }
 
-    int e1 = EN_GANGMEMBER;
-    en[e1].frames += 0.3f;
-    if (en[e1].frames > 4) {
-        en[e1].frames -= 4;
+    en[id].frames += 0.3f;
+    if (en[id].frames > 4) {
+        en[id].frames -= 4;
     }
-    EnemyMovement(e1, &en[e1].px, &en[e1].py, en[e1].speed, &en[e1].fw, &en[e1].fh,
-                  (int)en[e1].frames, npc_x, npc_y);
+    EnemyMovement(id, &en[id].px, &en[id].py, en[id].speed, &en[id].fw, &en[id].fh,
+                  (int)en[id].frames, npc_x, npc_y);
+
+    // printf("Enemy pos: %.1f %.1f dx=%d dy=%d\n", en[id].px, en[id].py, npc_x,
+    //        npc_y);
 }

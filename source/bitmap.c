@@ -10,26 +10,28 @@
 
 #include "bitmap.h"
 #include "collision.h"
-#include "main.h"
+#include "enemy.h"
 #include "input.h"
+#include "main.h"
 #include "tile_render.h"
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
-SpriteSheet_t   protag        = {.fw          = 0,
-                                 .fh          = 0,
-                                 .px          = 320,
-                                 .py          = 200,
-                                 .speed       = 3.5,
-                                 .frames      = 0.f,
-                                 .reset_frame = 0};
-SpriteSheet_t   en[NUM_ENEMY] = {[EN_GANGMEMBER] = {.fw          = 0,
-                                                    .fh          = 0,
-                                                    .px          = 150,
-                                                    .py          = 200,
-                                                    .speed       = 3.5,
-                                                    .frames      = 0.f,
-                                                    .reset_frame = 0}};
+SpriteSheet_t protag        = {.fw          = 0,
+                               .fh          = 0,
+                               .px          = 320,
+                               .py          = 200,
+                               .speed       = 3.5,
+                               .frames      = 0.f,
+                               .reset_frame = 0};
+SpriteSheet_t en[NUM_ENEMY] = {[EN_GANGMEMBER] = {.fw          = 0,
+                                                  .fh          = 0,
+                                                  .px          = 150,
+                                                  .py          = 200,
+                                                  .speed       = 3.5,
+                                                  .frames      = 0.f,
+                                                  .reset_frame = 0}};
+
 ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light, *DBG_portrait = NULL;
 
 // PRIVATE DATA DEFINITIONS /////////////////////////////////////////////////
@@ -58,7 +60,14 @@ void InitBitmap(void)
         goto placeholder;
     }
 
-    en[EN_GANGMEMBER].spr = al_load_bitmap("sprites/regis_spritesheet.png");
+    for (int i = 0; i < NUM_ENEMY; i++) {
+        int id = spawndata[i].id;
+        en[id].spr = al_load_bitmap("sprites/regis_spritesheet.png");
+        if (!en[id].spr) {
+            perror("Failed to load enemy sprite!\n");
+            exit(1);
+        }
+    }
 
     chatbox       = al_load_bitmap("sprites/dlgbox_sprite.png");
     chatbox_light = al_load_bitmap("sprites/signal_light_chatbox_spritesheet.png");
@@ -113,10 +122,13 @@ void DrawProtag(void)
 
 void DrawEnemy(void)
 {
-    // TODO: finding the best way to store every EN in the array
-    al_draw_scaled_bitmap(en[EN_GANGMEMBER].spr, en[EN_GANGMEMBER].fw,
-                          en[EN_GANGMEMBER].fh, 16, 24, en[EN_GANGMEMBER].px,
-                          en[EN_GANGMEMBER].py, 32, 48, 0);
+    for (int i = 0; i < NUM_ENEMY; i++) {
+        int id = spawndata[i].id;
+        if (id < 0 || id >= NUM_ENEMY) continue;
+        if (!en[id].spr) continue;
+        al_draw_scaled_bitmap(en[id].spr, en[id].fw, en[id].fh, 16, 24, en[id].px,
+                              en[id].py, 32, 48, 0);
+    }
 }
 
 //==========================================================================

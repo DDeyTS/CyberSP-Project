@@ -1,6 +1,9 @@
 #pragma once
 
-#include "main.h"
 #include "game.h"
+#include "input.h"
+#include "main.h"
 
-int RollD6(void);
+static inline int RollD6(void) { return (rand() % 6) + 1; }
+
+static inline int RollD20(void) { return (rand() % 20) + 1; }

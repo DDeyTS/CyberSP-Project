@@ -98,6 +98,7 @@ int main(void)
     InitCursor(disp);
     NpcDlgStorage(npc);
     DescStorage();
+    SpawnAllEnemies();
 
     //
     // Event Queue

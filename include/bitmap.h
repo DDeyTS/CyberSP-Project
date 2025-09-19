@@ -11,12 +11,14 @@
 typedef enum {
   NONE_ENEMY = -1,
   EN_GANGMEMBER,
+  EN_GANGMEMBER2,
   NUM_ENEMY,
 } EnemiesID;
 
 typedef struct {
   int fw, fh; /*rows, cols;*/ // frame manager
   float px, py;               // sprite movement
+  // float spawn_x, spawn_y;     // initial position
   float speed;
   float frames;
   int reset_frame;
@@ -31,5 +33,5 @@ void BitmapDraw(void);
 void BitmapExplode(void);
 void CursorChanger(void);
 
-extern SpriteSheet_t protag, en[];
+extern SpriteSheet_t protag, en[NUM_ENEMY];
 extern ALLEGRO_BITMAP *chatbox, *protagonist, *chatbox_light, *DBG_portrait;

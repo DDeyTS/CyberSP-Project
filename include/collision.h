@@ -10,6 +10,8 @@
 
 #define HITBOX_W 32
 #define HITBOX_H 48
+#define OFFSET_X 4
+#define OFFSET_Y 8
 
 typedef struct {
   float x, y;

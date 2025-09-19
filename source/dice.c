@@ -1,8 +1,8 @@
 //**************************************************************************
 //**
-//** File: dice.c 
+//** File: dice.c
 //** Purpose: Random number handling
-//** Last Update: 16-09-25 14:18
+//** Last Update: 18-09-25 20:53
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -26,12 +26,13 @@
 //
 //    RollD6
 //
-//    Argument: void 
+//    Argument: void
 //    Return:   int
 //
 //    TODO: Critical damage function.
 //
 //==========================================================================
 
-int RollD6(void) { return (rand() % 6) + 1; }
+// NOTE: inline function found in the header.
 
+// NOTE: inline function foun in the header.
