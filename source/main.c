@@ -3,7 +3,7 @@
 //** File: main.c (CyberSP Project)
 //** Purpose: Main game stuff
 //**
-//** Last Update: 09-09-2025 14:24
+//** Last Update: 19-09-2025 13:52
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -13,9 +13,9 @@
  * 1. Collision walls on the map. (Done!)
  *     1a. Map changer.
  * 2. NPC sprite render. (Done but it call for updates)
- *     2a. Entity movement manager. (done but it call for updates)
- * 3. Shooter mode.
- *     3a. Shooting with pistol.
+ *     2a. Entity movement manager. (Done!)
+ * 3. Shooter mode. (Done!)
+ *     3a. Shooting with pistol. (Done!)
  *     3b. Damage system. (Partially done!)
  * 4. Simple inventory (like first Metal Gear).
  * 5. Mouth cursor.
@@ -27,6 +27,7 @@
 #include "collision.h"
 #include "debug.h"
 #include "dialoguesys.h"
+#include "dice.h"
 #include "game.h"
 #include "input.h"
 #include "textdat.h"
@@ -37,6 +38,8 @@
 // EXTERNAL FUNCTION PROTOTYPES /////////////////////////////////////////////
 
 // PRIVATE FUNCTION PROTOTYPES //////////////////////////////////////////////
+
+static void InitGame(void);
 
 // EXTERNAL DATA DECLARATIONS ///////////////////////////////////////////////
 
@@ -67,7 +70,7 @@ bool running, redraw;
 //
 //    main
 //    Arguments: void
-//    Return:    void
+//    Return:    int
 //
 //==========================================================================
 
@@ -77,28 +80,7 @@ int main(void)
     // Initializers
     //
 
-    if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() ||
-        !al_install_keyboard() || !al_init_font_addon() || !al_init_ttf_addon() ||
-        !al_install_mouse()) {
-        perror("Fail to initialize Allegro\n");
-        return 1;
-    }
-
-    disp  = al_create_display(DISPW, DISPH);
-    queue = al_create_event_queue();
-    timer = al_create_timer(dt);
-    if (!disp || !queue || !timer) {
-        perror("Fail to initialize basic Allegro stuff!\n");
-        return 1;
-    }
-    srand(time(NULL));
-
-    InitStdFont();
-    InitBitmap();
-    InitCursor(disp);
-    NpcDlgStorage(npc);
-    DescStorage();
-    SpawnAllEnemies(num_active_enemies);
+    InitGame();
 
     //
     // Event Queue
@@ -129,10 +111,38 @@ int main(void)
 
     running = true;
     redraw  = true;
+
     while (running) {
         GameLoop();
     }
 
     GameCrusher();
     return 0;
+}
+
+void InitGame(void)
+{
+
+    if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() ||
+        !al_install_keyboard() || !al_init_font_addon() || !al_init_ttf_addon() ||
+        !al_install_mouse()) {
+        perror("Fail to initialize Allegro\n");
+        exit(1);
+    }
+
+    disp  = al_create_display(DISPW, DISPH);
+    queue = al_create_event_queue();
+    timer = al_create_timer(dt);
+    if (!disp || !queue || !timer) {
+        perror("Fail to initialize basic Allegro stuff!\n");
+        exit(1);
+    }
+    srand(time(NULL));
+
+    InitStdFont();
+    InitBitmap();
+    InitCursor(disp);
+    NpcDlgStorage(npc);
+    DescStorage();
+    SpawnAllEnemies(RollD4());  // NOTE: use num_active_enemies for a solid group.
 }
