@@ -33,7 +33,7 @@ void MoveInput(bool keys[], int *dx, int *dy, int *fx, int *fy, float frames);
 void MouseOn(void);
 void MouseClick(void);
 void CloseGame(void);
-void ToggleToAim(void);
+void ToggleToAim(float px, float py, int *fh);
 
 extern Mousecursors cursors;
 extern ALLEGRO_MOUSE_CURSOR *current_cursor;

@@ -13,6 +13,7 @@
 #include "combat.h"
 #include "debug.h"
 #include "dice.h"
+#include "sound.h"
 
 // PRIVATE FUNCTION PROTOTYPES /////////////////////////////////////////////
 
@@ -99,12 +100,16 @@ void KeyboardOn(void)
         dlgstats.speaker = 0;
     }
 
-    // 
-    // Enemy Spawner 
+    //
+    // Enemy Spawner
     //
 
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_M]) {
         DBG_EnemySpawner();
+    }
+
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_P]) {
+        StopMusic(bgm);
     }
 }
 
@@ -400,8 +405,8 @@ void CloseGame(void)
 //
 //==========================================================================
 
-void ToggleToAim(void)
+void ToggleToAim(float px, float py, int *fh)
 {
-    SpriteAimAtCursor(protag.px, protag.py, &protag.fh);
-    protag.fw = 0;
+    SpriteAimAtCursor(px, py, fh);
+    // fw = 0;
 }

@@ -23,10 +23,12 @@ int              num_active_enemies = 0;
 //    InitEnemy
 //
 //    Argument: int slot        - which slots he is in the spawndata[] array
-//              EnemiesID       - what enemy is
+//              EnemiesID id    - what enemy is
 //              float start_x   - initial position
 //              float start_y
 //    Return:   void
+//
+//    TODO: copy this function for NPC actors.
 //
 //==========================================================================
 
@@ -74,14 +76,6 @@ void SpawnAllEnemies(int n_enemies)
     }
 }
 
-//
-//===================================
-//
-// EnemyMovement
-//
-//===================================
-//
-
 //==========================================================================
 //
 //    EnemyMovement
@@ -93,6 +87,8 @@ void SpawnAllEnemies(int n_enemies)
 //              float frames       - amount of frames to animate
 //              int dx, dy         - directions to follow
 //    Return:   void
+//
+//    TODO: adjust this function for all the actors.
 //
 //==========================================================================
 
@@ -159,12 +155,14 @@ void EnemyMovement(int e, float *px, float *py, float sp, int *fx, int *fy,
 //    Argument: int id    - what enemy is
 //    Return:   void
 //
+//    TODO: adjust this function for all the actors.
+//
 //==========================================================================
 
 void EnemyMoveAnim(int id)
 {
     en[id].move_count++;
-    if (en[id].move_count > 15) {
+    if (en[id].move_count > 25) {
         en[id].move_count = 0;
         int r             = rand() % 4;
         switch (r) {

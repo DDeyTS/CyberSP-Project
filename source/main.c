@@ -3,7 +3,7 @@
 //** File: main.c (CyberSP Project)
 //** Purpose: Main game stuff
 //**
-//** Last Update: 19-09-2025 13:52
+//** Last Update: 02-10-2025 16:20
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -30,6 +30,7 @@
 #include "dice.h"
 #include "game.h"
 #include "input.h"
+#include "sound.h"
 #include "textdat.h"
 #include "tile_render.h"
 
@@ -45,10 +46,11 @@ static void InitGame(void);
 
 tmx_map *map = NULL;
 
-ALLEGRO_DISPLAY     *disp;
-ALLEGRO_EVENT        ev;
-ALLEGRO_EVENT_QUEUE *queue;
-ALLEGRO_TIMER       *timer;
+ALLEGRO_DISPLAY      *disp;
+ALLEGRO_EVENT         ev;
+ALLEGRO_EVENT_QUEUE  *queue;
+ALLEGRO_TIMER        *timer;
+ALLEGRO_AUDIO_STREAM *bgm;
 
 float dt = 1.0 / 30;
 
@@ -125,7 +127,8 @@ void InitGame(void)
 
     if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() ||
         !al_install_keyboard() || !al_init_font_addon() || !al_init_ttf_addon() ||
-        !al_install_mouse()) {
+        !al_install_mouse() || !al_install_audio() || !al_init_acodec_addon() ||
+        !al_reserve_samples(16)) {
         perror("Fail to initialize Allegro\n");
         exit(1);
     }
@@ -133,7 +136,8 @@ void InitGame(void)
     disp  = al_create_display(DISPW, DISPH);
     queue = al_create_event_queue();
     timer = al_create_timer(dt);
-    if (!disp || !queue || !timer) {
+    bgm   = LoadMusic("soundtrack/cybersp_menu.ogg");
+    if (!disp || !queue || !timer || !bgm) {
         perror("Fail to initialize basic Allegro stuff!\n");
         exit(1);
     }

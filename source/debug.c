@@ -65,8 +65,8 @@ void DBG_NpcChanger(void)
 void DBG_EnemySpawner(void)
 {
     if (num_active_enemies < MAX_ENEMIES) {
-        int roll = RollD4();
-        SpawnAllEnemies(roll);
-        printf("%d inimigos spawnados\n", roll);
+        int num_active_enemies = RollD4();
+        SpawnAllEnemies(num_active_enemies);
+        printf("%d inimigos spawnados\n", num_active_enemies);
     }
 }

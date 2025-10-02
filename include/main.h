@@ -5,6 +5,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/events.h>
 #include <allegro5/keyboard.h>
+#include <allegro5/allegro_audio.h>
 
 #include <math.h>
 #include <stdbool.h>
@@ -22,6 +23,7 @@ extern ALLEGRO_EVENT ev;
 extern ALLEGRO_DISPLAY *disp;
 extern ALLEGRO_TIMER *timer;
 extern ALLEGRO_EVENT_QUEUE *queue;
+extern ALLEGRO_AUDIO_STREAM *bgm;
 
 extern float dt;
 
