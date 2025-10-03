@@ -121,7 +121,8 @@ void GameCrusher(void)
 
     al_destroy_event_queue(queue);
     al_destroy_timer(timer);
-    DestroyMusic(bgm);
+    if (bgm) DestroyMusic(bgm);
+    if (dlg_ost) DestroyMusic(dlg_ost);
     al_destroy_display(disp);
 }
 

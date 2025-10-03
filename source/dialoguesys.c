@@ -3,7 +3,7 @@
 //** File: dialoguesys.c (CyberSP Project)
 //** Purpose: Any text to display happens here
 //**
-//** Last Update: 17-09-2025 15:09
+//** Last Update: 03-10-2025 00:19
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -12,7 +12,9 @@
 #include "bitmap.h"
 #include "game.h"
 #include "main.h"
+#include "sound.h"
 #include "textdat.h"
+#include <allegro5/allegro_audio.h>
 
 // MACROS ///////////////////////////////////////////////////////////////////
 
@@ -602,6 +604,8 @@ bool DlgBoxIsOpen(bool open_dlg)
     bool show_intro = (dlgstats.flags & SHOW_INTRO) == SHOW_INTRO;
 
     if (open_dlg) {
+        PauseMusic(bgm);
+        PlayMusic(dlg_ost);
         if (show_intro) {
             InitDlgBox(npc[dlgstats.speaker]->portrait_id,
                        npc[dlgstats.speaker]->name,

@@ -2,7 +2,7 @@
 //**
 //** File: input.c (CyberSP Project)
 //** Purpose: Organize all input stuff
-//** Last Update: 19-09-2025 13:01
+//** Last Update: 02-10-2025 16:25
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -13,6 +13,7 @@
 #include "combat.h"
 #include "debug.h"
 #include "dice.h"
+#include "main.h"
 #include "sound.h"
 
 // PRIVATE FUNCTION PROTOTYPES /////////////////////////////////////////////
@@ -86,6 +87,8 @@ void KeyboardOn(void)
 
     // TODO: bitmap button to trigger it
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_ESCAPE]) {
+        PauseMusic(dlg_ost);
+        PlayMusic(bgm);
         DlgExit();
     }
 
@@ -108,6 +111,10 @@ void KeyboardOn(void)
         DBG_EnemySpawner();
     }
 
+    // 
+    // Sound Manager 
+    //
+
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN && keys[ALLEGRO_KEY_P]) {
         StopMusic(bgm);
     }
@@ -117,10 +124,10 @@ void KeyboardOn(void)
 //
 //    MoveInput
 //
-//    Argument: bool keys        - read pressed keys
-//              int *dx, *dy     - read direction to walk
-//              int *fx, *fy     - sprite sheet axis
-//              float frames     - amount of them
+//    Argument: bool  keys         - read pressed keys
+//              int   *dx, *dy     - read direction to walk
+//              int   *fx, *fy     - sprite sheet axis
+//              float frames       - amount of them
 //    Return:   void
 //
 //==========================================================================

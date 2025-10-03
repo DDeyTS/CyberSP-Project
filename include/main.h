@@ -23,7 +23,7 @@ extern ALLEGRO_EVENT ev;
 extern ALLEGRO_DISPLAY *disp;
 extern ALLEGRO_TIMER *timer;
 extern ALLEGRO_EVENT_QUEUE *queue;
-extern ALLEGRO_AUDIO_STREAM *bgm;
+extern ALLEGRO_AUDIO_STREAM *bgm, *dlg_ost;
 
 extern float dt;
 
