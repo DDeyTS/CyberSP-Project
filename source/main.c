@@ -3,7 +3,7 @@
 //** File: main.c (CyberSP Project)
 //** Purpose: Main game stuff
 //**
-//** Last Update: 03-10-2025 00:19
+//** Last Update: 03-10-2025 15:37
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -50,7 +50,7 @@ ALLEGRO_DISPLAY      *disp;
 ALLEGRO_EVENT         ev;
 ALLEGRO_EVENT_QUEUE  *queue;
 ALLEGRO_TIMER        *timer;
-ALLEGRO_AUDIO_STREAM *bgm, *dlg_ost;
+ALLEGRO_AUDIO_STREAM *bgm, *dlg_ost, *tense_ost;
 
 float dt = 1.0 / 30;
 
@@ -133,11 +133,12 @@ void InitGame(void)
         exit(1);
     }
 
-    disp  = al_create_display(DISPW, DISPH);
-    queue = al_create_event_queue();
-    timer = al_create_timer(dt);
-    bgm   = LoadMusic("soundtrack/cybersp_menu.ogg");
-    dlg_ost = LoadMusic("soundtrack/slow_talk.ogg");
+    disp      = al_create_display(DISPW, DISPH);
+    queue     = al_create_event_queue();
+    timer     = al_create_timer(dt);
+    bgm       = LoadMusic("soundtrack/cybersp_menu.ogg");
+    dlg_ost   = LoadMusic("soundtrack/slow_talk.ogg");
+    tense_ost = LoadMusic("soundtrack/tense_talk.ogg");
     if (!disp || !queue || !timer || !bgm) {
         perror("Fail to initialize basic Allegro stuff!\n");
         exit(1);

@@ -2,7 +2,7 @@
 //**
 //** File: debug.c (CyberSP Project)
 //** Purpose: Debugging stuff
-//** Last Update: 19-09-2025 13:17
+//** Last Update: 03-10-2025 15:37
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -12,6 +12,7 @@
 #include "dice.h"
 #include "enemy.h"
 #include "main.h"
+#include "sound.h"
 
 //==========================================================================
 //
@@ -59,8 +60,24 @@ void DBG_NpcChanger(void)
     if (dlgstats.speaker < NUM_NPCS) {
         dlgstats.speaker++;
         printf("Hello, NPC number %d!\n", dlgstats.speaker);
+        if (dlgstats.speaker == NPC_BANGER_THE_KILLER) {
+            if (dlg_ost)
+                PauseMusic(dlg_ost);  // FIXME: they aren't pausing
+            else if (bgm)
+                PauseMusic(bgm);
+            PlayMusic(tense_ost);
+        }
     }
 }
+
+//==========================================================================
+//
+//    DBG_EnemySpawner
+//
+//    Argument: void
+//    Return:   void
+//
+//==========================================================================
 
 void DBG_EnemySpawner(void)
 {

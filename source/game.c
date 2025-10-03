@@ -2,7 +2,7 @@
 //**
 //** File: game.c (CyberSP Project)
 //** Purpose: Game logic
-//** Last Update: 02-10-2025 16:21
+//** Last Update: 03-10-2025 15:24
 //** Author: DDeyTS
 //**
 //**************************************************************************
@@ -12,8 +12,9 @@
 #include "collision.h"
 #include "combat.h"
 #include "dialoguesys.h"
-#include "sound.h"
 #include "enemy.h"
+#include "main.h"
+#include "sound.h"
 
 static void ProtagMoveAnim();
 
@@ -123,6 +124,7 @@ void GameCrusher(void)
     al_destroy_timer(timer);
     if (bgm) DestroyMusic(bgm);
     if (dlg_ost) DestroyMusic(dlg_ost);
+    if (tense_ost) DestroyMusic(tense_ost);
     al_destroy_display(disp);
 }
 
