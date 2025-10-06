@@ -136,9 +136,9 @@ void InitGame(void)
     disp      = al_create_display(DISPW, DISPH);
     queue     = al_create_event_queue();
     timer     = al_create_timer(dt);
-    bgm       = LoadMusic("soundtrack/cybersp_menu.ogg");
+    bgm       = LoadMusic("soundtrack/gunfight1.ogg");
     dlg_ost   = LoadMusic("soundtrack/slow_talk.ogg");
-    tense_ost = LoadMusic("soundtrack/tense_talk.ogg");
+    tense_ost = LoadMusic("soundtrack/tension.ogg");
     if (!disp || !queue || !timer || !bgm) {
         perror("Fail to initialize basic Allegro stuff!\n");
         exit(1);
